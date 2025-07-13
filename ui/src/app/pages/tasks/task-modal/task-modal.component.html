@@ -1,0 +1,37 @@
+<div class="card flex justify-center">
+  <p-dialog header="Create Task" [modal]="true" [visible]="visible" (visibleChange)="setVisibility($event)" [style]="{ width: '50rem' }">
+    <form [formGroup]="createTaskForm" (ngSubmit)="createTask()">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <label for="title">Title</label>
+          <input pInputText id="title" formControlName="title" autocomplete="off" />
+        </div>
+        <div class="flex flex-col">
+          <label for="assignee">Assignee</label>
+          <input pInputText id="assignee" formControlName="assignee" autocomplete="off" />
+        </div>
+        <div class="flex flex-col">
+          <label for="project">Project</label>
+          <p-select
+            formControlName="project"
+            [options]="projects"
+            optionLabel="label"
+            placeholder="Select a project" />
+        </div>
+        <div class="flex flex-col">
+          <label for="estimatedTime">Estimated Time</label>
+          <p-inputmask mask="99d 99h 99m" styleClass="w-full" inputId="estimatedTime" formControlName="estimatedTime" autocomplete="off" />
+        </div>
+        <div class="flex flex-col">
+          <label for="description">Description</label>
+          <textarea rows="4" pTextarea id="description" formControlName="description" autocomplete="off"></textarea>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <p-button label="Cancel" severity="secondary" (click)="setVisibility(false)" />
+        <p-button label="Save" (click)="setVisibility(false)" />
+      </div>
+    </form>
+  </p-dialog>
+</div>

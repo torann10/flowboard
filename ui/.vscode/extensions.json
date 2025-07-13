@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "angular.ng-template",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+    "jayfong.generate-index",
+    "sainoba.px-to-rem",
+    "gruntfuggly.todo-tree",
+    "usernamehw.errorlens"
+  ]
+}

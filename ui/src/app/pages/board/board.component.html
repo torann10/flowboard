@@ -1,0 +1,16 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+  <p-panel header="TO DO" class="h-[80vh] overflow-auto">
+    <div class="flex flex-col gap-4">
+      <p-card class="shadow-md border rounded" *ngFor="let task of tasks">
+        <ng-template pTemplate="title">{{ task.title }}</ng-template>
+        <ng-template pTemplate="content">
+          Estimated: {{ task.est }}<br />
+          Status: {{ task.status }}
+        </ng-template>
+      </p-card>
+
+    </div>
+  </p-panel>
+  <p-panel header="IN PROGRESS" class="h-[80vh] overflow-auto"></p-panel>
+  <p-panel header="DONE" class="h-[80vh] overflow-auto"></p-panel>
+</div>
