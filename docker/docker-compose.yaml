@@ -1,0 +1,37 @@
+name: flowboard
+
+services:
+  postgres:
+    build:
+      context: postgres
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - '5432:5432'
+    volumes:
+      - type: volume
+        source: flowboard-postgres-data
+        target: /var/lib/postgresql/data
+
+  keycloak:
+    container_name: keycloak_demo
+    image: quay.io/keycloak/keycloak:25.0.5
+    ports:
+      - 9090:8080
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    volumes:
+      - type: volume
+        source: flowboard-keycloak-data
+        target: /opt/keycloak/data
+    command:
+      - 'start-dev'
+
+volumes:
+  flowboard-postgres-data:
+    driver: local
+    name: flowboard-postgres-data
+  flowboard-keycloak-data:
+    driver: local
+    name: flowboard-keycloak-data

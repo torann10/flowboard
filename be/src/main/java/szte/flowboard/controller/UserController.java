@@ -1,69 +1,63 @@
 package szte.flowboard.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import szte.flowboard.dto.request.LoginRequest;
-import szte.flowboard.dto.request.RegisterRequest;
-import szte.flowboard.dto.response.LoginResponse;
-import szte.flowboard.dto.response.MessageResponse;
-import szte.flowboard.model.User;
+import szte.flowboard.entity.UserEntity;
 import szte.flowboard.service.UserService;
-import szte.flowboard.utils.JwtUtils;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-@CrossOrigin
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
 
-    private final JwtUtils jwtUtils;
-
-    public UserController(UserService userService, JwtUtils jwtUtils) {
-        this.userService = userService;
-        this.jwtUtils = jwtUtils;
+    @PostMapping
+    public ResponseEntity<UserEntity> create(@RequestBody UserEntity user) {
+        UserEntity createdUser = userService.create(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @GetMapping
-    public String getUsers() {
-        return "List of users";
+    public ResponseEntity<List<UserEntity>> findAll() {
+        List<UserEntity> users = userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
-        try {
-            userService.register(request);
-
-            return ResponseEntity.ok(new MessageResponse("Registered successfully"));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(e.getMessage());
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> findById(@PathVariable UUID id) {
+        Optional<UserEntity> user = userService.findById(id);
+        return user.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/authenticate")
-    public ResponseEntity<?> authenticate() {
-        try {
-            return ResponseEntity.ok(new MessageResponse("asd"));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(e.getMessage());
+    @PutMapping("/{id}")
+    public ResponseEntity<UserEntity> update(@PathVariable UUID id, @RequestBody UserEntity user) {
+        if (!userService.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
+        user.setId(id);
+        UserEntity updatedUser = userService.update(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
-        try {
-            String jwtToken = userService.login(request);
-            Cookie jwtCookie = jwtUtils.generateJwtCookie(jwtToken);
-            response.addCookie(jwtCookie);
-            return ResponseEntity.ok(new MessageResponse("login successful"));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        if (!userService.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        long count = userService.count();
+        return ResponseEntity.ok(count);
     }
 }
