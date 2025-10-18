@@ -1,0 +1,15 @@
+export * from './authController.service';
+import { AuthControllerApiService } from './authController.service';
+export * from './projectController.service';
+import { ProjectControllerApiService } from './projectController.service';
+export * from './projectUserController.service';
+import { ProjectUserControllerApiService } from './projectUserController.service';
+export * from './reportController.service';
+import { ReportControllerApiService } from './reportController.service';
+export * from './taskController.service';
+import { TaskControllerApiService } from './taskController.service';
+export * from './timeLogController.service';
+import { TimeLogControllerApiService } from './timeLogController.service';
+export * from './userController.service';
+import { UserControllerApiService } from './userController.service';
+export declare const APIS: (typeof AuthControllerApiService | typeof ProjectControllerApiService | typeof ProjectUserControllerApiService | typeof ReportControllerApiService | typeof TaskControllerApiService | typeof TimeLogControllerApiService | typeof UserControllerApiService)[];

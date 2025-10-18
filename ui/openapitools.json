@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.14.0",
+    "generators": {
+      "angular": {
+        "inputSpec": "http://localhost:8080/v3/api-docs",
+        "generatorName": "typescript-angular",
+        "output": "./api-client",
+        "additionalProperties": {
+          "apiModulePrefix": "FlowBoard",
+          "configurationPrefix": "FlowBoard",
+          "ngVersion": "19.0.0",
+          "ngPackagrVersion": "19.0.0",
+          "npmName": "@anna/flow-board-api",
+          "npmVersion": "0.0.1",
+          "snapshot": false,
+          "serviceSuffix": "ApiService"
+        }
+      }
+    }
+  }
+}

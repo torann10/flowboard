@@ -1,8 +1,15 @@
+<div class="developer-status"><strong>Keycloak Events:</strong> {{ keycloakStatus }}</div>
+
 <div class="flex overflow-hidden h-screen">
   <div
     class="shadow bg-gray-50"
     style="width: 12.5rem"
   >
+    @if (!authenticated) {
+      <button class="action-item" (click)="login()">Login</button>
+    } @else {
+      <button class="action-item" (click)="logout()">Logout</button>
+    }
     <app-menu></app-menu>
   </div>
   <div class="flex-1 p-4 overflow-y-auto">

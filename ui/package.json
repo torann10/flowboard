@@ -9,7 +9,8 @@
     "test": "ng test",
     "prettier": "prettier \"src/**/*.ts\" --write",
     "eslint": "eslint \"src/**\" --fix",
-    "code-format": "npm run prettier && npm run eslint"
+    "code-format": "npm run prettier && npm run eslint",
+    "generate:api": "rimraf api-client && openapi-generator-cli generate && rimraf api-client/.gitignore && cd api-client && npm i && npm run build && rimraf --glob !(dist)"
   },
   "private": true,
   "dependencies": {
@@ -22,7 +23,10 @@
     "@angular/router": "^19.2.0",
     "@primeng/themes": "^19.1.0",
     "@tailwindcss/postcss": "^4.1.4",
+    "@anna/flow-board-api": "file:api-client/dist",
     "chart.js": "^4.4.9",
+    "keycloak-angular": "19.0.2",
+    "keycloak-js": "26.2.0",
     "postcss": "^8.5.3",
     "primeicons": "^7.0.0",
     "primeng": "^19.1.0",
@@ -54,6 +58,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "^3.5.3",
-    "typescript": "~5.7.2"
+    "typescript": "~5.7.2",
+    "@openapitools/openapi-generator-cli": "2.24.0"
   }
 }
