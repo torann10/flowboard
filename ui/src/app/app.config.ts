@@ -15,6 +15,7 @@ import {
   withAutoRefreshToken
 } from 'keycloak-angular';
 import { environment } from '../environments/environment';
+import { FlowBoardApiModule, FlowBoardConfiguration, provideApi } from '@anna/flow-board-api';
 
 const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
   urlPattern: /^(http:\/\/localhost:8080)(\/.*)?$/i
@@ -59,6 +60,10 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.my-app-dark'
         }
       }
-    })
+    }),
+    provideApi(new FlowBoardConfiguration({
+      basePath: environment.basePath,
+      withCredentials: true,
+    })),
   ]
 };

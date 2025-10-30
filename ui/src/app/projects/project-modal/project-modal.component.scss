@@ -1,0 +1,101 @@
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.user-management-section {
+  padding: 1rem 0;
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    h4 {
+      margin: 0;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+  }
+  
+  .section-description {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-header {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+      padding: 1rem 1.5rem;
+      
+      .p-dialog-title {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+    }
+    
+    .p-dialog-content {
+      padding: 1.5rem;
+    }
+    
+    .p-dialog-footer {
+      background: #f8f9fa;
+      border-top: 1px solid #e9ecef;
+      padding: 1rem 1.5rem;
+    }
+  }
+  
+  .p-inputtext.ng-invalid,
+  .p-dropdown.ng-invalid {
+    border-color: #e24c4c;
+  }
+  
+  .p-error {
+    color: #e24c4c;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  
+  .p-message {
+    margin-bottom: 1rem;
+  }
+  
+  // Fix dropdown z-index issues in modals
+  .p-dropdown-panel {
+    z-index: 1100 !important;
+  }
+  
+  .p-dropdown {
+    .p-dropdown-panel {
+      z-index: 1100 !important;
+    }
+  }
+}

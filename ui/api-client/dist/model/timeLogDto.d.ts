@@ -7,17 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export interface ReportEntity {
+export interface TimeLogDto {
     id?: string;
+    taskId?: string;
+    userId?: string;
+    loggedTime?: string;
+    logDate?: string;
     createdBy?: string;
     createAt?: string;
     lastModifiedBy?: string;
     lastModifiedAt?: string;
-    projectId?: string;
-    userId?: string;
-    intervalFrom?: string;
-    intervalUntil?: string;
-    totalTime?: string;
-    totalBillableTime?: string;
-    data?: string;
+    billable?: boolean;
 }

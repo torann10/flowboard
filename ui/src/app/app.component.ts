@@ -7,10 +7,13 @@ import { CardModule } from 'primeng/card';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType, ReadyArgs, typeEventArgs } from 'keycloak-angular';
 import Keycloak from 'keycloak-js';
+import { NgIf } from '@angular/common';
+import { UserService } from './services/user.service';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MenuComponent, FormsModule, MenuModule, ChartModule, CardModule],
+  imports: [RouterOutlet, MenuComponent, FormsModule, MenuModule, ChartModule, CardModule, NgIf, ProgressSpinner],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -21,6 +24,7 @@ export class AppComponent {
   keycloakStatus: string | undefined;
   private readonly keycloak = inject(Keycloak);
   private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
+  readonly userService = inject(UserService);
 
   constructor() {
     effect(() => {
@@ -28,12 +32,12 @@ export class AppComponent {
 
       this.keycloakStatus = keycloakEvent.type;
 
-      console.log(keycloakEvent);
-
       if (keycloakEvent.type === KeycloakEventType.Ready) {
         this.authenticated = typeEventArgs<ReadyArgs>(keycloakEvent.args);
 
-        console.log(this.authenticated);
+        if (!this.authenticated) {
+          this.keycloak.login();
+        }
       }
 
       if (keycloakEvent.type === KeycloakEventType.AuthLogout) {

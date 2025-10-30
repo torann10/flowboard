@@ -1,7 +1,8 @@
 package szte.flowboard.enums;
 
 public enum UserRole {
-    ADMIN,
+    MAINTAINER,
+    EDITOR,
     MEMBER,
-    VIEWER
+    REPORTER
 }

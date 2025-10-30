@@ -16,13 +16,15 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProjectUserEntity extends AuditEntity {
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
-
-    @Column(name = "project_id", nullable = false)
-    private UUID projectId;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    private ProjectEntity project;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
 }

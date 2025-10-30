@@ -7,20 +7,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export interface ProjectEntity {
+import { StoryPointTimeMappingDto } from './storyPointTimeMappingDto';
+export interface ProjectDto {
     id?: string;
+    name?: string;
+    status?: ProjectDto.StatusEnum;
+    type?: ProjectDto.TypeEnum;
+    storyPointTimeMappings?: Array<StoryPointTimeMappingDto>;
     createdBy?: string;
     createAt?: string;
     lastModifiedBy?: string;
     lastModifiedAt?: string;
-    name?: string;
-    status?: ProjectEntity.StatusEnum;
 }
-export declare namespace ProjectEntity {
+export declare namespace ProjectDto {
     const StatusEnum: {
         readonly Active: "ACTIVE";
         readonly Archived: "ARCHIVED";
         readonly Completed: "COMPLETED";
     };
     type StatusEnum = typeof StatusEnum[keyof typeof StatusEnum];
+    const TypeEnum: {
+        readonly TimeBased: "TIME_BASED";
+        readonly StoryPointBased: "STORY_POINT_BASED";
+    };
+    type TypeEnum = typeof TypeEnum[keyof typeof TypeEnum];
 }

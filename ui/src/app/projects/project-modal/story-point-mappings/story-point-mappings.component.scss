@@ -1,0 +1,15 @@
+.story-point-mappings {
+  .mapping-item {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+    }
+  }
+  
+  .time-display {
+    font-family: 'Courier New', monospace;
+    background-color: #f3f4f6;
+  }
+}

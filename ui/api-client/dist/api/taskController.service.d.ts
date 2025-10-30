@@ -1,6 +1,8 @@
 import { HttpClient, HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TaskEntity } from '../model/taskEntity';
+import { TaskCreateRequestDto } from '../model/taskCreateRequestDto';
+import { TaskDto } from '../model/taskDto';
+import { TaskUpdateRequestDto } from '../model/taskUpdateRequestDto';
 import { FlowBoardConfiguration } from '../configuration';
 import { BaseService } from '../api.base.service';
 import * as i0 from "@angular/core";
@@ -8,124 +10,158 @@ export declare class TaskControllerApiService extends BaseService {
     protected httpClient: HttpClient;
     constructor(httpClient: HttpClient, basePath: string | string[], configuration?: FlowBoardConfiguration);
     /**
+     * Create task
+     * Creates a new task for the current user
+     * @param taskCreateRequestDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    count2(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    createTask(taskCreateRequestDto: TaskCreateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<number>;
-    count2(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<TaskDto>;
+    createTask(taskCreateRequestDto: TaskCreateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<number>>;
-    count2(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<TaskDto>>;
+    createTask(taskCreateRequestDto: TaskCreateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<number>>;
+    }): Observable<HttpEvent<TaskDto>>;
     /**
-     * @param taskEntity
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    create2(taskEntity: TaskEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<TaskEntity>;
-    create2(taskEntity: TaskEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpResponse<TaskEntity>>;
-    create2(taskEntity: TaskEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpEvent<TaskEntity>>;
-    /**
+     * Delete task
+     * Deletes a task by its ID for the current user
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    delete1(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+    deleteTask(id: string, observe?: 'body', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<any>;
-    delete1(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+    deleteTask(id: string, observe?: 'response', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpResponse<any>>;
-    delete1(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+    deleteTask(id: string, observe?: 'events', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpEvent<any>>;
     /**
+     * Get all tasks
+     * Retrieves all tasks for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findAll2(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getAllTasks(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<Array<TaskEntity>>;
-    findAll2(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<Array<TaskDto>>;
+    getAllTasks(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<Array<TaskEntity>>>;
-    findAll2(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<Array<TaskDto>>>;
+    getAllTasks(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<Array<TaskEntity>>>;
+    }): Observable<HttpEvent<Array<TaskDto>>>;
     /**
+     * Get task by ID
+     * Retrieves a task by its ID for the current user
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findById1(id: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getTaskById(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<TaskEntity>;
-    findById1(id: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<TaskDto>;
+    getTaskById(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<TaskEntity>>;
-    findById1(id: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<TaskDto>>;
+    getTaskById(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<TaskEntity>>;
+    }): Observable<HttpEvent<TaskDto>>;
     /**
-     * @param id
-     * @param taskEntity
+     * Get task count
+     * Retrieves the total number of tasks for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    update1(id: string, taskEntity: TaskEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getTaskCount(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<TaskEntity>;
-    update1(id: string, taskEntity: TaskEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<number>;
+    getTaskCount(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<TaskEntity>>;
-    update1(id: string, taskEntity: TaskEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<number>>;
+    getTaskCount(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<TaskEntity>>;
+    }): Observable<HttpEvent<number>>;
+    /**
+     * Get tasks by project
+     * Retrieves all tasks for a specific project
+     * @param projectId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    getTasksByProject(projectId: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<Array<TaskDto>>;
+    getTasksByProject(projectId: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpResponse<Array<TaskDto>>>;
+    getTasksByProject(projectId: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpEvent<Array<TaskDto>>>;
+    /**
+     * Update task
+     * Updates an existing task for the current user
+     * @param id
+     * @param taskUpdateRequestDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    updateTask(id: string, taskUpdateRequestDto: TaskUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<TaskDto>;
+    updateTask(id: string, taskUpdateRequestDto: TaskUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpResponse<TaskDto>>;
+    updateTask(id: string, taskUpdateRequestDto: TaskUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpEvent<TaskDto>>;
     static ɵfac: i0.ɵɵFactoryDeclaration<TaskControllerApiService, [null, { optional: true; }, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<TaskControllerApiService>;
 }

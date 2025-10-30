@@ -1,0 +1,143 @@
+.user-assignment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.add-user-section {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  
+  h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-weight: 600;
+  }
+}
+
+.add-user-form {
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+  }
+  
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    
+    label {
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.current-users-section {
+  h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-weight: 600;
+  }
+}
+
+.user-option {
+  padding: 0.5rem;
+  
+  .user-name {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  .user-email {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.role-dropdown {
+  min-width: 120px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  
+  p {
+    margin: 1rem 0 0 0;
+    color: #6c757d;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-header {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+      padding: 1rem 1.5rem;
+      
+      .p-dialog-title {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+    }
+    
+    .p-dialog-content {
+      padding: 1.5rem;
+    }
+    
+    .p-dialog-footer {
+      background: #f8f9fa;
+      border-top: 1px solid #e9ecef;
+      padding: 1rem 1.5rem;
+    }
+  }
+  
+  .p-datatable {
+    .p-datatable-header {
+      background: #f8f9fa;
+      border: none;
+    }
+    
+    .p-datatable-tbody > tr:hover {
+      background: #f8f9fa;
+    }
+  }
+  
+  .p-dropdown {
+    .p-dropdown-label {
+      font-size: 0.9rem;
+    }
+  }
+  
+  // Fix dropdown z-index issues in modals
+  .p-dropdown-panel {
+    z-index: 1100 !important;
+  }
+  
+  .p-dropdown {
+    .p-dropdown-panel {
+      z-index: 1100 !important;
+    }
+  }
+}

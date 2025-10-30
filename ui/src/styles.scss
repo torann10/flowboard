@@ -2,16 +2,7 @@
 @plugin "tailwindcss-primeui";
 
 :root {
-  --primary-color: #10b981;
-  --primary-color-text: #ffffff;
-
-  --surface-ground: #94bcf0;
-  --text-color: #000000;
-  --text-color-secondary: #ffffff;
-
   --font-family: 'Inter', sans-serif;
-
-  --border-radius: 0px;
 }
 
 html,
@@ -23,23 +14,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family), sans-serif;
-  background-color: var(--surface-ground);
-  color: var(--text-color);
 }
 
-p-menu {
-  .p-menu {
-    border: 0;
-  }
-
-  .side-menu {
-    height: 100%;
-    border-radius: 0 !important;
-    background-color: #333333;
-    color: #ffffff;
-  }
-
-  .p-menu-item-label {
-    color: #fff;
+app-menu {
+  .p-menu-list {
+    flex-grow: 1;
   }
 }

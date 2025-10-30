@@ -2,6 +2,7 @@ package szte.flowboard.service;
 
 import org.springframework.stereotype.Service;
 import szte.flowboard.entity.ProjectUserEntity;
+import szte.flowboard.enums.UserRole;
 import szte.flowboard.repository.ProjectUserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,21 @@ public class ProjectUserService {
         return projectUserRepository.findById(id);
     }
 
-    public ProjectUserEntity update(ProjectUserEntity projectUser) {
+    public ProjectUserEntity update(UUID id, UserRole role) {
+        var optionalProjectUser = projectUserRepository.findById(id);
+
+        if (optionalProjectUser.isEmpty()) {
+            return null;
+        }
+
+        var projectUser = optionalProjectUser.get();
+
+        if (projectUser.getRole() != UserRole.MAINTAINER && projectUser.getRole() != UserRole.EDITOR) {
+            return null;
+        }
+
+        projectUser.setRole(role);
+
         return projectUserRepository.save(projectUser);
     }
 

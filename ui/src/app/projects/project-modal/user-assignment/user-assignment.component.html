@@ -1,0 +1,149 @@
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '800px' }"
+  header="Manage Project Users"
+  (onHide)="onClose()">
+
+  <div class="user-assignment-content">
+    <p-message
+      *ngIf="errorMessage"
+      severity="error"
+      [text]="errorMessage"
+      [closable]="true"
+      (onClose)="errorMessage = ''">
+    </p-message>
+
+    <div class="add-user-section">
+      <h4>Add User to Project</h4>
+      <div class="add-user-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Select User</label>
+            <p-dropdown
+              [options]="availableUsers"
+              [(ngModel)]="selectedUser"
+              optionLabel="firstName"
+              [filter]="true"
+              filterBy="firstName,lastName,emailAddress"
+              placeholder="Search and select a user"
+              [showClear]="true"
+              [appendTo]="'body'"
+              [autofocus]="false"
+              class="w-full">
+              <ng-template pTemplate="selectedItem" let-user>
+                <span *ngIf="user">{{ user.firstName }} {{ user.lastName }} ({{ user.emailAddress }})</span>
+              </ng-template>
+              <ng-template pTemplate="item" let-user>
+                <div class="user-option">
+                  <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+                  <div class="user-email">{{ user.emailAddress }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="form-field">
+            <label>Role</label>
+            <p-dropdown
+              [options]="roleOptions"
+              [(ngModel)]="selectedRole"
+              placeholder="Select role"
+              [appendTo]="'body'"
+              [autofocus]="false"
+              class="w-full">
+            </p-dropdown>
+          </div>
+
+          <div class="form-field">
+            <p-button
+              label="Add User"
+              icon="pi pi-plus"
+              (onClick)="assignUser()"
+              [disabled]="!selectedUser || loading"
+              [loading]="loading">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="current-users-section">
+      <h4>Project Users</h4>
+      <p-table
+        [value]="projectUsers"
+        [loading]="loading"
+        styleClass="p-datatable-sm">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-projectUser>
+          <tr>
+            <td>
+              <div class="user-info">
+                <strong>{{ getUserName(projectUser.userId) }}</strong>
+              </div>
+            </td>
+            <td>{{ getUserEmail(projectUser.userId) }}</td>
+            <td>
+              <p-dropdown
+                [options]="roleOptions"
+                [ngModel]="projectUser.role"
+                (onChange)="updateUserRole(projectUser, $event.value)"
+                [disabled]="loading"
+                [appendTo]="'body'"
+                [autofocus]="false"
+                class="role-dropdown">
+              </p-dropdown>
+            </td>
+            <td>
+              <p-button
+                icon="pi pi-trash"
+                [text]="true"
+                [rounded]="true"
+                severity="danger"
+                size="small"
+                (onClick)="removeUser(projectUser)"
+                [disabled]="loading"
+                pTooltip="Remove User">
+              </p-button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center">
+              <div class="empty-state">
+                <i class="pi pi-users" style="font-size: 2rem; color: #6c757d;"></i>
+                <p>No users assigned to this project</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-button
+        label="Close"
+        icon="pi pi-times"
+        (onClick)="onClose()"
+        [disabled]="loading">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

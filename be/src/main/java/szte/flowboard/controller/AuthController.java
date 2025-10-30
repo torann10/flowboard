@@ -1,6 +1,8 @@
 package szte.flowboard.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +18,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @Operation(summary = "Get current user authentication info", description = "Retrieves the current user's authentication status and details")
+    @Operation(operationId = "getCurrentUserAuth", summary = "Get current user authentication info", description = "Retrieves the current user's authentication status and details")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Authentication info retrieved successfully")
+            @ApiResponse(responseCode = "200", description = "Authentication info retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
     @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> getCurrentUser(Authentication authentication) {

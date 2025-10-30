@@ -1,6 +1,9 @@
 package szte.flowboard.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +29,9 @@ public class UserController {
     private final UserService userService;
     private final UserSyncService userSyncService;
 
-    @Operation(summary = "Get current user", description = "Retrieves the current authenticated user information")
+    @Operation(operationId = "getCurrentUser", summary = "Get current user", description = "Retrieves the current authenticated user information")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found successfully"),
+            @ApiResponse(responseCode = "200", description = "User found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
@@ -55,9 +58,9 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Create user", description = "Creates a new user")
+    @Operation(operationId = "createUser", summary = "Create user", description = "Creates a new user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     @PostMapping
@@ -66,9 +69,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @Operation(summary = "Get all users", description = "Retrieves all users")
+    @Operation(operationId = "getAllUsers", summary = "Get all users", description = "Retrieves all users")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
     })
     @GetMapping
     public ResponseEntity<List<UserResponse>> findAll() {
@@ -76,9 +79,9 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @Operation(summary = "Get user by ID", description = "Retrieves a user by their ID")
+    @Operation(operationId = "getUserById", summary = "Get user by ID", description = "Retrieves a user by their ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found successfully"),
+            @ApiResponse(responseCode = "200", description = "User found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{id}")
@@ -88,9 +91,9 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Update user", description = "Updates an existing user")
+    @Operation(operationId = "updateUser", summary = "Update user", description = "Updates an existing user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "200", description = "User updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
@@ -104,7 +107,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Delete user", description = "Deletes a user by their ID")
+    @Operation(operationId = "deleteUser", summary = "Delete user", description = "Deletes a user by their ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deleted successfully"),
             @ApiResponse(responseCode = "404", description = "User not found")
@@ -119,9 +122,9 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Get user count", description = "Retrieves the total number of users")
+    @Operation(operationId = "getUserCount", summary = "Get user count", description = "Retrieves the total number of users")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Count retrieved successfully")
+            @ApiResponse(responseCode = "200", description = "Count retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
     })
     @GetMapping("/count")
     public ResponseEntity<Long> count() {

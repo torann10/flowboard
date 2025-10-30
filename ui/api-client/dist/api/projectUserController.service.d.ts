@@ -1,6 +1,8 @@
 import { HttpClient, HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProjectUserEntity } from '../model/projectUserEntity';
+import { ProjectUserCreateRequestDto } from '../model/projectUserCreateRequestDto';
+import { ProjectUserDto } from '../model/projectUserDto';
+import { ProjectUserUpdateRequestDto } from '../model/projectUserUpdateRequestDto';
 import { FlowBoardConfiguration } from '../configuration';
 import { BaseService } from '../api.base.service';
 import * as i0 from "@angular/core";
@@ -8,124 +10,136 @@ export declare class ProjectUserControllerApiService extends BaseService {
     protected httpClient: HttpClient;
     constructor(httpClient: HttpClient, basePath: string | string[], configuration?: FlowBoardConfiguration);
     /**
+     * Create project-user relationship
+     * Creates a new project-user relationship
+     * @param projectUserCreateRequestDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    count5(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    createProjectUser(projectUserCreateRequestDto: ProjectUserCreateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<number>;
-    count5(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<ProjectUserDto>;
+    createProjectUser(projectUserCreateRequestDto: ProjectUserCreateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<number>>;
-    count5(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<ProjectUserDto>>;
+    createProjectUser(projectUserCreateRequestDto: ProjectUserCreateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<number>>;
+    }): Observable<HttpEvent<ProjectUserDto>>;
     /**
-     * @param projectUserEntity
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    create5(projectUserEntity: ProjectUserEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<ProjectUserEntity>;
-    create5(projectUserEntity: ProjectUserEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpResponse<ProjectUserEntity>>;
-    create5(projectUserEntity: ProjectUserEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpEvent<ProjectUserEntity>>;
-    /**
+     * Delete project-user relationship
+     * Deletes a project-user relationship by its ID
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    delete4(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+    deleteProjectUser(id: string, observe?: 'body', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<any>;
-    delete4(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+    deleteProjectUser(id: string, observe?: 'response', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpResponse<any>>;
-    delete4(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+    deleteProjectUser(id: string, observe?: 'events', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpEvent<any>>;
     /**
+     * Get all project-user relationships
+     * Retrieves all project-user relationships
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findAll5(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getAllProjectUsers(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<Array<ProjectUserEntity>>;
-    findAll5(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<Array<ProjectUserDto>>;
+    getAllProjectUsers(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<Array<ProjectUserEntity>>>;
-    findAll5(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<Array<ProjectUserDto>>>;
+    getAllProjectUsers(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<Array<ProjectUserEntity>>>;
+    }): Observable<HttpEvent<Array<ProjectUserDto>>>;
     /**
+     * Get project-user relationship by ID
+     * Retrieves a project-user relationship by its ID
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findById4(id: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getProjectUserById(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<ProjectUserEntity>;
-    findById4(id: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<ProjectUserDto>;
+    getProjectUserById(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<ProjectUserEntity>>;
-    findById4(id: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<ProjectUserDto>>;
+    getProjectUserById(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<ProjectUserEntity>>;
+    }): Observable<HttpEvent<ProjectUserDto>>;
     /**
-     * @param id
-     * @param projectUserEntity
+     * Get project-user relationship count
+     * Retrieves the total number of project-user relationships
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    update4(id: string, projectUserEntity: ProjectUserEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getProjectUserCount(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<ProjectUserEntity>;
-    update4(id: string, projectUserEntity: ProjectUserEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<number>;
+    getProjectUserCount(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<ProjectUserEntity>>;
-    update4(id: string, projectUserEntity: ProjectUserEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<number>>;
+    getProjectUserCount(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<ProjectUserEntity>>;
+    }): Observable<HttpEvent<number>>;
+    /**
+     * Update project-user relationship
+     * Updates an existing project-user relationship
+     * @param id
+     * @param projectUserUpdateRequestDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    updateProjectUser(id: string, projectUserUpdateRequestDto: ProjectUserUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<ProjectUserDto>;
+    updateProjectUser(id: string, projectUserUpdateRequestDto: ProjectUserUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpResponse<ProjectUserDto>>;
+    updateProjectUser(id: string, projectUserUpdateRequestDto: ProjectUserUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpEvent<ProjectUserDto>>;
     static ɵfac: i0.ɵɵFactoryDeclaration<ProjectUserControllerApiService, [null, { optional: true; }, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ProjectUserControllerApiService>;
 }

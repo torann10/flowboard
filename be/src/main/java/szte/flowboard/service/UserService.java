@@ -90,6 +90,10 @@ public class UserService {
                 ));
     }
 
+    public Optional<UserEntity> findByIdEntity(UUID id) {
+        return userRepository.findById(id);
+    }
+
     public Optional<UserEntity> findByKeycloakId(String keycloakId) {
         return userRepository.findByKeycloakId(keycloakId);
     }

@@ -1,18 +1,16 @@
-<div class="developer-status"><strong>Keycloak Events:</strong> {{ keycloakStatus }}</div>
-
-<div class="flex overflow-hidden h-screen">
-  <div
-    class="shadow bg-gray-50"
-    style="width: 12.5rem"
-  >
-    @if (!authenticated) {
-      <button class="action-item" (click)="login()">Login</button>
-    } @else {
-      <button class="action-item" (click)="logout()">Logout</button>
-    }
-    <app-menu></app-menu>
-  </div>
-  <div class="flex-1 p-4 overflow-y-auto">
+<div *ngIf="userService.user(); else loadingTemplate" class="flex overflow-hidden h-screen">
+  <app-menu></app-menu>
+  <div class="flex-1 p-4 overflow-y-auto bg-slate-50">
     <router-outlet></router-outlet>
   </div>
 </div>
+
+<ng-template #loadingTemplate>
+  <div class="flex flex-col items-center justify-center h-screen">
+    <p-progressSpinner
+      strokeWidth="4"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+    <span>Loading...</span>
+  </div>
+</ng-template>

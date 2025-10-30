@@ -1,6 +1,8 @@
 import { HttpClient, HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProjectEntity } from '../model/projectEntity';
+import { ProjectCreateRequestDto } from '../model/projectCreateRequestDto';
+import { ProjectDto } from '../model/projectDto';
+import { ProjectUpdateRequestDto } from '../model/projectUpdateRequestDto';
 import { FlowBoardConfiguration } from '../configuration';
 import { BaseService } from '../api.base.service';
 import * as i0 from "@angular/core";
@@ -8,124 +10,136 @@ export declare class ProjectControllerApiService extends BaseService {
     protected httpClient: HttpClient;
     constructor(httpClient: HttpClient, basePath: string | string[], configuration?: FlowBoardConfiguration);
     /**
+     * Create project
+     * Creates a new project and assigns the current user as admin
+     * @param projectCreateRequestDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    count4(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    createProject(projectCreateRequestDto: ProjectCreateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<number>;
-    count4(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<ProjectDto>;
+    createProject(projectCreateRequestDto: ProjectCreateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<number>>;
-    count4(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<ProjectDto>>;
+    createProject(projectCreateRequestDto: ProjectCreateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<number>>;
+    }): Observable<HttpEvent<ProjectDto>>;
     /**
-     * @param projectEntity
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    create4(projectEntity: ProjectEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<ProjectEntity>;
-    create4(projectEntity: ProjectEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpResponse<ProjectEntity>>;
-    create4(projectEntity: ProjectEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpEvent<ProjectEntity>>;
-    /**
+     * Delete project
+     * Deletes a project by its ID for the current user
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    delete3(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+    deleteProject(id: string, observe?: 'body', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<any>;
-    delete3(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+    deleteProject(id: string, observe?: 'response', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpResponse<any>>;
-    delete3(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+    deleteProject(id: string, observe?: 'events', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpEvent<any>>;
     /**
+     * Get all projects
+     * Retrieves all projects for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findAll4(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getAllProjects(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<Array<ProjectEntity>>;
-    findAll4(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<Array<ProjectDto>>;
+    getAllProjects(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<Array<ProjectEntity>>>;
-    findAll4(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<Array<ProjectDto>>>;
+    getAllProjects(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<Array<ProjectEntity>>>;
+    }): Observable<HttpEvent<Array<ProjectDto>>>;
     /**
+     * Get project by ID
+     * Retrieves a project by its ID for the current user
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findById3(id: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getProjectById(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<ProjectEntity>;
-    findById3(id: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<ProjectDto>;
+    getProjectById(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<ProjectEntity>>;
-    findById3(id: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<ProjectDto>>;
+    getProjectById(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<ProjectEntity>>;
+    }): Observable<HttpEvent<ProjectDto>>;
     /**
-     * @param id
-     * @param projectEntity
+     * Get project count
+     * Retrieves the total number of projects for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    update3(id: string, projectEntity: ProjectEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getProjectCount(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<ProjectEntity>;
-    update3(id: string, projectEntity: ProjectEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<number>;
+    getProjectCount(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<ProjectEntity>>;
-    update3(id: string, projectEntity: ProjectEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<number>>;
+    getProjectCount(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<ProjectEntity>>;
+    }): Observable<HttpEvent<number>>;
+    /**
+     * Update project
+     * Updates an existing project for the current user
+     * @param id
+     * @param projectUpdateRequestDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    updateProject(id: string, projectUpdateRequestDto: ProjectUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<ProjectDto>;
+    updateProject(id: string, projectUpdateRequestDto: ProjectUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpResponse<ProjectDto>>;
+    updateProject(id: string, projectUpdateRequestDto: ProjectUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpEvent<ProjectDto>>;
     static ɵfac: i0.ɵɵFactoryDeclaration<ProjectControllerApiService, [null, { optional: true; }, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ProjectControllerApiService>;
 }

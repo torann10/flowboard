@@ -1,37 +1,189 @@
-<div class="card flex justify-center">
-  <p-dialog header="Create Task" [modal]="true" [visible]="visible" (visibleChange)="setVisibility($event)" [style]="{ width: '50rem' }">
-    <form [formGroup]="createTaskForm" (ngSubmit)="createTask()">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col">
-          <label for="title">Title</label>
-          <input pInputText id="title" formControlName="title" autocomplete="off" />
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '600px' }"
+  [header]="isEditMode ? 'Edit Task' : 'Create Task'"
+  (onHide)="onCancel()">
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSave()">
+    <div class="space-y-6 py-4">
+
+      <p-message
+        *ngIf="errorMessage"
+        severity="error"
+        [text]="errorMessage"
+        [closable]="true"
+        (onClose)="errorMessage = ''">
+      </p-message>
+
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Task Name *</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Enter task name"
+          [class.ng-invalid]="taskForm.get('name')?.invalid && taskForm.get('name')?.touched"
+          class="w-full">
+        <small
+          *ngIf="getFieldError('name')"
+          class="text-red-500 text-xs mt-1">
+          {{ getFieldError('name') }}
+        </small>
+      </div>
+
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+        <textarea
+          id="description"
+          pTextarea
+          formControlName="description"
+          placeholder="Enter task description"
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label for="projectId" class="block text-sm font-medium text-gray-700 mb-2">Project *</label>
+          <p-dropdown
+            id="projectId"
+            formControlName="projectId"
+            [options]="projectOptions"
+            placeholder="Select project"
+            [class.ng-invalid]="taskForm.get('projectId')?.invalid && taskForm.get('projectId')?.touched"
+            [appendTo]="'body'"
+            [autofocus]="false"
+            class="w-full">
+          </p-dropdown>
+          <small
+            *ngIf="getFieldError('projectId')"
+            class="text-red-500 text-xs mt-1">
+            {{ getFieldError('projectId') }}
+          </small>
         </div>
-        <div class="flex flex-col">
-          <label for="assignee">Assignee</label>
-          <input pInputText id="assignee" formControlName="assignee" autocomplete="off" />
+
+        <div>
+          <label for="assignTo" class="block text-sm font-medium text-gray-700 mb-2">Assign To</label>
+          <p-dropdown
+            id="assignTo"
+            formControlName="assignTo"
+            [options]="userOptions"
+            placeholder="Select user (optional)"
+            [appendTo]="'body'"
+            [autofocus]="false"
+            [showClear]="true"
+            class="w-full">
+          </p-dropdown>
+          <small class="text-gray-500 text-xs mt-1">
+            Use the clear button (×) to remove assignment
+          </small>
         </div>
-        <div class="flex flex-col">
-          <label for="project">Project</label>
-          <p-select
-            formControlName="project"
-            [options]="projects"
-            optionLabel="label"
-            placeholder="Select a project" />
-        </div>
-        <div class="flex flex-col">
-          <label for="estimatedTime">Estimated Time</label>
-          <p-inputmask mask="99d 99h 99m" styleClass="w-full" inputId="estimatedTime" formControlName="estimatedTime" autocomplete="off" />
-        </div>
-        <div class="flex flex-col">
-          <label for="description">Description</label>
-          <textarea rows="4" pTextarea id="description" formControlName="description" autocomplete="off"></textarea>
+
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
+          <p-dropdown
+            id="status"
+            formControlName="status"
+            [options]="statusOptions"
+            placeholder="Select status"
+            [class.ng-invalid]="taskForm.get('status')?.invalid && taskForm.get('status')?.touched"
+            [appendTo]="'body'"
+            [autofocus]="false"
+            class="w-full">
+          </p-dropdown>
+          <small
+            *ngIf="getFieldError('status')"
+            class="text-red-500 text-xs mt-1">
+            {{ getFieldError('status') }}
+          </small>
         </div>
       </div>
 
-      <div class="flex justify-end gap-2 mt-4">
-        <p-button label="Cancel" severity="secondary" (click)="setVisibility(false)" />
-        <p-button label="Save" (click)="setVisibility(false)" />
+      <div *ngIf="!isStoryPointBased()">
+        <label for="estimatedTime" class="block text-sm font-medium text-gray-700 mb-2">Estimated Time</label>
+        <input
+          id="estimatedTime"
+          type="text"
+          pInputText
+          formControlName="estimatedTime"
+          placeholder="e.g., 2h 30m or 1h"
+          (blur)="onEstimatedTimeChange()"
+          class="w-full">
+        <small class="text-gray-500 text-xs mt-1">
+          Enter estimated time in format like "2h 30m" or "1h"
+        </small>
       </div>
-    </form>
-  </p-dialog>
-</div>
+
+      <div *ngIf="isStoryPointBased()">
+        <label for="storyPoints" class="block text-sm font-medium text-gray-700 mb-2">Story Points *</label>
+        <p-inputNumber
+          id="storyPoints"
+          formControlName="storyPoints"
+          placeholder="Enter story points"
+          [min]="1"
+          [max]="100"
+          [step]="1"
+          [class.ng-invalid]="taskForm.get('storyPoints')?.invalid && taskForm.get('storyPoints')?.touched"
+          class="w-full">
+        </p-inputNumber>
+        <small
+          *ngIf="getFieldError('storyPoints')"
+          class="text-red-500 text-xs mt-1">
+          {{ getFieldError('storyPoints') }}
+        </small>
+        <small class="text-gray-500 text-xs mt-1">
+          Enter the story points for this task (1-100)
+        </small>
+        
+        <!-- Time equivalent display -->
+        <div *ngIf="calculatedTime" class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <div class="flex items-center">
+            <i class="pi pi-clock text-blue-600 mr-2"></i>
+            <span class="text-sm font-medium text-blue-800">
+              Estimated Time: {{ calculatedTime }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Common story point values -->
+        <div *ngIf="getCommonStoryPointValues().length > 0" class="mt-3">
+          <h4 class="text-sm font-medium text-gray-700 mb-2">Common Story Point Values:</h4>
+          <div class="grid grid-cols-2 gap-2">
+            <div 
+              *ngFor="let item of getCommonStoryPointValues()" 
+              class="flex justify-between items-center p-2 bg-gray-50 rounded text-xs">
+              <span class="font-medium">{{ item.storyPoints }} SP</span>
+              <span class="text-gray-600">{{ item.time }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2 pt-4 border-t border-gray-200">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="onCancel()"
+        [disabled]="loading">
+      </p-button>
+      <p-button
+        [label]="isEditMode ? 'Update' : 'Create'"
+        icon="pi pi-check"
+        (onClick)="onSave()"
+        [loading]="loading"
+        [disabled]="taskForm.invalid">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

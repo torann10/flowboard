@@ -1,6 +1,8 @@
 import { HttpClient, HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ReportEntity } from '../model/reportEntity';
+import { ReportCreateRequestDto } from '../model/reportCreateRequestDto';
+import { ReportDto } from '../model/reportDto';
+import { ReportUpdateRequestDto } from '../model/reportUpdateRequestDto';
 import { FlowBoardConfiguration } from '../configuration';
 import { BaseService } from '../api.base.service';
 import * as i0 from "@angular/core";
@@ -8,124 +10,136 @@ export declare class ReportControllerApiService extends BaseService {
     protected httpClient: HttpClient;
     constructor(httpClient: HttpClient, basePath: string | string[], configuration?: FlowBoardConfiguration);
     /**
+     * Create report
+     * Creates a new report for the current user
+     * @param reportCreateRequestDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    count3(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    createReport(reportCreateRequestDto: ReportCreateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<number>;
-    count3(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<ReportDto>;
+    createReport(reportCreateRequestDto: ReportCreateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<number>>;
-    count3(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<ReportDto>>;
+    createReport(reportCreateRequestDto: ReportCreateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<number>>;
+    }): Observable<HttpEvent<ReportDto>>;
     /**
-     * @param reportEntity
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    create3(reportEntity: ReportEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<ReportEntity>;
-    create3(reportEntity: ReportEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpResponse<ReportEntity>>;
-    create3(reportEntity: ReportEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpEvent<ReportEntity>>;
-    /**
+     * Delete report
+     * Deletes a report by its ID for the current user
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    delete2(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+    deleteReport(id: string, observe?: 'body', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<any>;
-    delete2(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+    deleteReport(id: string, observe?: 'response', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpResponse<any>>;
-    delete2(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+    deleteReport(id: string, observe?: 'events', reportProgress?: boolean, options?: {
         httpHeaderAccept?: undefined;
         context?: HttpContext;
         transferCache?: boolean;
     }): Observable<HttpEvent<any>>;
     /**
+     * Get all reports
+     * Retrieves all reports for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findAll3(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getAllReports(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<Array<ReportEntity>>;
-    findAll3(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<Array<ReportDto>>;
+    getAllReports(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<Array<ReportEntity>>>;
-    findAll3(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<Array<ReportDto>>>;
+    getAllReports(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<Array<ReportEntity>>>;
+    }): Observable<HttpEvent<Array<ReportDto>>>;
     /**
+     * Get report by ID
+     * Retrieves a report by its ID for the current user
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    findById2(id: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getReportById(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<ReportEntity>;
-    findById2(id: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<ReportDto>;
+    getReportById(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<ReportEntity>>;
-    findById2(id: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<ReportDto>>;
+    getReportById(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<ReportEntity>>;
+    }): Observable<HttpEvent<ReportDto>>;
     /**
-     * @param id
-     * @param reportEntity
+     * Get report count
+     * Retrieves the total number of reports for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    update2(id: string, reportEntity: ReportEntity, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    getReportCount(observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<ReportEntity>;
-    update2(id: string, reportEntity: ReportEntity, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<number>;
+    getReportCount(observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<ReportEntity>>;
-    update2(id: string, reportEntity: ReportEntity, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*';
+    }): Observable<HttpResponse<number>>;
+    getReportCount(observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<ReportEntity>>;
+    }): Observable<HttpEvent<number>>;
+    /**
+     * Update report
+     * Updates an existing report for the current user
+     * @param id
+     * @param reportUpdateRequestDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    updateReport(id: string, reportUpdateRequestDto: ReportUpdateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<ReportDto>;
+    updateReport(id: string, reportUpdateRequestDto: ReportUpdateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpResponse<ReportDto>>;
+    updateReport(id: string, reportUpdateRequestDto: ReportUpdateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json' | '*/*';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpEvent<ReportDto>>;
     static ɵfac: i0.ɵɵFactoryDeclaration<ReportControllerApiService, [null, { optional: true; }, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ReportControllerApiService>;
 }

@@ -1,12 +1,12 @@
 package szte.flowboard.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,4 +27,7 @@ public class UserEntity extends AuditEntity {
 
     @Column(name = "email_address", nullable = false, unique = true)
     private String emailAddress;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProjectUserEntity> projectUsers;
 }

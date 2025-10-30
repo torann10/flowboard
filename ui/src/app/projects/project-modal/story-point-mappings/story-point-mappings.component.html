@@ -1,0 +1,93 @@
+<div class="story-point-mappings">
+  <h4 class="text-lg font-semibold text-gray-800 mb-4">Story Point Time Mappings</h4>
+  <p class="text-sm text-gray-600 mb-4">
+    Define custom time values for different story point amounts. This allows for non-linear time estimation.
+  </p>
+
+  <form [formGroup]="mappingsForm">
+    <div formArrayName="mappings" class="space-y-4">
+      <div
+        *ngFor="let mappingGroup of mappingsArray.controls; let i = index"
+        [formGroupName]="i"
+        class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+
+        <div class="flex justify-between gap-2 items-end">
+          <div>
+            <label [for]="'storyPoints_' + i" class="block text-sm font-medium text-gray-700 mb-1">
+              Story Points *
+            </label>
+            <p-inputNumber
+              [id]="'storyPoints_' + i"
+              formControlName="storyPoints"
+              placeholder="e.g., 1, 2, 5, 8"
+              [min]="1"
+              [max]="100"
+              [step]="1"
+              [class.ng-invalid]="mappingGroup.get('storyPoints')?.invalid && mappingGroup.get('storyPoints')?.touched"
+              class="w-full">
+            </p-inputNumber>
+            <small
+              *ngIf="getFieldError(mappingGroup, 'storyPoints')"
+              class="text-red-500 text-xs mt-1">
+              {{ getFieldError(mappingGroup, 'storyPoints') }}
+            </small>
+          </div>
+
+          <div>
+            <label [for]="'timeDisplay_' + i" class="block text-sm font-medium text-gray-700 mb-1">
+              Time (hours) *
+            </label>
+            <input
+              pInputText
+              [id]="'timeDisplay_' + i"
+              formControlName="timeDisplay"
+              placeholder="e.g., 2h, 5h 30m"
+              [class.ng-invalid]="mappingGroup.get('timeDisplay')?.invalid && mappingGroup.get('timeDisplay')?.touched"
+              class="w-full" />
+            <small
+              *ngIf="getFieldError(mappingGroup, 'timeDisplay')"
+              class="text-red-500 text-xs mt-1">
+              {{ getFieldError(mappingGroup, 'timeDisplay') }}
+            </small>
+          </div>
+
+          <div class="mb-2">
+            <p-button
+              icon="pi pi-trash"
+              [text]="true"
+              [rounded]="true"
+              severity="danger"
+              size="small"
+              (onClick)="removeMapping(i)"
+              [disabled]="mappingsArray.length <= 1"
+              pTooltip="Remove this mapping">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-4 flex justify-between items-center">
+    <p-button
+      label="Add Mapping"
+      icon="pi pi-plus"
+      [outlined]="true"
+      size="small"
+      (onClick)="addMapping()">
+    </p-button>
+
+    <small class="text-gray-500">
+      {{ mappingsArray.length }} mapping(s) defined
+    </small>
+  </div>
+
+  <p-message
+    *ngIf="errorMessage"
+    severity="error"
+    [text]="errorMessage"
+    [closable]="true"
+    (onClose)="errorMessage = ''"
+    class="mt-4">
+  </p-message>
+</div>

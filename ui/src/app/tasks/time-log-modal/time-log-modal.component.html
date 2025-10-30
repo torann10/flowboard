@@ -1,0 +1,297 @@
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '800px' }"
+  [header]="'Time Log - ' + (task?.name || 'Task')"
+  (onHide)="onCancel()">
+
+  <div class="space-y-6 py-4">
+    
+    <p-message
+      *ngIf="errorMessage"
+      severity="error"
+      [text]="errorMessage"
+      [closable]="true"
+      (onClose)="errorMessage = ''">
+    </p-message>
+
+    <!-- Time Summary -->
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200 shadow-sm">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+          <i class="pi pi-chart-bar text-green-600 text-lg"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">Time Summary</h3>
+          <p class="text-sm text-gray-600">Overview of logged time for this task</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <i class="pi pi-clock text-blue-600 text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-gray-600 mb-1">Total Time</div>
+              <div class="text-2xl font-bold text-gray-800">{{ getTotalLoggedTime() }}</div>
+              <div class="text-xs text-gray-500">{{ timeLogs.length }} entries</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <i class="pi pi-dollar text-green-600 text-xl"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-gray-600 mb-1">Billable Time</div>
+              <div class="text-2xl font-bold text-gray-800">{{ getTotalBillableTime() }}</div>
+              <div class="text-xs text-gray-500">
+                {{ timeLogs | billableCount }} billable entries
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Time Log Form -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-sm">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <i class="pi pi-clock text-blue-600 text-lg"></i>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-gray-800">
+              {{ isEditMode ? 'Edit Time Log' : 'Log Time' }}
+            </h4>
+            <p class="text-sm text-gray-600">
+              {{ isEditMode ? 'Update the time log entry' : 'Add a new time entry for this task' }}
+            </p>
+          </div>
+        </div>
+        <div *ngIf="isEditMode" class="flex gap-2">
+          <p-button
+            icon="pi pi-times"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+            (onClick)="cancelEdit()"
+            pTooltip="Cancel Edit"
+            tooltipPosition="top">
+          </p-button>
+        </div>
+      </div>
+
+      <form [formGroup]="timeLogForm" (ngSubmit)="onSave()">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="lg:col-span-2">
+            <label for="loggedTime" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="pi pi-clock mr-1"></i>Time Spent *
+            </label>
+            <div class="relative">
+              <input
+                id="loggedTime"
+                type="text"
+                pInputText
+                formControlName="loggedTime"
+                placeholder="e.g., 2h 30m or 1h"
+                [class.ng-invalid]="timeLogForm.get('loggedTime')?.invalid && timeLogForm.get('loggedTime')?.touched"
+                class="w-full pl-10">
+              <i class="pi pi-clock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+            <small
+              *ngIf="getFieldError('loggedTime')"
+              class="text-red-500 text-xs mt-1 block">
+              {{ getFieldError('loggedTime') }}
+            </small>
+            <small class="text-gray-500 text-xs mt-1 block">
+              <i class="pi pi-info-circle mr-1"></i>
+              Enter time in format like "2h 30m" or "1h"
+            </small>
+          </div>
+
+          <div>
+            <label for="logDate" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="pi pi-calendar mr-1"></i>Date *
+            </label>
+            <p-calendar
+              id="logDate"
+              formControlName="logDate"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"
+              [class.ng-invalid]="timeLogForm.get('logDate')?.invalid && timeLogForm.get('logDate')?.touched"
+              class="w-full">
+            </p-calendar>
+            <small
+              *ngIf="getFieldError('logDate')"
+              class="text-red-500 text-xs mt-1 block">
+              {{ getFieldError('logDate') }}
+            </small>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="pi pi-cog mr-1"></i>Options
+            </label>
+            <div class="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
+              <p-checkbox
+                formControlName="isBillable"
+                [binary]="true"
+                inputId="isBillable">
+              </p-checkbox>
+              <label for="isBillable" class="text-sm text-gray-700 font-medium">
+                <i class="pi pi-dollar mr-1"></i>Billable
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-blue-200">
+          <p-button
+            *ngIf="isEditMode"
+            label="Cancel"
+            icon="pi pi-times"
+            [text]="true"
+            (onClick)="cancelEdit()"
+            [disabled]="loading">
+          </p-button>
+          <p-button
+            [label]="isEditMode ? 'Update Time' : 'Add Time'"
+            [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+            (onClick)="onSave()"
+            [loading]="loading"
+            [disabled]="timeLogForm.invalid"
+            [class]="isEditMode ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-500 hover:bg-blue-600'">
+          </p-button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Time Log History -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+              <i class="pi pi-history text-gray-600"></i>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-800">Time Log History</h4>
+              <p class="text-sm text-gray-600">{{ timeLogs.length }} entries logged</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-hidden">
+        <p-table
+          [value]="timeLogs"
+          [loading]="loading"
+          styleClass="p-datatable-sm">
+          
+          <ng-template pTemplate="header">
+            <tr class="bg-gray-50">
+              <th class="text-left py-4 px-6 font-semibold text-gray-700">Date</th>
+              <th class="text-left py-4 px-6 font-semibold text-gray-700">Time</th>
+              <th class="text-left py-4 px-6 font-semibold text-gray-700">Billable</th>
+              <th class="text-center py-4 px-6 font-semibold text-gray-700">Actions</th>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-timeLog let-rowIndex="rowIndex">
+            <tr class="hover:bg-gray-50 transition-colors" [class.bg-blue-50]="editingTimeLog?.id === timeLog.id">
+              <td class="py-4 px-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <i class="pi pi-calendar text-gray-600 text-sm"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-800">
+                      {{ timeLog.logDate | date:'MMM dd, yyyy' }}
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      {{ timeLog.logDate | date:'EEEE' }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-4 px-6">
+                <div class="flex items-center gap-2">
+                  <i class="pi pi-clock text-gray-500"></i>
+                  <span class="font-semibold text-gray-800 text-lg">
+                    {{ timeLog.loggedTime | durationFormat }}
+                  </span>
+                </div>
+              </td>
+              <td class="py-4 px-6">
+                <p-tag
+                  [value]="timeLog.isBillable ? 'Billable' : 'Non-billable'"
+                  [severity]="timeLog.isBillable ? 'success' : 'info'"
+                  [icon]="timeLog.isBillable ? 'pi pi-dollar' : 'pi pi-times'">
+                </p-tag>
+              </td>
+              <td class="py-4 px-6">
+                <div class="flex items-center justify-center gap-2">
+                  <p-button
+                    icon="pi pi-pencil"
+                    [text]="true"
+                    [rounded]="true"
+                    size="small"
+                    (onClick)="editTimeLog(timeLog)"
+                    pTooltip="Edit Time Log"
+                    tooltipPosition="top"
+                    [class]="editingTimeLog?.id === timeLog.id ? 'bg-orange-100 text-orange-600' : ''">
+                  </p-button>
+                  <p-button
+                    icon="pi pi-trash"
+                    [text]="true"
+                    [rounded]="true"
+                    severity="danger"
+                    size="small"
+                    (onClick)="deleteTimeLog(timeLog)"
+                    pTooltip="Delete Time Log"
+                    tooltipPosition="top">
+                  </p-button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" class="text-center py-12">
+                <div class="flex flex-col items-center">
+                  <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="pi pi-clock text-2xl text-gray-400"></i>
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-600 mb-2">No time logged yet</h3>
+                  <p class="text-gray-500 text-sm mb-4">Start tracking time for this task</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end pt-4 border-t border-gray-200">
+      <p-button
+        label="Close"
+        icon="pi pi-times"
+        (onClick)="onCancel()"
+        [disabled]="loading">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

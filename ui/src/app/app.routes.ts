@@ -4,6 +4,7 @@ import { TasksComponent } from './tasks/tasks.component';
 import { TimeTrackingComponent } from './time-tracking/time-tracking.component';
 import { BoardComponent } from './board/board.component';
 import { ReportsComponent } from './reports/reports.component';
+import { ProjectsComponent } from './projects/projects.component';
 import { canActivateAuthRole } from './guards/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 
@@ -32,6 +33,11 @@ export const routes: Routes = [
   {
     path: 'reports',
     component: ReportsComponent,
+    canActivate: [canActivateAuthRole]
+  },
+  {
+    path: 'projects',
+    component: ProjectsComponent,
     canActivate: [canActivateAuthRole]
   },
   {

@@ -267,12 +267,12 @@ class AuthControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    getCurrentUser1(observe = 'body', reportProgress = false, options) {
+    getCurrentUserAuth(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -336,50 +336,15 @@ class ProjectControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    count4(observe = 'body', reportProgress = false, options) {
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/projects/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    create4(projectEntity, observe = 'body', reportProgress = false, options) {
-        if (projectEntity === null || projectEntity === undefined) {
-            throw new Error('Required parameter projectEntity was null or undefined when calling create4.');
+    createProject(projectCreateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (projectCreateRequestDto === null || projectCreateRequestDto === undefined) {
+            throw new Error('Required parameter projectCreateRequestDto was null or undefined when calling createProject.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -411,7 +376,7 @@ class ProjectControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('post', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: projectEntity,
+            body: projectCreateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -420,9 +385,9 @@ class ProjectControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    delete3(id, observe = 'body', reportProgress = false, options) {
+    deleteProject(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling delete3.');
+            throw new Error('Required parameter id was null or undefined when calling deleteProject.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
@@ -457,12 +422,12 @@ class ProjectControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findAll4(observe = 'body', reportProgress = false, options) {
+    getAllProjects(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -493,14 +458,15 @@ class ProjectControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findById3(id, observe = 'body', reportProgress = false, options) {
+    getProjectById(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling findById3.');
+            throw new Error('Required parameter id was null or undefined when calling getProjectById.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -532,17 +498,54 @@ class ProjectControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    update3(id, projectEntity, observe = 'body', reportProgress = false, options) {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update3.');
+    getProjectCount(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
-        if (projectEntity === null || projectEntity === undefined) {
-            throw new Error('Required parameter projectEntity was null or undefined when calling update3.');
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/projects/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    updateProject(id, projectUpdateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateProject.');
+        }
+        if (projectUpdateRequestDto === null || projectUpdateRequestDto === undefined) {
+            throw new Error('Required parameter projectUpdateRequestDto was null or undefined when calling updateProject.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -574,7 +577,7 @@ class ProjectControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('put', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: projectEntity,
+            body: projectUpdateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -616,50 +619,15 @@ class ProjectUserControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    count5(observe = 'body', reportProgress = false, options) {
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/project-users/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    create5(projectUserEntity, observe = 'body', reportProgress = false, options) {
-        if (projectUserEntity === null || projectUserEntity === undefined) {
-            throw new Error('Required parameter projectUserEntity was null or undefined when calling create5.');
+    createProjectUser(projectUserCreateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (projectUserCreateRequestDto === null || projectUserCreateRequestDto === undefined) {
+            throw new Error('Required parameter projectUserCreateRequestDto was null or undefined when calling createProjectUser.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -691,7 +659,7 @@ class ProjectUserControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('post', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: projectUserEntity,
+            body: projectUserCreateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -700,9 +668,9 @@ class ProjectUserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    delete4(id, observe = 'body', reportProgress = false, options) {
+    deleteProjectUser(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling delete4.');
+            throw new Error('Required parameter id was null or undefined when calling deleteProjectUser.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
@@ -737,12 +705,12 @@ class ProjectUserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findAll5(observe = 'body', reportProgress = false, options) {
+    getAllProjectUsers(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -773,14 +741,15 @@ class ProjectUserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findById4(id, observe = 'body', reportProgress = false, options) {
+    getProjectUserById(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling findById4.');
+            throw new Error('Required parameter id was null or undefined when calling getProjectUserById.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -812,17 +781,54 @@ class ProjectUserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    update4(id, projectUserEntity, observe = 'body', reportProgress = false, options) {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update4.');
+    getProjectUserCount(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
-        if (projectUserEntity === null || projectUserEntity === undefined) {
-            throw new Error('Required parameter projectUserEntity was null or undefined when calling update4.');
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/project-users/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    updateProjectUser(id, projectUserUpdateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateProjectUser.');
+        }
+        if (projectUserUpdateRequestDto === null || projectUserUpdateRequestDto === undefined) {
+            throw new Error('Required parameter projectUserUpdateRequestDto was null or undefined when calling updateProjectUser.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -854,7 +860,7 @@ class ProjectUserControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('put', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: projectUserEntity,
+            body: projectUserUpdateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -896,50 +902,15 @@ class ReportControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    count3(observe = 'body', reportProgress = false, options) {
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/reports/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    create3(reportEntity, observe = 'body', reportProgress = false, options) {
-        if (reportEntity === null || reportEntity === undefined) {
-            throw new Error('Required parameter reportEntity was null or undefined when calling create3.');
+    createReport(reportCreateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (reportCreateRequestDto === null || reportCreateRequestDto === undefined) {
+            throw new Error('Required parameter reportCreateRequestDto was null or undefined when calling createReport.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -971,7 +942,7 @@ class ReportControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('post', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: reportEntity,
+            body: reportCreateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -980,9 +951,9 @@ class ReportControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    delete2(id, observe = 'body', reportProgress = false, options) {
+    deleteReport(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling delete2.');
+            throw new Error('Required parameter id was null or undefined when calling deleteReport.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
@@ -1017,12 +988,12 @@ class ReportControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findAll3(observe = 'body', reportProgress = false, options) {
+    getAllReports(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1053,14 +1024,15 @@ class ReportControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findById2(id, observe = 'body', reportProgress = false, options) {
+    getReportById(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling findById2.');
+            throw new Error('Required parameter id was null or undefined when calling getReportById.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1092,17 +1064,54 @@ class ReportControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    update2(id, reportEntity, observe = 'body', reportProgress = false, options) {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update2.');
+    getReportCount(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
-        if (reportEntity === null || reportEntity === undefined) {
-            throw new Error('Required parameter reportEntity was null or undefined when calling update2.');
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/reports/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    updateReport(id, reportUpdateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateReport.');
+        }
+        if (reportUpdateRequestDto === null || reportUpdateRequestDto === undefined) {
+            throw new Error('Required parameter reportUpdateRequestDto was null or undefined when calling updateReport.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1134,7 +1143,7 @@ class ReportControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('put', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: reportEntity,
+            body: reportUpdateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -1176,50 +1185,15 @@ class TaskControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    count2(observe = 'body', reportProgress = false, options) {
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/tasks/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    create2(taskEntity, observe = 'body', reportProgress = false, options) {
-        if (taskEntity === null || taskEntity === undefined) {
-            throw new Error('Required parameter taskEntity was null or undefined when calling create2.');
+    createTask(taskCreateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (taskCreateRequestDto === null || taskCreateRequestDto === undefined) {
+            throw new Error('Required parameter taskCreateRequestDto was null or undefined when calling createTask.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1251,7 +1225,7 @@ class TaskControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('post', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: taskEntity,
+            body: taskCreateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -1260,9 +1234,9 @@ class TaskControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    delete1(id, observe = 'body', reportProgress = false, options) {
+    deleteTask(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling delete1.');
+            throw new Error('Required parameter id was null or undefined when calling deleteTask.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
@@ -1297,12 +1271,12 @@ class TaskControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findAll2(observe = 'body', reportProgress = false, options) {
+    getAllTasks(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1333,14 +1307,15 @@ class TaskControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findById1(id, observe = 'body', reportProgress = false, options) {
+    getTaskById(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling findById1.');
+            throw new Error('Required parameter id was null or undefined when calling getTaskById.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1372,17 +1347,93 @@ class TaskControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    update1(id, taskEntity, observe = 'body', reportProgress = false, options) {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update1.');
+    getTaskCount(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
-        if (taskEntity === null || taskEntity === undefined) {
-            throw new Error('Required parameter taskEntity was null or undefined when calling update1.');
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/tasks/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    getTasksByProject(projectId, observe = 'body', reportProgress = false, options) {
+        if (projectId === null || projectId === undefined) {
+            throw new Error('Required parameter projectId was null or undefined when calling getTasksByProject.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/tasks/project/${this.configuration.encodeParam({ name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    updateTask(id, taskUpdateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateTask.');
+        }
+        if (taskUpdateRequestDto === null || taskUpdateRequestDto === undefined) {
+            throw new Error('Required parameter taskUpdateRequestDto was null or undefined when calling updateTask.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1414,7 +1465,7 @@ class TaskControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('put', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: taskEntity,
+            body: taskUpdateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -1456,9 +1507,58 @@ class TimeLogControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    _delete(id, observe = 'body', reportProgress = false, options) {
+    createTimeLog(timeLogUpdateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (timeLogUpdateRequestDto === null || timeLogUpdateRequestDto === undefined) {
+            throw new Error('Required parameter timeLogUpdateRequestDto was null or undefined when calling createTimeLog.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        // to determine the Content-Type header
+        const consumes = [
+            'application/json'
+        ];
+        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/time-logs`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('post', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            body: timeLogUpdateRequestDto,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    deleteTimeLog(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling _delete.');
+            throw new Error('Required parameter id was null or undefined when calling deleteTimeLog.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
@@ -1493,96 +1593,12 @@ class TimeLogControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    count1(observe = 'body', reportProgress = false, options) {
+    getAllTimeLogs(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/time-logs/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    create1(timeLogEntity, observe = 'body', reportProgress = false, options) {
-        if (timeLogEntity === null || timeLogEntity === undefined) {
-            throw new Error('Required parameter timeLogEntity was null or undefined when calling create1.');
-        }
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        // to determine the Content-Type header
-        const consumes = [
             'application/json'
-        ];
-        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/time-logs`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('post', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            body: timeLogEntity,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    findAll1(observe = 'body', reportProgress = false, options) {
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1613,14 +1629,15 @@ class TimeLogControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findById(id, observe = 'body', reportProgress = false, options) {
+    getTimeLogById(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling findById.');
+            throw new Error('Required parameter id was null or undefined when calling getTimeLogById.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1652,17 +1669,54 @@ class TimeLogControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    update(id, timeLogEntity, observe = 'body', reportProgress = false, options) {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update.');
+    getTimeLogCount(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
-        if (timeLogEntity === null || timeLogEntity === undefined) {
-            throw new Error('Required parameter timeLogEntity was null or undefined when calling update.');
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/time-logs/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    updateTimeLog(id, timeLogUpdateRequestDto, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateTimeLog.');
+        }
+        if (timeLogUpdateRequestDto === null || timeLogUpdateRequestDto === undefined) {
+            throw new Error('Required parameter timeLogUpdateRequestDto was null or undefined when calling updateTimeLog.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1694,7 +1748,7 @@ class TimeLogControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('put', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: timeLogEntity,
+            body: timeLogUpdateRequestDto,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -1736,50 +1790,15 @@ class UserControllerApiService extends BaseService {
         super(basePath, configuration);
         this.httpClient = httpClient;
     }
-    count(observe = 'body', reportProgress = false, options) {
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/users/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
-    create(userEntity, observe = 'body', reportProgress = false, options) {
-        if (userEntity === null || userEntity === undefined) {
-            throw new Error('Required parameter userEntity was null or undefined when calling create.');
+    createUser(userCreateRequest, observe = 'body', reportProgress = false, options) {
+        if (userCreateRequest === null || userCreateRequest === undefined) {
+            throw new Error('Required parameter userCreateRequest was null or undefined when calling createUser.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1811,7 +1830,7 @@ class UserControllerApiService extends BaseService {
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request('post', `${basePath}${localVarPath}`, {
             context: localVarHttpContext,
-            body: userEntity,
+            body: userCreateRequest,
             responseType: responseType_,
             ...(withCredentials ? { withCredentials } : {}),
             headers: localVarHeaders,
@@ -1820,9 +1839,9 @@ class UserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    delete5(id, observe = 'body', reportProgress = false, options) {
+    deleteUser(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling delete5.');
+            throw new Error('Required parameter id was null or undefined when calling deleteUser.');
         }
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
@@ -1857,12 +1876,12 @@ class UserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findAll(observe = 'body', reportProgress = false, options) {
+    getAllUsers(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1893,50 +1912,12 @@ class UserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    findById5(id, observe = 'body', reportProgress = false, options) {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling findById5.');
-        }
-        let localVarHeaders = this.defaultHeaders;
-        // authentication (oauth2) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-        const localVarHttpContext = options?.context ?? new HttpContext();
-        const localVarTransferCache = options?.transferCache ?? true;
-        let responseType_ = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            }
-            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            }
-            else {
-                responseType_ = 'blob';
-            }
-        }
-        let localVarPath = `/users/${this.configuration.encodeParam({ name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
-            context: localVarHttpContext,
-            responseType: responseType_,
-            ...(withCredentials ? { withCredentials } : {}),
-            headers: localVarHeaders,
-            observe: observe,
-            transferCache: localVarTransferCache,
-            reportProgress: reportProgress
-        });
-    }
     getCurrentUser(observe = 'body', reportProgress = false, options) {
         let localVarHeaders = this.defaultHeaders;
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
             '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -1968,6 +1949,134 @@ class UserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
+    getUserById(id, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getUserById.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/users/${this.configuration.encodeParam({ name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    getUserCount(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/users/count`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    updateUser(id, userUpdateRequest, observe = 'body', reportProgress = false, options) {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateUser.');
+        }
+        if (userUpdateRequest === null || userUpdateRequest === undefined) {
+            throw new Error('Required parameter userUpdateRequest was null or undefined when calling updateUser.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        // to determine the Content-Type header
+        const consumes = [
+            'application/json'
+        ];
+        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/users/${this.configuration.encodeParam({ name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('put', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            body: userUpdateRequest,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: UserControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: UserControllerApiService, providedIn: 'root' });
 }
@@ -1987,41 +2096,101 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImpo
 
 const APIS = [AuthControllerApiService, ProjectControllerApiService, ProjectUserControllerApiService, ReportControllerApiService, TaskControllerApiService, TimeLogControllerApiService, UserControllerApiService];
 
-/**
- * OpenAPI definition
- *
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var ProjectEntity;
-(function (ProjectEntity) {
-    ProjectEntity.StatusEnum = {
+var ProjectCreateRequestDto;
+(function (ProjectCreateRequestDto) {
+    ProjectCreateRequestDto.StatusEnum = {
         Active: 'ACTIVE',
         Archived: 'ARCHIVED',
         Completed: 'COMPLETED'
     };
-})(ProjectEntity || (ProjectEntity = {}));
-
-/**
- * OpenAPI definition
- *
- *
- *
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var ProjectUserEntity;
-(function (ProjectUserEntity) {
-    ProjectUserEntity.RoleEnum = {
-        Admin: 'ADMIN',
-        Member: 'MEMBER',
-        Viewer: 'VIEWER'
+    ProjectCreateRequestDto.TypeEnum = {
+        TimeBased: 'TIME_BASED',
+        StoryPointBased: 'STORY_POINT_BASED'
     };
-})(ProjectUserEntity || (ProjectUserEntity = {}));
+})(ProjectCreateRequestDto || (ProjectCreateRequestDto = {}));
+
+var ProjectDto;
+(function (ProjectDto) {
+    ProjectDto.StatusEnum = {
+        Active: 'ACTIVE',
+        Archived: 'ARCHIVED',
+        Completed: 'COMPLETED'
+    };
+    ProjectDto.TypeEnum = {
+        TimeBased: 'TIME_BASED',
+        StoryPointBased: 'STORY_POINT_BASED'
+    };
+})(ProjectDto || (ProjectDto = {}));
+
+var ProjectUpdateRequestDto;
+(function (ProjectUpdateRequestDto) {
+    ProjectUpdateRequestDto.StatusEnum = {
+        Active: 'ACTIVE',
+        Archived: 'ARCHIVED',
+        Completed: 'COMPLETED'
+    };
+    ProjectUpdateRequestDto.TypeEnum = {
+        TimeBased: 'TIME_BASED',
+        StoryPointBased: 'STORY_POINT_BASED'
+    };
+})(ProjectUpdateRequestDto || (ProjectUpdateRequestDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var ProjectUserCreateRequestDto;
+(function (ProjectUserCreateRequestDto) {
+    ProjectUserCreateRequestDto.RoleEnum = {
+        Maintainer: 'MAINTAINER',
+        Editor: 'EDITOR',
+        Member: 'MEMBER',
+        Reporter: 'REPORTER'
+    };
+})(ProjectUserCreateRequestDto || (ProjectUserCreateRequestDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var ProjectUserDto;
+(function (ProjectUserDto) {
+    ProjectUserDto.RoleEnum = {
+        Maintainer: 'MAINTAINER',
+        Editor: 'EDITOR',
+        Member: 'MEMBER',
+        Reporter: 'REPORTER'
+    };
+})(ProjectUserDto || (ProjectUserDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var ProjectUserUpdateRequestDto;
+(function (ProjectUserUpdateRequestDto) {
+    ProjectUserUpdateRequestDto.RoleEnum = {
+        Maintainer: 'MAINTAINER',
+        Editor: 'EDITOR',
+        Member: 'MEMBER',
+        Reporter: 'REPORTER'
+    };
+})(ProjectUserUpdateRequestDto || (ProjectUserUpdateRequestDto = {}));
 
 /**
  * OpenAPI definition
@@ -2042,15 +2211,103 @@ var ProjectUserEntity;
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-var TaskEntity;
-(function (TaskEntity) {
-    TaskEntity.StatusEnum = {
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var TaskCreateRequestDto;
+(function (TaskCreateRequestDto) {
+    TaskCreateRequestDto.StatusEnum = {
         Open: 'OPEN',
         InProgress: 'IN_PROGRESS',
         Done: 'DONE',
         Canceled: 'CANCELED'
     };
-})(TaskEntity || (TaskEntity = {}));
+})(TaskCreateRequestDto || (TaskCreateRequestDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var TaskDto;
+(function (TaskDto) {
+    TaskDto.StatusEnum = {
+        Open: 'OPEN',
+        InProgress: 'IN_PROGRESS',
+        Done: 'DONE',
+        Canceled: 'CANCELED'
+    };
+})(TaskDto || (TaskDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var TaskUpdateRequestDto;
+(function (TaskUpdateRequestDto) {
+    TaskUpdateRequestDto.StatusEnum = {
+        Open: 'OPEN',
+        InProgress: 'IN_PROGRESS',
+        Done: 'DONE',
+        Canceled: 'CANCELED'
+    };
+})(TaskUpdateRequestDto || (TaskUpdateRequestDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
 
 /**
  * OpenAPI definition
@@ -2134,5 +2391,5 @@ function provideApi(configOrBasePath) {
  * Generated bundle index. Do not edit.
  */
 
-export { APIS, AuthControllerApiService, BASE_PATH, COLLECTION_FORMATS, FlowBoardApiModule, FlowBoardConfiguration, ProjectControllerApiService, ProjectEntity, ProjectUserControllerApiService, ProjectUserEntity, ReportControllerApiService, TaskControllerApiService, TaskEntity, TimeLogControllerApiService, UserControllerApiService, provideApi };
+export { APIS, AuthControllerApiService, BASE_PATH, COLLECTION_FORMATS, FlowBoardApiModule, FlowBoardConfiguration, ProjectControllerApiService, ProjectCreateRequestDto, ProjectDto, ProjectUpdateRequestDto, ProjectUserControllerApiService, ProjectUserCreateRequestDto, ProjectUserDto, ProjectUserUpdateRequestDto, ReportControllerApiService, TaskControllerApiService, TaskCreateRequestDto, TaskDto, TaskUpdateRequestDto, TimeLogControllerApiService, UserControllerApiService, provideApi };
 //# sourceMappingURL=anna-flow-board-api.mjs.map

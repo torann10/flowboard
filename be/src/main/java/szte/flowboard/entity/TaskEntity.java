@@ -17,8 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TaskEntity extends AuditEntity {
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @Column(name = "assign_to")
+    private UUID assignTo;
 
     @Column(name = "project_id", nullable = false)
     private UUID projectId;
@@ -34,6 +34,9 @@ public class TaskEntity extends AuditEntity {
 
     @Column(name = "estimated_time")
     private Duration estimatedTime;
+
+    @Column(name = "story_points")
+    private Integer storyPoints;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

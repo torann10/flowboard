@@ -7,21 +7,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export interface ProjectUserEntity {
+export interface ProjectUserDto {
     id?: string;
+    projectId?: string;
+    userId?: string;
+    role?: ProjectUserDto.RoleEnum;
     createdBy?: string;
-    createAt?: string;
+    createdAt?: string;
     lastModifiedBy?: string;
     lastModifiedAt?: string;
-    userId?: string;
-    projectId?: string;
-    role?: ProjectUserEntity.RoleEnum;
 }
-export declare namespace ProjectUserEntity {
+export declare namespace ProjectUserDto {
     const RoleEnum: {
-        readonly Admin: "ADMIN";
+        readonly Maintainer: "MAINTAINER";
+        readonly Editor: "EDITOR";
         readonly Member: "MEMBER";
-        readonly Viewer: "VIEWER";
+        readonly Reporter: "REPORTER";
     };
     type RoleEnum = typeof RoleEnum[keyof typeof RoleEnum];
 }

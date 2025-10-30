@@ -7,21 +7,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export interface TaskEntity {
-    id?: string;
-    createdBy?: string;
-    createAt?: string;
-    lastModifiedBy?: string;
-    lastModifiedAt?: string;
-    userId?: string;
-    projectId?: string;
-    name?: string;
+export interface TaskCreateRequestDto {
+    name: string;
     description?: string;
-    bookedTime?: string;
+    projectId: string;
+    assignTo?: string;
     estimatedTime?: string;
-    status?: TaskEntity.StatusEnum;
+    storyPoints?: number;
+    status: TaskCreateRequestDto.StatusEnum;
 }
-export declare namespace TaskEntity {
+export declare namespace TaskCreateRequestDto {
     const StatusEnum: {
         readonly Open: "OPEN";
         readonly InProgress: "IN_PROGRESS";

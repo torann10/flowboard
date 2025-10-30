@@ -1,0 +1,136 @@
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '600px' }"
+  [header]="isEditMode ? 'Edit Project' : 'Create Project'"
+  (onHide)="onCancel()">
+
+  <p-tabView>
+    <p-tabPanel header="Project Details">
+      <form [formGroup]="projectForm" (ngSubmit)="onSave()">
+        <div class="form-content">
+
+          <p-message
+            *ngIf="errorMessage"
+            severity="error"
+            [text]="errorMessage"
+            [closable]="true"
+            (onClose)="errorMessage = ''">
+          </p-message>
+
+          <div class="field">
+            <label for="name" class="field-label">Project Name *</label>
+            <input
+              id="name"
+              type="text"
+              pInputText
+              formControlName="name"
+              placeholder="Enter project name"
+              [class.ng-invalid]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
+              class="w-full">
+            <small
+              *ngIf="getFieldError('name')"
+              class="p-error">
+              {{ getFieldError('name') }}
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="status" class="field-label">Status *</label>
+            <p-dropdown
+              id="status"
+              formControlName="status"
+              [options]="statusOptions"
+              placeholder="Select status"
+              [class.ng-invalid]="projectForm.get('status')?.invalid && projectForm.get('status')?.touched"
+              [appendTo]="'body'"
+              [autofocus]="false"
+              class="w-full">
+            </p-dropdown>
+            <small
+              *ngIf="getFieldError('status')"
+              class="p-error">
+              {{ getFieldError('status') }}
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="type" class="field-label">Project Type *</label>
+            <p-dropdown
+              id="type"
+              formControlName="type"
+              [options]="typeOptions"
+              placeholder="Select project type"
+              [class.ng-invalid]="projectForm.get('type')?.invalid && projectForm.get('type')?.touched"
+              [appendTo]="'body'"
+              [autofocus]="false"
+              class="w-full">
+            </p-dropdown>
+            <small
+              *ngIf="getFieldError('type')"
+              class="p-error">
+              {{ getFieldError('type') }}
+            </small>
+          </div>
+
+          <!-- Story Point Mappings -->
+          <div class="mt-6">
+            <app-story-point-mappings
+              [mappings]="storyPointMappings"
+              [projectId]="project?.id"
+              (mappingsChange)="onStoryPointMappingsChange($event)">
+            </app-story-point-mappings>
+          </div>
+
+        </div>
+      </form>
+    </p-tabPanel>
+
+    <p-tabPanel header="Team Members" *ngIf="isEditMode && project?.id">
+      <div class="user-management-section">
+        <div class="section-header">
+          <h4>Project Team</h4>
+          <p-button
+            label="Manage Users"
+            icon="pi pi-users"
+            (onClick)="openUserAssignment()"
+            [outlined]="true">
+          </p-button>
+        </div>
+        <p class="section-description">
+          Add team members to this project and assign their roles. You can manage who has access to this project and what level of permissions they have.
+        </p>
+      </div>
+    </p-tabPanel>
+
+  </p-tabView>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="onCancel()"
+        [disabled]="loading">
+      </p-button>
+      <p-button
+        [label]="isEditMode ? 'Update' : 'Create'"
+        icon="pi pi-check"
+        (onClick)="onSave()"
+        [loading]="loading"
+        [disabled]="projectForm.invalid">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<app-user-assignment
+  [visible]="showUserAssignment"
+  [projectId]="project?.id"
+  (close)="onUserAssignmentClose()"
+  (usersUpdated)="onUsersUpdated()">
+</app-user-assignment>

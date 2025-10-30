@@ -25,7 +25,7 @@ public class AuditEntity extends BaseEntity {
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
-    private LocalDate createAt;
+    private LocalDate createdAt;
 
     @LastModifiedBy
     private String lastModifiedBy;

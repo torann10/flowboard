@@ -1,50 +1,137 @@
-<div class="flex justify-end flex-row md:flex mb-4 gap-4">
-  <p-button
-    (click)="showDialog()"
-    label="Create Task"
-    icon="pi pi-plus"
-    severity="secondary"
-  />
+<div class="p-8 mx-auto">
+  <div class="flex justify-between items-start mb-8">
+    <div>
+      <h1 class="text-3xl font-semibold text-gray-800 mb-2">Tasks</h1>
+      <p class="text-gray-600">Manage your tasks and track time spent on each one.</p>
+    </div>
+    <div class="flex gap-2">
+      <p-button
+        label="Create Task"
+        icon="pi pi-plus"
+        raised="true"
+        (onClick)="openCreateTask()"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Tasks Table -->
+  <p-card>
+    <p-table
+      #table
+      [value]="tasks"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} tasks"
+      styleClass="p-datatable-sm">
+
+      <ng-template #caption>
+        <div class="flex gap-4">
+          <p-iconfield iconPosition="left">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input pInputText type="text" (input)="table.filter($any($event.target!).value, 'name', 'contains')" placeholder="Name" />
+          </p-iconfield>
+          <p-iconfield>
+            <p-select showClear="true" [options]="statusOptions" (onChange)="table.filter($event.value, 'status', 'equals')" placeholder="Select status" styleClass="w-full">
+              <ng-template let-option #item>
+                <p-tag [value]="option.value" [severity]="getStatusSeverity(option.value)"></p-tag>
+              </ng-template>
+            </p-select>
+          </p-iconfield>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Task</th>
+          <th>Status</th>
+          <th>Time</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-task>
+        <tr>
+          <td>
+            <div class="font-semibold text-gray-800">{{ task.name }}</div>
+          </td>
+          <td>
+            <p-tag
+              [value]="getStatusLabel(task.status)"
+              [severity]="getStatusSeverity(task.status)">
+            </p-tag>
+          </td>
+          <td>
+            <div class="flex items-center gap-2 text-gray-800">
+              <i class="pi pi-clock text-sm text-gray-500"></i>
+              <span class="font-medium">{{ task.bookedTime | durationFormat }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="flex gap-1">
+              <p-button
+                icon="pi pi-clock"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                (onClick)="openTimeLogModal(task)"
+                pTooltip="Log Time"
+                tooltipPosition="top">
+              </p-button>
+              <p-button
+                icon="pi pi-pencil"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                (onClick)="openEditTask(task)"
+                pTooltip="Edit Task"
+                tooltipPosition="top">
+              </p-button>
+              <p-button
+                icon="pi pi-trash"
+                [text]="true"
+                [rounded]="true"
+                severity="danger"
+                size="small"
+                (onClick)="deleteTask(task)"
+                pTooltip="Delete Task"
+                tooltipPosition="top">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="text-center">
+            <div class="text-center">
+              <p class="text-gray-600">No tasks found</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </div>
 
-<app-create-task
-  [(visible)]="visible"
->
-</app-create-task>
+<!-- Task Modal -->
+<app-task-modal
+  [visible]="showTaskModal"
+  [task]="selectedTask"
+  [isEditMode]="isEditMode"
+  (close)="onTaskModalClose()"
+  (saved)="onTaskSaved()">
+</app-task-modal>
 
-<p-card class="shadow mb-6 bg-white">
-  <p-table
-    [value]="tasks"
-    [columns]="columns"
-    responsiveLayout="scroll"
-  >
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th *ngFor="let col of columns" class="text-center">
-          {{ col.header }}
-        </th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-row let-columns="columns">
-      <tr>
-        <td *ngFor="let col of columns" class="text-center">
-          <ng-container [ngSwitch]="col.field">
-            <ng-container *ngSwitchCase="'done'">
-              <i
-                class="pi"
-                [ngClass]="{
-                  'pi-check-circle text-green-500': row[col.field],
-                  'pi-stopwatch text-white-400': !row[col.field]
-                }"
-              ></i>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              {{ row[col.field] }}
-            </ng-container>
-          </ng-container>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</p-card>
+<!-- Time Log Modal -->
+<app-time-log-modal
+  [visible]="showTimeLogModal"
+  [task]="selectedTaskForTimeLog"
+  (close)="onTimeLogModalClose()"
+  (saved)="onTimeLogSaved()">
+</app-time-log-modal>
