@@ -1,16 +1,26 @@
 package szte.flowboard.mapper;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.ProjectUserDto;
 import szte.flowboard.dto.ProjectUserCreateRequestDto;
 import szte.flowboard.dto.ProjectUserUpdateRequestDto;
+import szte.flowboard.entity.ProjectEntity;
 import szte.flowboard.entity.ProjectUserEntity;
+import szte.flowboard.entity.UserEntity;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, ProjectUserDto> {
+
+    private final EntityManager entityManager;
+
+    public ProjectUserMapper(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public ProjectUserDto toDto(ProjectUserEntity entity) {
@@ -19,9 +29,9 @@ public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, Projec
         }
 
         ProjectUserDto dto = new ProjectUserDto();
-        dto.setId(entity.getId() != null ? entity.getId().toString() : null);
-        dto.setProjectId(entity.getProject() != null ? entity.getProject().getId().toString() : null);
-        dto.setUserId(entity.getUser() != null ? entity.getUser().getId().toString() : null);
+        dto.setId(entity.getId());
+        dto.setProjectId(entity.getProject().getId());
+        dto.setUserId(entity.getUser().getId());
         dto.setRole(entity.getRole());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setCreatedAt(entity.getCreatedAt());
@@ -38,10 +48,10 @@ public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, Projec
         }
 
         ProjectUserEntity entity = new ProjectUserEntity();
-        entity.setId(dto.getId() != null ? UUID.fromString(dto.getId()) : null);
+        entity.setId(dto.getId());
+        entity.setUser(entityManager.getReference(UserEntity.class, dto.getUserId()));
+        entity.setProject(entityManager.getReference(ProjectEntity.class, dto.getProjectId()));
         entity.setRole(dto.getRole());
-        entity.setCreatedBy(dto.getCreatedBy());
-        entity.setLastModifiedBy(dto.getLastModifiedBy());
 
         return entity;
     }
@@ -52,8 +62,8 @@ public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, Projec
         }
 
         ProjectUserEntity entity = new ProjectUserEntity();
-        // Note: The relationships (project and user) will need to be set by the service
-        // since the mapper doesn't have access to repositories
+        entity.setUser(entityManager.getReference(UserEntity.class, dto.getUserId()));
+        entity.setProject(entityManager.getReference(ProjectEntity.class, dto.getProjectId()));
         entity.setRole(dto.getRole());
 
         return entity;

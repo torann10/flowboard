@@ -10,6 +10,7 @@ import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,8 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class TimeLogUpdateRequestDto {
     
-    @NotBlank(message = "Task ID is required")
-    private String taskId;
+    private UUID taskId;
 
     private Duration loggedTime;
 

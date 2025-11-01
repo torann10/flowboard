@@ -97,27 +97,6 @@ export declare class TaskControllerApiService extends BaseService {
         transferCache?: boolean;
     }): Observable<HttpEvent<TaskDto>>;
     /**
-     * Get task count
-     * Retrieves the total number of tasks for the current user
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    getTaskCount(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: 'application/json';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<number>;
-    getTaskCount(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: 'application/json';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpResponse<number>>;
-    getTaskCount(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: 'application/json';
-        context?: HttpContext;
-        transferCache?: boolean;
-    }): Observable<HttpEvent<number>>;
-    /**
      * Get tasks by project
      * Retrieves all tasks for a specific project
      * @param projectId

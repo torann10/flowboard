@@ -10,10 +10,8 @@
 export interface TaskUpdateRequestDto {
     name: string;
     description?: string;
-    projectId: string;
-    assignTo?: string;
-    estimatedTime?: string;
-    storyPoints?: number;
+    assignedToId?: string;
+    storyPointMappingId?: string;
     status: TaskUpdateRequestDto.StatusEnum;
 }
 export declare namespace TaskUpdateRequestDto {

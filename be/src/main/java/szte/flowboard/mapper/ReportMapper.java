@@ -66,8 +66,8 @@ public class ReportMapper implements EntityMapper<ReportEntity, ReportDto> {
         }
 
         ReportEntity entity = new ReportEntity();
-        entity.setProjectId(dto.getProjectId() != null ? UUID.fromString(dto.getProjectId()) : null);
-        entity.setUserId(dto.getUserId() != null ? UUID.fromString(dto.getUserId()) : null);
+        entity.setProjectId(dto.getProjectId());
+        entity.setUserId(dto.getUserId());
 
         return entity;
     }

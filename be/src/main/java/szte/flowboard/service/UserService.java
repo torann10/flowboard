@@ -2,6 +2,8 @@ package szte.flowboard.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import szte.flowboard.dto.request.UserCreateRequest;
@@ -42,6 +44,12 @@ public class UserService {
                 savedUser.getLastName(),
                 savedUser.getEmailAddress()
         );
+    }
+
+    public Optional<UserEntity> getUserByAuthentication(Authentication authentication) {
+        String keycloakId = getKeycloakIdFromAuthentication(authentication);
+
+        return userRepository.findByKeycloakId(keycloakId);
     }
 
     public UserEntity update(UserEntity user) {
@@ -125,5 +133,9 @@ public class UserService {
 
     public Optional<UserEntity> findByEmailAddress(String email) {
         return userRepository.findByEmailAddress(email);
+    }
+
+    private String getKeycloakIdFromAuthentication(Authentication authentication) {
+        return (String) ((Jwt) authentication.getPrincipal()).getClaims().get("sub");
     }
 }

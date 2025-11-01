@@ -17,12 +17,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TimeLogEntity extends AuditEntity {
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
-
-    @Column(name = "task_id", nullable = false)
-    private UUID taskId;
-
     @Column(name = "logged_time", nullable = false)
     private Duration loggedTime;
 
@@ -31,4 +25,12 @@ public class TimeLogEntity extends AuditEntity {
 
     @Column(name = "log_date", nullable = false)
     private LocalDate logDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    private TaskEntity task;
 }

@@ -6,7 +6,7 @@
   [resizable]="false"
   [style]="{ width: '600px' }"
   [header]="isEditMode ? 'Edit Project' : 'Create Project'"
-  (onHide)="onCancel()">
+  (visibleChange)="onCancel()">
 
   <p-tabView>
     <p-tabPanel header="Project Details">
@@ -78,11 +78,7 @@
 
           <!-- Story Point Mappings -->
           <div class="mt-6">
-            <app-story-point-mappings
-              [mappings]="storyPointMappings"
-              [projectId]="project?.id"
-              (mappingsChange)="onStoryPointMappingsChange($event)">
-            </app-story-point-mappings>
+            <app-story-point-mappings formControlName="storyPointTimeMappings" />
           </div>
 
         </div>

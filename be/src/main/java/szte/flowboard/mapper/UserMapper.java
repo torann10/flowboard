@@ -19,7 +19,7 @@ public class UserMapper implements EntityMapper<UserEntity, UserDto> {
         }
 
         UserDto dto = new UserDto();
-        dto.setId(entity.getId() != null ? entity.getId().toString() : null);
+        dto.setId(entity.getId());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setEmailAddress(entity.getEmailAddress());
@@ -39,7 +39,7 @@ public class UserMapper implements EntityMapper<UserEntity, UserDto> {
         }
 
         UserEntity entity = new UserEntity();
-        entity.setId(dto.getId() != null ? UUID.fromString(dto.getId()) : null);
+        entity.setId(dto.getId());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setEmailAddress(dto.getEmailAddress());

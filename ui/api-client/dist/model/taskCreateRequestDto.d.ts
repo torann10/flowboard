@@ -11,9 +11,8 @@ export interface TaskCreateRequestDto {
     name: string;
     description?: string;
     projectId: string;
-    assignTo?: string;
-    estimatedTime?: string;
-    storyPoints?: number;
+    assignedToId?: string;
+    storyPointMappingId?: string;
     status: TaskCreateRequestDto.StatusEnum;
 }
 export declare namespace TaskCreateRequestDto {

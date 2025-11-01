@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,16 +26,11 @@ public class TaskCreateRequestDto {
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
     
-    @NotBlank(message = "Project ID is required")
-    private String projectId;
+    private UUID projectId;
     
-    private String assignTo;
+    private UUID assignedToId;
     
-    private String estimatedTime; // ISO 8601 duration format
-    
-    @Min(value = 1, message = "Story points must be at least 1")
-    @Max(value = 100, message = "Story points must be at most 100")
-    private Integer storyPoints;
+    private UUID storyPointMappingId;
     
     @NotNull(message = "Task status is required")
     private TaskStatus status;

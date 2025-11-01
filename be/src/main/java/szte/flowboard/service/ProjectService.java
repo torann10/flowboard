@@ -4,13 +4,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import szte.flowboard.entity.BaseEntity;
 import szte.flowboard.entity.ProjectEntity;
 import szte.flowboard.entity.ProjectUserEntity;
 import szte.flowboard.entity.UserEntity;
 import szte.flowboard.repository.ProjectRepository;
 import szte.flowboard.repository.ProjectUserRepository;
+import szte.flowboard.repository.StoryPointTimeMappingRepository;
 import szte.flowboard.repository.UserRepository;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,13 +23,16 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectUserRepository projectUserRepository;
     private final UserRepository userRepository;
+    private final StoryPointTimeMappingRepository storyPointTimeMappingRepository;
 
-    public ProjectService(ProjectRepository projectRepository, 
-                        ProjectUserRepository projectUserRepository,
-                        UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository,
+                          ProjectUserRepository projectUserRepository,
+                          UserRepository userRepository,
+                          StoryPointTimeMappingRepository storyPointTimeMappingRepository) {
         this.projectRepository = projectRepository;
         this.projectUserRepository = projectUserRepository;
         this.userRepository = userRepository;
+        this.storyPointTimeMappingRepository = storyPointTimeMappingRepository;
     }
 
     public ProjectEntity create(ProjectEntity project, Authentication authentication) {
@@ -105,7 +111,15 @@ public class ProjectService {
         return projectUserRepository.countByUserId(user.get().getId());
     }
 
+    @Transactional
     public ProjectEntity update(ProjectEntity project) {
+        UUID[] ids = project.getStoryPointTimeMappings().stream()
+                .map(BaseEntity::getId)
+                .filter(Objects::nonNull)
+                .toArray(UUID[]::new);
+
+        this.storyPointTimeMappingRepository.deleteAllForProjectNotInIds(project.getId(), ids);
+
         return projectRepository.save(project);
     }
 

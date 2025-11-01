@@ -8,6 +8,8 @@ import szte.flowboard.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,10 +17,10 @@ import jakarta.validation.constraints.NotNull;
 public class ProjectUserCreateRequestDto {
     
     @NotBlank(message = "Project ID is required")
-    private String projectId;
+    private UUID projectId;
     
     @NotBlank(message = "User ID is required")
-    private String userId;
+    private UUID userId;
     
     @NotNull(message = "User role is required")
     private UserRole role;

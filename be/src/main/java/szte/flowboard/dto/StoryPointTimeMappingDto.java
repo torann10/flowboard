@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Duration;
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
@@ -15,8 +17,8 @@ import jakarta.validation.constraints.Max;
 @NoArgsConstructor
 public class StoryPointTimeMappingDto {
     
-    private String id;
-    private String projectId;
+    private UUID id;
+    private UUID projectId;
     
     @NotNull(message = "Story points is required")
     @Min(value = 1, message = "Story points must be at least 1")

@@ -16,7 +16,7 @@ import {
   UserResponse,
   TaskDto, ProjectDto
 } from '@anna/flow-board-api';
-import { StoryPointConverterService, CustomStoryPointMapping } from '../../shared/services/story-point-converter.service';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-task-modal',
@@ -32,7 +32,8 @@ import { StoryPointConverterService, CustomStoryPointMapping } from '../../share
     TextareaModule,
     DropdownModule,
     MessageModule,
-    CalendarModule
+    CalendarModule,
+    Select,
   ],
   templateUrl: './task-modal.component.html'
 })
@@ -49,9 +50,6 @@ export class TaskModalComponent implements OnInit, OnChanges {
   projects: ProjectDto[] = [];
   users: UserResponse[] = [];
   selectedProject: ProjectDto | null = null;
-  storyPointTimeValue: number = 0;
-  calculatedTime: string = '';
-  customStoryPointMappings: CustomStoryPointMapping[] = [];
 
   statusOptions = [
     { label: 'Open', value: 'OPEN' },
@@ -68,7 +66,6 @@ export class TaskModalComponent implements OnInit, OnChanges {
     private taskService: TaskControllerApiService,
     private projectService: ProjectControllerApiService,
     private userService: UserControllerApiService,
-    private storyPointConverter: StoryPointConverterService
   ) {
     this.taskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -76,9 +73,10 @@ export class TaskModalComponent implements OnInit, OnChanges {
       status: ['OPEN', Validators.required],
       projectId: ['', Validators.required],
       assignTo: [''],
-      estimatedTime: [''],
-      storyPoints: [null, [Validators.min(1), Validators.max(100)]]
+      storyPointMappingId: [null]
     });
+
+    this.taskForm.get('storyPointMappingId')?.disable();
   }
 
   ngOnInit() {
@@ -88,13 +86,12 @@ export class TaskModalComponent implements OnInit, OnChanges {
     // Watch for project changes to determine if story points should be shown
     this.taskForm.get('projectId')?.valueChanges.subscribe(projectId => {
       this.selectedProject = this.projects.find(p => p.id === projectId) || null;
-      this.updateStoryPointTimeValue();
-      this.updateFieldValidators();
-    });
 
-    // Watch for story points changes to calculate time
-    this.taskForm.get('storyPoints')?.valueChanges.subscribe(() => {
-      this.calculateTimeFromStoryPoints();
+      if (!!this.selectedProject) {
+        this.taskForm.get('storyPointMappingId')?.enable();
+      } else {
+        this.taskForm.get('storyPointMappingId')?.disable();
+      }
     });
   }
 
@@ -105,13 +102,11 @@ export class TaskModalComponent implements OnInit, OnChanges {
         description: this.task.description,
         status: this.task.status,
         projectId: this.task.projectId,
-        assignTo: this.task.assignTo || '',
-        estimatedTime: this.task.estimatedTime,
-        storyPoints: (this.task as any).storyPoints || null
+        assignTo: this.task.assignedToId || null,
+        storyPointMappingId: this.task.storyPointMappingId || null,
       });
       // Set selected project for validation
       this.selectedProject = this.projects.find(p => p.id === this.task?.projectId) || null;
-      this.updateStoryPointTimeValue();
     } else {
       this.taskForm.reset({
         name: '',
@@ -120,23 +115,22 @@ export class TaskModalComponent implements OnInit, OnChanges {
         projectId: '',
         assignTo: '',
         estimatedTime: '',
-        storyPoints: null
+        storyPointMappingId: null
       });
       this.selectedProject = null;
     }
-    this.updateFieldValidators();
   }
 
   loadProjects() {
     this.projectService.getAllProjects().subscribe({
-      next: (projects) => {
+      next: projects => {
         this.projects = projects;
         this.projectOptions = projects.map(project => ({
           label: project.name || 'Unnamed Project',
           value: project.id || ''
         }));
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading projects:', error);
       }
     });
@@ -144,14 +138,14 @@ export class TaskModalComponent implements OnInit, OnChanges {
 
   loadUsers() {
     this.userService.getAllUsers().subscribe({
-      next: (users) => {
+      next: users => {
         this.users = users;
         this.userOptions = users.map(user => ({
           label: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.emailAddress || 'Unknown User',
           value: user.id || ''
         }));
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading users:', error);
       }
     });
@@ -168,9 +162,8 @@ export class TaskModalComponent implements OnInit, OnChanges {
         description: formValue.description,
         status: formValue.status,
         projectId: formValue.projectId,
-        assignTo: formValue.assignTo || undefined,
-        estimatedTime: formValue.estimatedTime,
-        storyPoints: this.isStoryPointBased() ? formValue.storyPoints : null
+        assignedToId: formValue.assignTo || undefined,
+        storyPointMappingId: formValue.storyPointMappingId
       };
 
       if (this.isEditMode && this.task?.id) {
@@ -180,7 +173,7 @@ export class TaskModalComponent implements OnInit, OnChanges {
             this.loading = false;
             this.saved.emit();
           },
-          error: (error) => {
+          error: error => {
             this.loading = false;
             this.errorMessage = 'Error updating task. Please try again.';
             console.error('Error updating task:', error);
@@ -193,7 +186,7 @@ export class TaskModalComponent implements OnInit, OnChanges {
             this.loading = false;
             this.saved.emit();
           },
-          error: (error) => {
+          error: error => {
             this.loading = false;
             this.errorMessage = 'Error creating task. Please try again.';
             console.error('Error creating task:', error);
@@ -233,106 +226,5 @@ export class TaskModalComponent implements OnInit, OnChanges {
       }
     }
     return '';
-  }
-
-  formatDurationInput(duration: string): string {
-    if (!duration) return '';
-
-    // Convert from ISO 8601 format (PT2H30M) to user-friendly format (2h 30m)
-    const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
-    if (!match) return duration;
-
-    const hours = parseInt(match[1] || '0');
-    const minutes = parseInt(match[2] || '0');
-
-    if (hours > 0 && minutes > 0) {
-      return `${hours}h ${minutes}m`;
-    } else if (hours > 0) {
-      return `${hours}h`;
-    } else if (minutes > 0) {
-      return `${minutes}m`;
-    }
-    return '';
-  }
-
-  parseDurationInput(input: string): string {
-    if (!input) return '';
-
-    // Convert from user-friendly format (2h 30m) to ISO 8601 format (PT2H30M)
-    const hourMatch = input.match(/(\d+)h/);
-    const minuteMatch = input.match(/(\d+)m/);
-
-    const hours = hourMatch ? parseInt(hourMatch[1]) : 0;
-    const minutes = minuteMatch ? parseInt(minuteMatch[1]) : 0;
-
-    if (hours > 0 || minutes > 0) {
-      return `PT${hours}H${minutes}M`;
-    }
-
-    return '';
-  }
-
-  onEstimatedTimeChange() {
-    const currentValue = this.taskForm.get('estimatedTime')?.value;
-    if (currentValue && !currentValue.startsWith('PT')) {
-      const parsed = this.parseDurationInput(currentValue);
-      this.taskForm.patchValue({ estimatedTime: parsed });
-    }
-  }
-
-  isStoryPointBased(): boolean {
-    return this.selectedProject?.type === 'STORY_POINT_BASED';
-  }
-
-  updateFieldValidators() {
-    const storyPointsControl = this.taskForm.get('storyPoints');
-    const estimatedTimeControl = this.taskForm.get('estimatedTime');
-
-    if (this.isStoryPointBased()) {
-      // For story point based projects, story points are required, estimated time is optional
-      storyPointsControl?.setValidators([Validators.required, Validators.min(1), Validators.max(100)]);
-      estimatedTimeControl?.clearValidators();
-    } else {
-      // For time based projects, estimated time is optional, story points are not used
-      storyPointsControl?.clearValidators();
-      estimatedTimeControl?.clearValidators();
-    }
-
-    storyPointsControl?.updateValueAndValidity();
-    estimatedTimeControl?.updateValueAndValidity();
-  }
-
-  updateStoryPointTimeValue() {
-    if (this.selectedProject && this.isStoryPointBased()) {
-      this.storyPointTimeValue = (this.selectedProject as any).storyPointTimeValue || 0;
-      this.customStoryPointMappings = (this.selectedProject as any).storyPointTimeMappings || [];
-      this.calculateTimeFromStoryPoints();
-    } else {
-      this.storyPointTimeValue = 0;
-      this.customStoryPointMappings = [];
-      this.calculatedTime = '';
-    }
-  }
-
-  calculateTimeFromStoryPoints() {
-    const storyPoints = this.taskForm.get('storyPoints')?.value;
-    if (storyPoints && storyPoints > 0) {
-      this.calculatedTime = this.storyPointConverter.convertStoryPointsToTimeWithCustomMappings(
-        storyPoints,
-        this.customStoryPointMappings,
-        this.storyPointTimeValue
-      );
-    } else {
-      this.calculatedTime = '';
-    }
-  }
-
-  getCommonStoryPointValues() {
-    if (this.customStoryPointMappings.length > 0) {
-      return this.storyPointConverter.getCustomStoryPointValues(this.customStoryPointMappings);
-    } else if (this.storyPointTimeValue > 0) {
-      return this.storyPointConverter.getCommonStoryPointValues(this.storyPointTimeValue);
-    }
-    return [];
   }
 }

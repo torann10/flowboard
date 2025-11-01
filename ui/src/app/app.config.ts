@@ -16,6 +16,8 @@ import {
 } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { FlowBoardApiModule, FlowBoardConfiguration, provideApi } from '@anna/flow-board-api';
+import { DurationFormatPipe } from './shared/pipes/duration-format.pipe';
+import { DatePipe } from '@angular/common';
 
 const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
   urlPattern: /^(http:\/\/localhost:8080)(\/.*)?$/i
@@ -65,5 +67,7 @@ export const appConfig: ApplicationConfig = {
       basePath: environment.basePath,
       withCredentials: true,
     })),
+    DurationFormatPipe,
+    DatePipe,
   ]
 };

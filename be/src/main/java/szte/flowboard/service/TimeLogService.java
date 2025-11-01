@@ -15,29 +15,27 @@ import java.util.UUID;
 public class TimeLogService {
 
     private final TimeLogRepository timeLogRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public TimeLogService(TimeLogRepository timeLogRepository, UserRepository userRepository) {
+    public TimeLogService(TimeLogRepository timeLogRepository, UserService userService) {
         this.timeLogRepository = timeLogRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public TimeLogEntity create(TimeLogEntity timeLog, Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
-            throw new RuntimeException("User not found");
+            return null;
         }
         
-        timeLog.setUserId(user.get().getId());
+        timeLog.setUser(user.get());
         
         return timeLogRepository.save(timeLog);
     }
 
     public List<TimeLogEntity> findAllByUser(Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
             return List.of();
@@ -47,8 +45,7 @@ public class TimeLogService {
     }
 
     public Optional<TimeLogEntity> findByIdAndUser(UUID id, Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
             return Optional.empty();
@@ -58,14 +55,13 @@ public class TimeLogService {
     }
 
     public TimeLogEntity update(TimeLogEntity timeLog, Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         
-        timeLog.setUserId(user.get().getId());
+        timeLog.setUser(user.get());
         
         return timeLogRepository.save(timeLog);
     }
@@ -75,19 +71,14 @@ public class TimeLogService {
     }
 
     public boolean existsByIdAndUser(UUID id, Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
-        
-        if (user.isEmpty()) {
-            return false;
-        }
-        
-        return timeLogRepository.existsByIdAndUserId(id, user.get().getId());
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
+
+        return user.filter(userEntity -> timeLogRepository.existsByIdAndUserId(id, userEntity.getId())).isPresent();
+
     }
 
     public long countByUser(Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
             return 0;

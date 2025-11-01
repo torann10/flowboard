@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Duration;
-import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(name = "story_point_time_mappings")
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoryPointTimeMapping extends AuditEntity {
+public class StoryPointTimeMappingEntity extends AuditEntity {
 
     @Column(name = "story_points", nullable = false)
     private Integer storyPoints;
@@ -25,4 +25,7 @@ public class StoryPointTimeMapping extends AuditEntity {
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private ProjectEntity project;
+
+    @OneToMany(mappedBy = "storyPointMapping", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TaskEntity> tasks;
 }

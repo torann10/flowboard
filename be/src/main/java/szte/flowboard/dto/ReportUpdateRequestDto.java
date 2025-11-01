@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,12 +18,12 @@ import java.time.LocalDateTime;
 public class ReportUpdateRequestDto {
     
     @NotBlank(message = "Project ID is required")
-    private String projectId;
+    private UUID projectId;
     
     @NotBlank(message = "User ID is required")
-    private String userId;
+    private UUID userId;
     
-    private String taskId;
+    private UUID taskId;
     
     @NotBlank(message = "Description is required")
     @Size(max = 1000, message = "Description must not exceed 1000 characters")

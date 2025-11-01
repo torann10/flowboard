@@ -26,7 +26,7 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         }
 
         ProjectDto dto = new ProjectDto();
-        dto.setId(entity.getId() != null ? entity.getId().toString() : null);
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setStatus(entity.getStatus());
         dto.setType(entity.getType());
@@ -51,7 +51,7 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         }
 
         ProjectEntity entity = new ProjectEntity();
-        entity.setId(dto.getId() != null ? UUID.fromString(dto.getId()) : null);
+        entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setStatus(dto.getStatus());
         entity.setType(dto.getType());
@@ -62,6 +62,10 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
             entity.setStoryPointTimeMappings(
                 storyPointTimeMappingMapper.toEntityList(dto.getStoryPointTimeMappings())
             );
+
+            entity.getStoryPointTimeMappings().forEach(storyPointTimeMapping -> {
+                storyPointTimeMapping.setProject(entity);
+            });
         }
 
         return entity;
@@ -81,6 +85,10 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
             entity.setStoryPointTimeMappings(
                 storyPointTimeMappingMapper.toEntityList(dto.getStoryPointTimeMappings())
             );
+
+            entity.getStoryPointTimeMappings().forEach(storyPointTimeMapping -> {
+                storyPointTimeMapping.setProject(entity);
+            });
         }
 
         return entity;
@@ -100,6 +108,10 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
             entity.setStoryPointTimeMappings(
                 storyPointTimeMappingMapper.toEntityList(dto.getStoryPointTimeMappings())
             );
+
+            entity.getStoryPointTimeMappings().forEach(storyPointTimeMapping -> {
+                storyPointTimeMapping.setProject(entity);
+            });
         }
 
         return entity;

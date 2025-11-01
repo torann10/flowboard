@@ -6,7 +6,7 @@
   [resizable]="false"
   [style]="{ width: '600px' }"
   [header]="isEditMode ? 'Edit Task' : 'Create Task'"
-  (onHide)="onCancel()">
+  (visibleChange)="onCancel()">
 
   <form [formGroup]="taskForm" (ngSubmit)="onSave()">
     <div class="space-y-6 py-4">
@@ -105,66 +105,30 @@
         </div>
       </div>
 
-      <div *ngIf="!isStoryPointBased()">
-        <label for="estimatedTime" class="block text-sm font-medium text-gray-700 mb-2">Estimated Time</label>
-        <input
-          id="estimatedTime"
-          type="text"
-          pInputText
-          formControlName="estimatedTime"
-          placeholder="e.g., 2h 30m or 1h"
-          (blur)="onEstimatedTimeChange()"
-          class="w-full">
-        <small class="text-gray-500 text-xs mt-1">
-          Enter estimated time in format like "2h 30m" or "1h"
-        </small>
-      </div>
-
-      <div *ngIf="isStoryPointBased()">
-        <label for="storyPoints" class="block text-sm font-medium text-gray-700 mb-2">Story Points *</label>
-        <p-inputNumber
+      <div>
+        <label for="storyPoints" class="block text-sm font-medium text-gray-700 mb-2">Estimation (story points) *</label>
+        <p-select
           id="storyPoints"
-          formControlName="storyPoints"
-          placeholder="Enter story points"
-          [min]="1"
-          [max]="100"
-          [step]="1"
-          [class.ng-invalid]="taskForm.get('storyPoints')?.invalid && taskForm.get('storyPoints')?.touched"
-          class="w-full">
-        </p-inputNumber>
+          formControlName="storyPointMappingId"
+          placeholder="Select estimation"
+          class="w-full"
+          appendTo="body"
+          [options]="this.selectedProject?.storyPointTimeMappings"
+          optionValue="id"
+          [class.ng-invalid]="taskForm.get('storyPointMappingId')?.invalid && taskForm.get('storyPointMappingId')?.touched">
+          <ng-template #selectedItem let-selectedOption>
+            <div>{{ selectedOption.storyPoints }} story point(s)</div>
+          </ng-template>
+          <ng-template let-item #item>
+            <div>{{ item.storyPoints }} story point(s)</div>
+          </ng-template>
+        </p-select>
         <small
-          *ngIf="getFieldError('storyPoints')"
+          *ngIf="getFieldError('storyPointMappingId')"
           class="text-red-500 text-xs mt-1">
-          {{ getFieldError('storyPoints') }}
+          {{ getFieldError('storyPointMappingId') }}
         </small>
-        <small class="text-gray-500 text-xs mt-1">
-          Enter the story points for this task (1-100)
-        </small>
-        
-        <!-- Time equivalent display -->
-        <div *ngIf="calculatedTime" class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
-          <div class="flex items-center">
-            <i class="pi pi-clock text-blue-600 mr-2"></i>
-            <span class="text-sm font-medium text-blue-800">
-              Estimated Time: {{ calculatedTime }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Common story point values -->
-        <div *ngIf="getCommonStoryPointValues().length > 0" class="mt-3">
-          <h4 class="text-sm font-medium text-gray-700 mb-2">Common Story Point Values:</h4>
-          <div class="grid grid-cols-2 gap-2">
-            <div 
-              *ngFor="let item of getCommonStoryPointValues()" 
-              class="flex justify-between items-center p-2 bg-gray-50 rounded text-xs">
-              <span class="font-medium">{{ item.storyPoints }} SP</span>
-              <span class="text-gray-600">{{ item.time }}</span>
-            </div>
-          </div>
-        </div>
       </div>
-
     </div>
   </form>
 

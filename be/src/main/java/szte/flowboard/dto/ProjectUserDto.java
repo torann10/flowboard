@@ -8,6 +8,7 @@ import szte.flowboard.enums.UserRole;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,9 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ProjectUserDto {
     
-    private String id;
-    private String projectId;
-    private String userId;
+    private UUID id;
+    private UUID projectId;
+    private UUID userId;
     private UserRole role;
     private String createdBy;
     private LocalDate createdAt;

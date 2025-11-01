@@ -1,13 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-  Validators,
-  AbstractControl
+  AbstractControl,
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -15,11 +12,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-
-export interface StoryPointMapping {
-  storyPoints: number;
-  timeDisplay: string; // formatted time display
-}
+import { StoryPointTimeMappingDto } from '@anna/flow-board-api';
+import { DurationFormatPipe } from '../../../shared/pipes/duration-format.pipe';
+import { parseDurationInput } from '../../../shared/helpers/duration-helper';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-story-point-mappings',
@@ -27,124 +23,74 @@ export interface StoryPointMapping {
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     ButtonModule,
     InputNumberModule,
     InputTextModule,
     MessageModule,
     CardModule,
-    DividerModule
+    DividerModule,
+    DurationFormatPipe,
+    Tooltip
   ],
   templateUrl: './story-point-mappings.component.html',
-  styleUrl: './story-point-mappings.component.scss'
+  styleUrl: './story-point-mappings.component.scss',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: StoryPointMappingsComponent
+    }
+  ]
 })
-export class StoryPointMappingsComponent implements OnInit {
-  @Input() mappings: StoryPointMapping[] = [];
-  @Input() projectId: string | undefined;
-  @Output() mappingsChange = new EventEmitter<StoryPointMapping[]>();
-
-  mappingsForm: FormGroup;
+export class StoryPointMappingsComponent implements ControlValueAccessor {
+  mappings: StoryPointTimeMappingDto[] = [];
+  onChange: any = (value: StoryPointTimeMappingDto[]) => {};
+  onTouched: any = () => {};
+  isDisabled = false;
   errorMessage = '';
 
-  constructor(private fb: FormBuilder) {
-    this.mappingsForm = this.fb.group({
-      mappings: this.fb.array([])
-    });
-
-    this.mappingsForm.valueChanges.subscribe(val => {
-      this.emitMappings();
-    })
+  writeValue(obj: StoryPointTimeMappingDto[]): void {
+    this.mappings = obj;
   }
 
-  ngOnInit() {
-    this.initializeForm();
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
-  get mappingsArray(): FormArray {
-    return this.mappingsForm.get('mappings') as FormArray;
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
-  initializeForm() {
-    const mappingsArray = this.fb.array<FormGroup>([]);
-
-    if (this.mappings.length > 0) {
-      this.mappings.forEach(mapping => {
-        mappingsArray.push(this.createMappingFormGroup(mapping));
-      });
-    } else {
-      // Add default common story point values
-      const defaultMappings = [
-        { storyPoints: 1, timeDisplay: '2h' },
-        { storyPoints: 2, timeDisplay: '4h' },
-        { storyPoints: 3, timeDisplay: '6h' },
-        { storyPoints: 5, timeDisplay: '10h' },
-        { storyPoints: 8, timeDisplay: '16h' },
-        { storyPoints: 13, timeDisplay: '26h' },
-        { storyPoints: 21, timeDisplay: '42h' }
-      ];
-
-      defaultMappings.forEach(mapping => {
-        mappingsArray.push(this.createMappingFormGroup(mapping));
-      });
-    }
-
-    this.mappingsForm.setControl('mappings', mappingsArray);
-  }
-
-  createMappingFormGroup(mapping: StoryPointMapping = { storyPoints: 0, timeDisplay: '' }): FormGroup<any> {
-    return this.fb.group({
-      storyPoints: [mapping.storyPoints, [Validators.required, Validators.min(1), Validators.max(100)]],
-      timeDisplay: [mapping.timeDisplay]
-    });
+  setDisabledState?(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 
   addMapping() {
-    const newMapping = this.createMappingFormGroup();
-    this.mappingsArray.push(newMapping);
+    this.mappings.push({
+      storyPoints: 0,
+      timeValue: '',
+    } as StoryPointTimeMappingDto);
+    this.onChange(this.mappings);
   }
 
   removeMapping(index: number) {
-    this.mappingsArray.removeAt(index);
+    this.mappings.splice(index, 1);
+    this.onChange(this.mappings);
   }
 
-  emitMappings() {
-    console.log(this.mappingsArray);
-
-    const mappings: StoryPointMapping[] = [];
-
-    for (let i = 0; i < this.mappingsArray.length; i++) {
-      const mappingGroup = this.mappingsArray.at(i);
-      const storyPoints = mappingGroup.get('storyPoints')?.value;
-      const timeDisplay = mappingGroup.get('timeDisplay')?.value;
-
-      console.log(storyPoints, timeDisplay);
-
-      if (storyPoints && timeDisplay && storyPoints > 0 && !!timeDisplay) {
-        mappings.push({
-          storyPoints,
-          timeDisplay: timeDisplay
-        });
-      }
+  onStoryPointsChange(index: number, value: string) {
+    const storyPoints = parseInt(value, 10);
+    if (!isNaN(storyPoints)) {
+      this.mappings[index].storyPoints = storyPoints;
+      this.onChange(this.mappings);
     }
-
-    console.log(mappings);
-
-    this.mappingsChange.emit(mappings);
   }
 
-  getFieldError(formGroup: AbstractControl, fieldName: string): string {
-    const field = formGroup.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
-      }
-      if (field.errors['min']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least ${field.errors['min'].min}`;
-      }
-      if (field.errors['max']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at most ${field.errors['max'].max}`;
-      }
+  onTimeValueChange(index: number, value: Event) {
+    const duration = parseDurationInput((value.target as any).value);
+    if (duration) {
+      this.mappings[index].timeValue = duration;
+      this.onChange(this.mappings);
     }
-    return '';
   }
 }

@@ -9,10 +9,8 @@ import java.util.UUID;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
-    List<TaskEntity> findByAssignTo(UUID assignTo);
-    List<TaskEntity> findByAssignToIsNull();
+    List<TaskEntity> findByProjectProjectUsersUserId(UUID userId);
     List<TaskEntity> findByProjectId(UUID projectId);
-    Optional<TaskEntity> findByIdAndAssignTo(UUID id, UUID assignTo);
-    boolean existsByIdAndAssignTo(UUID id, UUID assignTo);
-    long countByAssignTo(UUID assignTo);
+    Optional<TaskEntity> findByIdAndProjectProjectUsersUserId(UUID id, UUID userId);
+    boolean existsByIdAndProjectProjectUsersUserId(UUID id, UUID userId);
 }

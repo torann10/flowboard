@@ -1,16 +1,24 @@
 package szte.flowboard.mapper;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.TimeLogDto;
 import szte.flowboard.dto.TimeLogUpdateRequestDto;
+import szte.flowboard.entity.TaskEntity;
 import szte.flowboard.entity.TimeLogEntity;
-import java.time.Duration;
+import szte.flowboard.entity.UserEntity;
+
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 public class TimeLogMapper implements EntityMapper<TimeLogEntity, TimeLogDto> {
+
+    private final EntityManager entityManager;
+
+    public TimeLogMapper(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public TimeLogDto toDto(TimeLogEntity entity) {
@@ -19,9 +27,9 @@ public class TimeLogMapper implements EntityMapper<TimeLogEntity, TimeLogDto> {
         }
 
         TimeLogDto dto = new TimeLogDto();
-        dto.setId(entity.getId() != null ? entity.getId().toString() : null);
-        dto.setTaskId(entity.getTaskId() != null ? entity.getTaskId().toString() : null);
-        dto.setUserId(entity.getUserId() != null ? entity.getUserId().toString() : null);
+        dto.setId(entity.getId());
+        dto.setTaskId(entity.getTask().getId());
+        dto.setUserId(entity.getUser().getId());
         dto.setLoggedTime(entity.getLoggedTime());
         dto.setLogDate(entity.getLogDate());
         dto.setCreatedBy(entity.getCreatedBy());
@@ -40,9 +48,9 @@ public class TimeLogMapper implements EntityMapper<TimeLogEntity, TimeLogDto> {
         }
 
         TimeLogEntity entity = new TimeLogEntity();
-        entity.setId(dto.getId() != null ? UUID.fromString(dto.getId()) : null);
-        entity.setTaskId(dto.getTaskId() != null ? UUID.fromString(dto.getTaskId()) : null);
-        entity.setUserId(dto.getUserId() != null ? UUID.fromString(dto.getUserId()) : null);
+        entity.setId(dto.getId());
+        entity.setTask(entityManager.getReference(TaskEntity.class, dto.getTaskId()));
+        entity.setUser(entityManager.getReference(UserEntity.class, dto.getUserId()));
         entity.setLoggedTime(dto.getLoggedTime());
         entity.setLogDate(dto.getLogDate());
         entity.setCreatedBy(dto.getCreatedBy());
@@ -60,7 +68,7 @@ public class TimeLogMapper implements EntityMapper<TimeLogEntity, TimeLogDto> {
         }
 
         TimeLogEntity entity = new TimeLogEntity();
-        entity.setTaskId(dto.getTaskId() != null ? UUID.fromString(dto.getTaskId()) : null);
+        entity.setTask(entityManager.getReference(TaskEntity.class, dto.getTaskId()));
         entity.setLoggedTime(dto.getLoggedTime() != null ? dto.getLoggedTime() : null);
         entity.setLogDate(dto.getLogDate());
         entity.setIsBillable(dto.isBillable());

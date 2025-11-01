@@ -1,9 +1,13 @@
 package szte.flowboard.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import szte.flowboard.entity.ProjectUserEntity;
 import szte.flowboard.enums.UserRole;
+import szte.flowboard.repository.ProjectRepository;
 import szte.flowboard.repository.ProjectUserRepository;
+import szte.flowboard.repository.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,13 +15,25 @@ import java.util.UUID;
 @Service
 public class ProjectUserService {
 
+    private final UserService userService;
     private final ProjectUserRepository projectUserRepository;
 
-    public ProjectUserService(ProjectUserRepository projectUserRepository) {
+    public ProjectUserService(UserService userService, ProjectUserRepository projectUserRepository) {
+        this.userService = userService;
         this.projectUserRepository = projectUserRepository;
     }
 
-    public ProjectUserEntity create(ProjectUserEntity projectUser) {
+    public ProjectUserEntity create(ProjectUserEntity projectUser, Authentication authentication) {
+        var user = userService.getUserByAuthentication(authentication);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        if (!projectUserRepository.existsByUserIdAndProjectIdAndRole(user.get().getId(), projectUser.getProject().getId(), UserRole.MAINTAINER)) {
+            return null;
+        }
+
         return projectUserRepository.save(projectUser);
     }
 

@@ -21,6 +21,7 @@ import java.time.LocalDate;
 public class AuditEntity extends BaseEntity {
 
     @CreatedBy
+    @Column(name = "created_by", updatable = false)
     private String createdBy;
 
     @CreatedDate

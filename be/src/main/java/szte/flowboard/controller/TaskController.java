@@ -85,7 +85,7 @@ public class TaskController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<TaskDto> update(@PathVariable UUID id, @Valid @RequestBody TaskUpdateRequestDto taskRequest, Authentication authentication) {
-        if (!taskService.existsByIdAndUser(id, authentication)) {
+        if (!taskService.existsById(id, authentication)) {
             return ResponseEntity.notFound().build();
         }
         TaskEntity task = taskMapper.toEntity(taskRequest);
@@ -102,20 +102,10 @@ public class TaskController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
-        if (!taskService.existsByIdAndUser(id, authentication)) {
+        if (!taskService.existsById(id, authentication)) {
             return ResponseEntity.notFound().build();
         }
         taskService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Operation(operationId = "getTaskCount", summary = "Get task count", description = "Retrieves the total number of tasks for the current user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Count retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
-    })
-    @GetMapping("/count")
-    public ResponseEntity<Long> count(Authentication authentication) {
-        long count = taskService.countByUser(authentication);
-        return ResponseEntity.ok(count);
     }
 }

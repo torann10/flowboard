@@ -2,23 +2,22 @@ package szte.flowboard.mapper;
 
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.StoryPointTimeMappingDto;
-import szte.flowboard.entity.StoryPointTimeMapping;
+import szte.flowboard.entity.StoryPointTimeMappingEntity;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class StoryPointTimeMappingMapper implements EntityMapper<StoryPointTimeMapping, StoryPointTimeMappingDto> {
+public class StoryPointTimeMappingMapper implements EntityMapper<StoryPointTimeMappingEntity, StoryPointTimeMappingDto> {
 
     @Override
-    public StoryPointTimeMappingDto toDto(StoryPointTimeMapping entity) {
+    public StoryPointTimeMappingDto toDto(StoryPointTimeMappingEntity entity) {
         if (entity == null) {
             return null;
         }
 
         StoryPointTimeMappingDto dto = new StoryPointTimeMappingDto();
-        dto.setId(entity.getId() != null ? entity.getId().toString() : null);
-        dto.setProjectId(entity.getProject() != null ? entity.getProject().getId().toString() : null);
+        dto.setId(entity.getId());
+        dto.setProjectId(entity.getProject().getId());
         dto.setStoryPoints(entity.getStoryPoints());
         dto.setTimeValue(entity.getTimeValue());
 
@@ -26,13 +25,13 @@ public class StoryPointTimeMappingMapper implements EntityMapper<StoryPointTimeM
     }
 
     @Override
-    public StoryPointTimeMapping toEntity(StoryPointTimeMappingDto dto) {
+    public StoryPointTimeMappingEntity toEntity(StoryPointTimeMappingDto dto) {
         if (dto == null) {
             return null;
         }
 
-        StoryPointTimeMapping entity = new StoryPointTimeMapping();
-        entity.setId(dto.getId() != null ? UUID.fromString(dto.getId()) : null);
+        StoryPointTimeMappingEntity entity = new StoryPointTimeMappingEntity();
+        entity.setId(dto.getId());
         entity.setStoryPoints(dto.getStoryPoints());
         entity.setTimeValue(dto.getTimeValue());
 
@@ -40,7 +39,7 @@ public class StoryPointTimeMappingMapper implements EntityMapper<StoryPointTimeM
     }
 
     @Override
-    public List<StoryPointTimeMappingDto> toDtoList(List<StoryPointTimeMapping> entities) {
+    public List<StoryPointTimeMappingDto> toDtoList(List<StoryPointTimeMappingEntity> entities) {
         if (entities == null) {
             return null;
         }
@@ -50,7 +49,7 @@ public class StoryPointTimeMappingMapper implements EntityMapper<StoryPointTimeM
     }
 
     @Override
-    public List<StoryPointTimeMapping> toEntityList(List<StoryPointTimeMappingDto> dtos) {
+    public List<StoryPointTimeMappingEntity> toEntityList(List<StoryPointTimeMappingDto> dtos) {
         if (dtos == null) {
             return null;
         }

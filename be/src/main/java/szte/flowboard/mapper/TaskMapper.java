@@ -1,10 +1,12 @@
 package szte.flowboard.mapper;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.TaskDto;
 import szte.flowboard.dto.TaskCreateRequestDto;
 import szte.flowboard.dto.TaskUpdateRequestDto;
-import szte.flowboard.entity.TaskEntity;
+import szte.flowboard.entity.*;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,12 @@ import java.util.stream.Collectors;
 @Component
 public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
 
+    private final EntityManager entityManager;
+
+    public TaskMapper(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     @Override
     public TaskDto toDto(TaskEntity entity) {
         if (entity == null) {
@@ -20,14 +28,19 @@ public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
         }
 
         TaskDto dto = new TaskDto();
-        dto.setId(entity.getId() != null ? entity.getId().toString() : null);
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
-        dto.setProjectId(entity.getProjectId() != null ? entity.getProjectId().toString() : null);
-        dto.setAssignTo(entity.getAssignTo() != null ? entity.getAssignTo().toString() : null);
-        dto.setBookedTime(entity.getBookedTime());
-        dto.setEstimatedTime(entity.getEstimatedTime());
-        dto.setStoryPoints(entity.getStoryPoints());
+        dto.setProjectId(entity.getProject().getId());
+
+        if (entity.getAssignedTo() != null) {
+            dto.setAssignedToId(entity.getAssignedTo().getId());
+            dto.setAssignedToName(entity.getAssignedTo().getFirstName() + " " + entity.getAssignedTo().getLastName());
+        }
+
+        dto.setBookedTime(entity.getTimeLogs().stream().map(TimeLogEntity::getLoggedTime).reduce(Duration.ZERO, Duration::plus));
+
+        dto.setStoryPointMappingId(entity.getStoryPointMapping().getId());
         dto.setStatus(entity.getStatus());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setCreatedAt(entity.getCreatedAt());
@@ -44,14 +57,17 @@ public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
         }
 
         TaskEntity entity = new TaskEntity();
-        entity.setId(dto.getId() != null ? UUID.fromString(dto.getId()) : null);
+        entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
-        entity.setProjectId(dto.getProjectId() != null ? UUID.fromString(dto.getProjectId()) : null);
-        entity.setAssignTo(dto.getAssignTo() != null ? UUID.fromString(dto.getAssignTo()) : null);
-        entity.setBookedTime(dto.getBookedTime());
-        entity.setEstimatedTime(dto.getEstimatedTime());
-        entity.setStoryPoints(dto.getStoryPoints());
+        entity.setProject(entityManager.getReference(ProjectEntity.class, dto.getProjectId()));
+
+        if (dto.getAssignedToId() != null) {
+            entity.setAssignedTo(entityManager.getReference(UserEntity.class, dto.getAssignedToId()));
+        }
+
+        entity.setAssignedTo(entityManager.getReference(UserEntity.class, dto.getAssignedToId()));
+        entity.setStoryPointMapping(entityManager.getReference(StoryPointTimeMappingEntity.class, dto.getStoryPointMappingId()));
         entity.setStatus(dto.getStatus());
         entity.setLastModifiedBy(dto.getLastModifiedBy());
         entity.setLastModifiedAt(dto.getLastModifiedAt());
@@ -67,10 +83,13 @@ public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
         TaskEntity entity = new TaskEntity();
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
-        entity.setProjectId(dto.getProjectId() != null ? UUID.fromString(dto.getProjectId()) : null);
-        entity.setAssignTo(dto.getAssignTo() != null ? UUID.fromString(dto.getAssignTo()) : null);
-        entity.setEstimatedTime(dto.getEstimatedTime() != null ? Duration.parse(dto.getEstimatedTime()) : null);
-        entity.setStoryPoints(dto.getStoryPoints());
+        entity.setProject(entityManager.getReference(ProjectEntity.class, dto.getProjectId()));
+
+        if (dto.getAssignedToId() != null) {
+            entity.setAssignedTo(entityManager.getReference(UserEntity.class, dto.getAssignedToId()));
+        }
+
+        entity.setStoryPointMapping(entityManager.getReference(StoryPointTimeMappingEntity.class, dto.getStoryPointMappingId()));
         entity.setStatus(dto.getStatus());
 
         return entity;
@@ -84,10 +103,12 @@ public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
         TaskEntity entity = new TaskEntity();
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
-        entity.setProjectId(dto.getProjectId() != null ? UUID.fromString(dto.getProjectId()) : null);
-        entity.setAssignTo(dto.getAssignTo() != null ? UUID.fromString(dto.getAssignTo()) : null);
-        entity.setEstimatedTime(dto.getEstimatedTime() != null ? Duration.parse(dto.getEstimatedTime()) : null);
-        entity.setStoryPoints(dto.getStoryPoints());
+
+        if (dto.getAssignedToId() != null) {
+            entity.setAssignedTo(entityManager.getReference(UserEntity.class, dto.getAssignedToId()));
+        }
+
+        entity.setStoryPointMapping(entityManager.getReference(StoryPointTimeMappingEntity.class, dto.getStoryPointMappingId()));
         entity.setStatus(dto.getStatus());
 
         return entity;

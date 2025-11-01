@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProjectDto {
     
-    private String id;
+    private UUID id;
     private String name;
     private ProjectStatus status;
     private ProjectType type;

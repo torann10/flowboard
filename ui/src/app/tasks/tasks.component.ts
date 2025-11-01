@@ -162,7 +162,6 @@ export class TasksComponent implements OnInit {
 
   onTimeLogSaved() {
     this.loadTasks(); // Refresh to update booked time
-    this.onTimeLogModalClose();
   }
 
   deleteTask(task: TaskDto) {

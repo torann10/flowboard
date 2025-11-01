@@ -12,10 +12,10 @@ export interface TaskDto {
     name?: string;
     description?: string;
     projectId?: string;
-    assignTo?: string;
+    assignedToId?: string;
+    assignedToName?: string;
     bookedTime?: string;
-    estimatedTime?: string;
-    storyPoints?: number;
+    storyPointMappingId?: string;
     status?: TaskDto.StatusEnum;
     createdBy?: string;
     createdAt?: string;

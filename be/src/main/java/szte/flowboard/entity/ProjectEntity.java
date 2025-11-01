@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import szte.flowboard.enums.ProjectStatus;
 import szte.flowboard.enums.ProjectType;
-import java.time.Duration;
+
 import java.util.List;
 
 @Entity
@@ -30,8 +30,11 @@ public class ProjectEntity extends AuditEntity {
     private ProjectType type;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StoryPointTimeMapping> storyPointTimeMappings;
+    private List<StoryPointTimeMappingEntity> storyPointTimeMappings;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectUserEntity> projectUsers;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TaskEntity> tasks;
 }

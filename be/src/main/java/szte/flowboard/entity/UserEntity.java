@@ -30,4 +30,10 @@ public class UserEntity extends AuditEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectUserEntity> projectUsers;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TimeLogEntity> timeLogs;
+
+    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TaskEntity> assignedTasks;
 }

@@ -1,144 +1,113 @@
-<div class="min-h-screen bg-blue-50">
-  <!-- Header Section with Time Summaries -->
-  <div class="bg-blue-100 px-8 py-6">
-    <div class="max-w-7xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-800 mb-6">Time Tracking Summary</h1>
-      
-      <!-- Time Summary Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Today Card -->
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div class="text-3xl font-bold text-gray-800 mb-1">
-            {{ formatHours(todayHours) }}
-          </div>
-          <div class="text-sm text-gray-600">
-            {{ getTodayDate() }}
-          </div>
-        </div>
+<!-- Header Section with Time Summaries -->
+<div class="max-w-7xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Time Tracking Summary</h1>
 
-        <!-- Week Card -->
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div class="text-3xl font-bold text-gray-800 mb-1">
-            {{ formatHours(weekHours) }}
-          </div>
-          <div class="text-sm text-gray-600">
-            Week {{ getWeekNumber() }}
-          </div>
-        </div>
+  <!-- Time Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Today Card -->
+    <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div class="text-3xl font-bold text-gray-800 mb-1">
+        {{ todayHours | durationFormat }}
+      </div>
+      <div class="text-sm text-gray-600">
+        Today, {{ now | date:'yyyy-MM-dd' }}
+      </div>
+    </div>
 
-        <!-- Month Card -->
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div class="text-3xl font-bold text-gray-800 mb-1">
-            {{ formatHours(monthHours) }}
-          </div>
-          <div class="text-sm text-gray-600">
-            {{ getMonthName() }}
-          </div>
-        </div>
+    <!-- Week Card -->
+    <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div class="text-3xl font-bold text-gray-800 mb-1">
+        {{ weekHours | durationFormat }}
+      </div>
+      <div class="text-sm text-gray-600">
+        Week {{ now | date:'ww' }}
+      </div>
+    </div>
 
-        <!-- Year Card -->
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-          <div class="text-3xl font-bold text-gray-800 mb-1">
-            {{ formatHours(yearHours) }}
-          </div>
-          <div class="text-sm text-gray-600">
-            Year {{ getCurrentYear() }}
-          </div>
-        </div>
+    <!-- Month Card -->
+    <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div class="text-3xl font-bold text-gray-800 mb-1">
+        {{ monthHours | durationFormat }}
+      </div>
+      <div class="text-sm text-gray-600">
+        {{ now | date:'MMMM' }}
+      </div>
+    </div>
+
+    <!-- Year Card -->
+    <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div class="text-3xl font-bold text-gray-800 mb-1">
+        {{ yearHours | durationFormat }}
+      </div>
+      <div class="text-sm text-gray-600">
+        Year {{ now | date:'yyyy' }}
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Chart Section -->
-  <div class="px-8 py-8">
-    <div class="max-w-7xl mx-auto">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-6">Daily Working Hours</h2>
-        
-        <!-- Chart Container -->
-        <div class="relative">
-          <!-- Y-axis labels -->
-          <div class="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between">
-            <div class="text-right text-sm text-gray-600 pr-2">{{ getMaxHours() }}h</div>
-            <div class="text-right text-sm text-gray-600 pr-2">{{ Math.floor(getMaxHours() * 0.75) }}h</div>
-            <div class="text-right text-sm text-gray-600 pr-2">{{ Math.floor(getMaxHours() * 0.5) }}h</div>
-            <div class="text-right text-sm text-gray-600 pr-2">{{ Math.floor(getMaxHours() * 0.25) }}h</div>
-            <div class="text-right text-sm text-gray-600 pr-2">0h</div>
+<!-- Chart Section -->
+<div class="px-8 py-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="flex justify-between">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Current week working hours</h2>
+        <div class="gap-1 flex">
+          <div>
+            <p-select [options]="intervalOptions" [(ngModel)]="intervalType"/>
           </div>
-
-          <!-- Chart Area -->
-          <div class="ml-12 mr-4">
-            <!-- Grid Lines -->
-            <div class="relative h-64">
-              <!-- Horizontal grid lines -->
-              <div class="absolute inset-0 flex flex-col justify-between">
-                <div class="border-t border-gray-200"></div>
-                <div class="border-t border-gray-200"></div>
-                <div class="border-t border-gray-200"></div>
-                <div class="border-t border-gray-200"></div>
-                <div class="border-t border-gray-200"></div>
-              </div>
-
-              <!-- Bars -->
-              <div class="absolute inset-0 flex items-end justify-between px-2">
-                <div 
-                  *ngFor="let hours of weeklyData; let i = index" 
-                  class="flex flex-col items-center flex-1 mx-1">
-                  <!-- Bar -->
-                  <div 
-                    class="w-full bg-blue-500 rounded-t transition-all duration-300 hover:bg-blue-600"
-                    [style.height]="getBarHeight(hours)"
-                    [title]="formatHours(hours)">
-                  </div>
-                  
-                  <!-- Day Label -->
-                  <div class="text-xs text-gray-600 mt-2 font-medium">
-                    {{ getDayNames()[i] }}
-                  </div>
-                  
-                  <!-- Hours Label (optional, shown on hover) -->
-                  <div class="text-xs text-gray-500 mt-1 opacity-0 hover:opacity-100 transition-opacity">
-                    {{ formatHours(hours) }}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div>
+            <p-button icon="pi pi-angle-left" aria-label="Previous" (click)="calculateInterval(-1)"/>
+          </div>
+          <div>
+            <p-datePicker
+              [(ngModel)]="selectedDateRange"
+              [readonlyInput]="true"
+              [showWeek]="true"
+              [firstDayOfWeek]="1"
+              selectionMode="range"
+              dateFormat="yy-mm-dd"/>
+          </div>
+          <div>
+            <p-button icon="pi pi-angle-right" aria-label="Next" (click)="calculateInterval(+1)"/>
           </div>
         </div>
+      </div>
 
-        <!-- Loading State -->
-        <div *ngIf="loading" class="flex items-center justify-center h-64">
-          <div class="flex items-center space-x-2">
-            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-            <span class="text-gray-600">Loading time tracking data...</span>
-          </div>
+      <p-chart type="bar" [data]="basicData" [options]="basicOptions"/>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="flex items-center justify-center h-64">
+        <div class="flex items-center space-x-2">
+          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+          <span class="text-gray-600">Loading time tracking data...</span>
         </div>
+      </div>
 
-        <!-- Error State -->
-        <div *ngIf="errorMessage" class="flex items-center justify-center h-64">
-          <div class="text-center">
-            <div class="text-red-500 text-lg mb-2">⚠️</div>
-            <p class="text-gray-600">{{ errorMessage }}</p>
-            <button 
-              (click)="loadTimeLogs()"
-              class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-              Try Again
-            </button>
-          </div>
+      <!-- Error State -->
+      <div *ngIf="errorMessage" class="flex items-center justify-center h-64">
+        <div class="text-center">
+          <div class="text-red-500 text-lg mb-2">⚠️</div>
+          <p class="text-gray-600">{{ errorMessage }}</p>
+          <button
+            (click)="loadTimeLogs()"
+            class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Try Again
+          </button>
         </div>
+      </div>
 
-        <!-- Empty State -->
-        <div *ngIf="!loading && !errorMessage && timeLogs.length === 0" class="flex items-center justify-center h-64">
-          <div class="text-center">
-            <div class="text-gray-400 text-4xl mb-4">📊</div>
-            <h3 class="text-lg font-medium text-gray-600 mb-2">No time tracking data</h3>
-            <p class="text-gray-500 mb-4">Start logging time to see your working hours summary</p>
-            <button 
-              (click)="loadTimeLogs()"
-              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-              Refresh
-            </button>
-          </div>
+      <!-- Empty State -->
+      <div *ngIf="!loading && !errorMessage && timeLogs.length === 0" class="flex items-center justify-center h-64">
+        <div class="text-center">
+          <div class="text-gray-400 text-4xl mb-4">📊</div>
+          <h3 class="text-lg font-medium text-gray-600 mb-2">No time tracking data</h3>
+          <p class="text-gray-500 mb-4">Start logging time to see your working hours summary</p>
+          <button
+            (click)="loadTimeLogs()"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Refresh
+          </button>
         </div>
       </div>
     </div>

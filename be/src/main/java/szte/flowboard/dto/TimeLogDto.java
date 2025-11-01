@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,9 +14,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class TimeLogDto {
     
-    private String id;
-    private String taskId;
-    private String userId;
+    private UUID id;
+    private UUID taskId;
+    private UUID userId;
     private Duration loggedTime;
     private boolean isBillable;
     private LocalDate logDate;

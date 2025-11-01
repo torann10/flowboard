@@ -9,7 +9,7 @@
  */
 export interface TimeLogUpdateRequestDto {
     taskId: string;
-    loggedTime: string;
+    loggedTime?: string;
     logDate: string;
     billable?: boolean;
 }

@@ -45,19 +45,7 @@ public class ProjectUserController {
     @PostMapping
     public ResponseEntity<ProjectUserDto> create(@Valid @RequestBody ProjectUserCreateRequestDto projectUserRequest, Authentication authentication) {
         ProjectUserEntity projectUser = projectUserMapper.toEntity(projectUserRequest);
-
-        // Set the relationships
-        Optional<ProjectEntity> project = projectService.findByIdAndUser(UUID.fromString(projectUserRequest.getProjectId()), authentication);
-        Optional<UserEntity> user = userService.findByIdEntity(UUID.fromString(projectUserRequest.getUserId()));
-        
-        if (project.isEmpty() || user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        
-        projectUser.setProject(project.get());
-        projectUser.setUser(user.get());
-        
-        ProjectUserEntity createdProjectUser = projectUserService.create(projectUser);
+        ProjectUserEntity createdProjectUser = projectUserService.create(projectUser, authentication);
         ProjectUserDto projectUserDto = projectUserMapper.toDto(createdProjectUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(projectUserDto);
     }
