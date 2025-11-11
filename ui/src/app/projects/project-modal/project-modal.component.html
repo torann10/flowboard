@@ -4,7 +4,7 @@
   [closable]="true"
   [draggable]="false"
   [resizable]="false"
-  [style]="{ width: '600px' }"
+  [style]="{ width: '700px' }"
   [header]="isEditMode ? 'Edit Project' : 'Create Project'"
   (visibleChange)="onCancel()">
 
@@ -74,6 +74,80 @@
               class="p-error">
               {{ getFieldError('type') }}
             </small>
+          </div>
+
+          <!-- Customer Section -->
+          <div class="company-section">
+            <h4 class="section-title">Customer *</h4>
+            <div class="field">
+              <label for="customerName" class="field-label">Customer Name *</label>
+              <input
+                id="customerName"
+                type="text"
+                pInputText
+                formControlName="customerName"
+                placeholder="Enter customer name"
+                [class.ng-invalid]="projectForm.get('customerName')?.invalid && projectForm.get('customerName')?.touched"
+                class="w-full">
+              <small
+                *ngIf="getFieldError('customerName')"
+                class="p-error">
+                {{ getFieldError('customerName') }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="customerAddress" class="field-label">Customer Address *</label>
+              <input
+                id="customerAddress"
+                type="text"
+                pInputText
+                formControlName="customerAddress"
+                placeholder="Enter customer address"
+                [class.ng-invalid]="projectForm.get('customerAddress')?.invalid && projectForm.get('customerAddress')?.touched"
+                class="w-full">
+              <small
+                *ngIf="getFieldError('customerAddress')"
+                class="p-error">
+                {{ getFieldError('customerAddress') }}
+              </small>
+            </div>
+          </div>
+
+          <!-- Contractor Section -->
+          <div class="company-section">
+            <h4 class="section-title">Contractor *</h4>
+            <div class="field">
+              <label for="contractorName" class="field-label">Contractor Name *</label>
+              <input
+                id="contractorName"
+                type="text"
+                pInputText
+                formControlName="contractorName"
+                placeholder="Enter contractor name"
+                [class.ng-invalid]="projectForm.get('contractorName')?.invalid && projectForm.get('contractorName')?.touched"
+                class="w-full">
+              <small
+                *ngIf="getFieldError('contractorName')"
+                class="p-error">
+                {{ getFieldError('contractorName') }}
+              </small>
+            </div>
+            <div class="field">
+              <label for="contractorAddress" class="field-label">Contractor Address *</label>
+              <input
+                id="contractorAddress"
+                type="text"
+                pInputText
+                formControlName="contractorAddress"
+                placeholder="Enter contractor address"
+                [class.ng-invalid]="projectForm.get('contractorAddress')?.invalid && projectForm.get('contractorAddress')?.touched"
+                class="w-full">
+              <small
+                *ngIf="getFieldError('contractorAddress')"
+                class="p-error">
+                {{ getFieldError('contractorAddress') }}
+              </small>
+            </div>
           </div>
 
           <!-- Story Point Mappings -->

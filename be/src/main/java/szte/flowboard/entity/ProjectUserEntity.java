@@ -20,6 +20,9 @@ public class ProjectUserEntity extends AuditEntity {
     @Column(nullable = false)
     private UserRole role;
 
+    @Column
+    private Double fee;
+
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private ProjectEntity project;

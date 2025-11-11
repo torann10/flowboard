@@ -7,12 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CompanyDto } from './companyDto';
 import { StoryPointTimeMappingDto } from './storyPointTimeMappingDto';
 export interface ProjectCreateRequestDto {
     name: string;
     status: ProjectCreateRequestDto.StatusEnum;
     type: ProjectCreateRequestDto.TypeEnum;
     storyPointTimeMappings?: Array<StoryPointTimeMappingDto>;
+    customer: CompanyDto;
+    contractor: CompanyDto;
 }
 export declare namespace ProjectCreateRequestDto {
     const StatusEnum: {

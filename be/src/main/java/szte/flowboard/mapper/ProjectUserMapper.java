@@ -33,6 +33,7 @@ public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, Projec
         dto.setProjectId(entity.getProject().getId());
         dto.setUserId(entity.getUser().getId());
         dto.setRole(entity.getRole());
+        dto.setFee(entity.getFee());
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setLastModifiedBy(entity.getLastModifiedBy());
@@ -52,6 +53,7 @@ public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, Projec
         entity.setUser(entityManager.getReference(UserEntity.class, dto.getUserId()));
         entity.setProject(entityManager.getReference(ProjectEntity.class, dto.getProjectId()));
         entity.setRole(dto.getRole());
+        entity.setFee(dto.getFee());
 
         return entity;
     }
@@ -65,6 +67,7 @@ public class ProjectUserMapper implements EntityMapper<ProjectUserEntity, Projec
         entity.setUser(entityManager.getReference(UserEntity.class, dto.getUserId()));
         entity.setProject(entityManager.getReference(ProjectEntity.class, dto.getProjectId()));
         entity.setRole(dto.getRole());
+        entity.setFee(dto.getFee());
 
         return entity;
     }

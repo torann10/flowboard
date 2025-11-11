@@ -9,6 +9,7 @@
  */
 export interface ProjectUserUpdateRequestDto {
     role: ProjectUserUpdateRequestDto.RoleEnum;
+    fee: number;
 }
 export declare namespace ProjectUserUpdateRequestDto {
     const RoleEnum: {

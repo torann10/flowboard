@@ -27,14 +27,14 @@ export class MenuComponent implements OnInit {
         separator: true
       },
       {
-        label: 'Dashboard',
-        icon: 'pi pi-home',
-        routerLink: '/dashboard'
-      },
-      {
         label: 'Time Tracking',
         icon: 'pi pi-clock',
         routerLink: '/time-tracking'
+      },
+      {
+        label: 'Projects',
+        icon: 'pi pi-folder',
+        routerLink: '/projects'
       },
       {
         label: 'Tasks',
@@ -42,20 +42,9 @@ export class MenuComponent implements OnInit {
         routerLink: '/tasks'
       },
       {
-        label: 'Board',
-        icon: 'pi pi-clipboard',
-        routerLink: '/board'
-      },
-      {
         label: 'Reports',
         icon: 'pi pi-file-check',
         routerLink: '/reports'
-      },
-      {
-        label: 'Projects',
-        icon: 'pi pi-folder',
-        routerLink: '/projects',
-        styleClass: 'bg-secondary'
       }
     ];
   }

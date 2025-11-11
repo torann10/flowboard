@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import szte.flowboard.dto.ProjectUserDto;
@@ -18,10 +17,6 @@ import szte.flowboard.dto.ProjectUserUpdateRequestDto;
 import szte.flowboard.entity.ProjectUserEntity;
 import szte.flowboard.mapper.ProjectUserMapper;
 import szte.flowboard.service.ProjectUserService;
-import szte.flowboard.service.ProjectService;
-import szte.flowboard.service.UserService;
-import szte.flowboard.entity.ProjectEntity;
-import szte.flowboard.entity.UserEntity;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +29,6 @@ public class ProjectUserController {
 
     private final ProjectUserService projectUserService;
     private final ProjectUserMapper projectUserMapper;
-    private final ProjectService projectService;
-    private final UserService userService;
 
     @Operation(operationId = "createProjectUser", summary = "Create project-user relationship", description = "Creates a new project-user relationship")
     @ApiResponses(value = {
@@ -84,7 +77,7 @@ public class ProjectUserController {
         if (!projectUserService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        ProjectUserEntity updatedProjectUser = projectUserService.update(id, projectUserRequest.getRole());
+        ProjectUserEntity updatedProjectUser = projectUserService.update(id, projectUserRequest.getRole(), projectUserRequest.getFee());
         ProjectUserDto projectUserDto = projectUserMapper.toDto(updatedProjectUser);
         return projectUserDto == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(projectUserDto);
     }

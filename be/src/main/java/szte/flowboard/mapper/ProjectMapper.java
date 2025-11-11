@@ -15,8 +15,11 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
 
     private final StoryPointTimeMappingMapper storyPointTimeMappingMapper;
 
-    public ProjectMapper(StoryPointTimeMappingMapper storyPointTimeMappingMapper) {
+    private final CompanyMapper companyMapper;
+
+    public ProjectMapper(StoryPointTimeMappingMapper storyPointTimeMappingMapper, CompanyMapper companyMapper) {
         this.storyPointTimeMappingMapper = storyPointTimeMappingMapper;
+        this.companyMapper = companyMapper;
     }
 
     @Override
@@ -34,6 +37,8 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         dto.setCreateAt(entity.getCreatedAt());
         dto.setLastModifiedBy(entity.getLastModifiedBy());
         dto.setLastModifiedAt(entity.getLastModifiedAt());
+        dto.setCustomer(companyMapper.toDto(entity.getCustomer()));
+        dto.setContractor(companyMapper.toDto(entity.getContractor()));
 
         if (entity.getStoryPointTimeMappings() != null) {
             dto.setStoryPointTimeMappings(
@@ -57,6 +62,8 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         entity.setType(dto.getType());
         entity.setLastModifiedBy(dto.getLastModifiedBy());
         entity.setLastModifiedAt(dto.getLastModifiedAt());
+        entity.setCustomer(companyMapper.toEntity(dto.getCustomer()));
+        entity.setContractor(companyMapper.toEntity(dto.getContractor()));
 
         if (dto.getStoryPointTimeMappings() != null) {
             entity.setStoryPointTimeMappings(
@@ -80,6 +87,8 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         entity.setName(dto.getName());
         entity.setStatus(dto.getStatus());
         entity.setType(dto.getType());
+        entity.setCustomer(companyMapper.toEntity(dto.getCustomer()));
+        entity.setContractor(companyMapper.toEntity(dto.getContractor()));
 
         if (dto.getStoryPointTimeMappings() != null) {
             entity.setStoryPointTimeMappings(
@@ -103,6 +112,8 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         entity.setName(dto.getName());
         entity.setStatus(dto.getStatus());
         entity.setType(dto.getType());
+        entity.setCustomer(companyMapper.toEntity(dto.getCustomer()));
+        entity.setContractor(companyMapper.toEntity(dto.getContractor()));
 
         if (dto.getStoryPointTimeMappings() != null) {
             entity.setStoryPointTimeMappings(

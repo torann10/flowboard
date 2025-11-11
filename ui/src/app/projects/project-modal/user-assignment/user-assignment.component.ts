@@ -15,6 +15,7 @@ import {
   ProjectUserUpdateRequestDto
 } from '@anna/flow-board-api';
 import { UserControllerApiService, ProjectUserControllerApiService } from '@anna/flow-board-api';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-user-assignment',
@@ -28,7 +29,8 @@ import { UserControllerApiService, ProjectUserControllerApiService } from '@anna
     TableModule,
     TagModule,
     DialogModule,
-    MessageModule
+    MessageModule,
+    InputNumberModule
   ],
   templateUrl: './user-assignment.component.html',
   styleUrl: './user-assignment.component.scss'
@@ -44,13 +46,16 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
   availableUsers: UserResponse[] = [];
   selectedUser: UserResponse | null = null;
   selectedRole: string = 'MEMBER';
+  userFee: number = 0;
+
   loading = false;
   errorMessage = '';
 
   roleOptions = [
     { label: 'Maintainer', value: 'MAINTAINER' },
+    { label: 'Editor', value: 'EDITOR' },
     { label: 'Member', value: 'MEMBER' },
-    { label: 'Viewer', value: 'VIEWER' }
+    { label: 'Reporter', value: 'REPORTER' }
   ];
 
   constructor(
@@ -121,7 +126,8 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
     const projectUser: ProjectUserCreateRequestDto = {
       userId: this.selectedUser.id!,
       projectId: this.projectId,
-      role: this.selectedRole as any
+      role: this.selectedRole as any,
+      fee: this.userFee
     };
 
     this.projectUserService.createProjectUser(projectUser).subscribe({
@@ -129,6 +135,7 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
         this.loadProjectUsers();
         this.selectedUser = null;
         this.selectedRole = 'MEMBER';
+        this.userFee = 0;
         this.usersUpdated.emit();
       },
       error: (error) => {
@@ -162,7 +169,7 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
     }
   }
 
-  updateUserRole(projectUser: ProjectUserDto, newRole: string) {
+  updateUserRoleAndFee(projectUser: ProjectUserDto) {
     if (!projectUser.id) {
       return;
     }
@@ -172,7 +179,8 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
 
     const updatedProjectUser: ProjectUserUpdateRequestDto = {
       ...projectUser,
-      role: newRole as any
+      role: projectUser.role as any,
+      fee: projectUser.fee as any
     };
 
     this.projectUserService.updateProjectUser(projectUser.id, updatedProjectUser).subscribe({
@@ -182,8 +190,8 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = 'Error updating user role';
-        console.error('Error updating user role:', error);
+        this.errorMessage = 'Error updating user role and fee';
+        console.error('Error updating user role and fee:', error);
       }
     });
   }

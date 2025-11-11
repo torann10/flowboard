@@ -11,6 +11,7 @@ export interface ProjectUserCreateRequestDto {
     projectId: string;
     userId: string;
     role: ProjectUserCreateRequestDto.RoleEnum;
+    fee: number;
 }
 export declare namespace ProjectUserCreateRequestDto {
     const RoleEnum: {

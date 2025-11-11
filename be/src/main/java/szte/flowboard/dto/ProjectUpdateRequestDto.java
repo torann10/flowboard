@@ -27,5 +27,11 @@ public class ProjectUpdateRequestDto {
     private ProjectType type;
     
     private java.util.List<StoryPointTimeMappingDto> storyPointTimeMappings;
+
+    @NotNull
+    private CompanyDto customer;
+
+    @NotNull
+    private CompanyDto contractor;
 }
 

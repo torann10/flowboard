@@ -24,5 +24,8 @@ public class ProjectUserCreateRequestDto {
     
     @NotNull(message = "User role is required")
     private UserRole role;
+
+    @NotNull(message = "User fee is required")
+    private Double fee;
 }
 

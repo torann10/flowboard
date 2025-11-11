@@ -36,4 +36,8 @@ public class UserEntity extends AuditEntity {
 
     @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskEntity> assignedTasks;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

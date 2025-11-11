@@ -8,9 +8,8 @@
  * Do not edit the class manually.
  */
 export interface ReportCreateRequestDto {
-    projectId: string;
-    userId: string;
-    taskId?: string;
+    projectId?: string;
+    startDate?: string;
+    endDate?: string;
     description: string;
-    reportDate: string;
 }

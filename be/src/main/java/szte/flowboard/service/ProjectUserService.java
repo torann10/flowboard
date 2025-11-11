@@ -45,7 +45,7 @@ public class ProjectUserService {
         return projectUserRepository.findById(id);
     }
 
-    public ProjectUserEntity update(UUID id, UserRole role) {
+    public ProjectUserEntity update(UUID id, UserRole role, Double fee) {
         var optionalProjectUser = projectUserRepository.findById(id);
 
         if (optionalProjectUser.isEmpty()) {
@@ -59,6 +59,7 @@ public class ProjectUserService {
         }
 
         projectUser.setRole(role);
+        projectUser.setFee(fee);
 
         return projectUserRepository.save(projectUser);
     }

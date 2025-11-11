@@ -1,0 +1,119 @@
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '600px' }"
+  header="Create Report"
+  (visibleChange)="onVisibleChange($event)">
+
+  <form [formGroup]="reportForm" (ngSubmit)="onSave()">
+    <div class="form-content">
+
+      <p-message
+        *ngIf="errorMessage"
+        severity="error"
+        [text]="errorMessage"
+        [closable]="true"
+        (onClose)="errorMessage = ''">
+      </p-message>
+
+      <div class="field">
+        <label for="projectId" class="field-label">Project *</label>
+        <p-dropdown
+          id="projectId"
+          formControlName="projectId"
+          [options]="projectOptions"
+          placeholder="Select project"
+          [class.ng-invalid]="reportForm.get('projectId')?.invalid && reportForm.get('projectId')?.touched"
+          [appendTo]="'body'"
+          [autofocus]="false"
+          class="w-full">
+        </p-dropdown>
+        <small
+          *ngIf="getFieldError('projectId')"
+          class="p-error">
+          {{ getFieldError('projectId') }}
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="startDate" class="field-label">Start Date *</label>
+        <p-calendar
+          id="startDate"
+          formControlName="startDate"
+          [showIcon]="true"
+          dateFormat="yy-mm-dd"
+          placeholder="Select start date"
+          [class.ng-invalid]="reportForm.get('startDate')?.invalid && reportForm.get('startDate')?.touched"
+          [appendTo]="'body'"
+          class="w-full">
+        </p-calendar>
+        <small
+          *ngIf="getFieldError('startDate')"
+          class="p-error">
+          {{ getFieldError('startDate') }}
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="endDate" class="field-label">End Date *</label>
+        <p-calendar
+          id="endDate"
+          formControlName="endDate"
+          [showIcon]="true"
+          dateFormat="yy-mm-dd"
+          placeholder="Select end date"
+          [class.ng-invalid]="reportForm.get('endDate')?.invalid && reportForm.get('endDate')?.touched"
+          [appendTo]="'body'"
+          class="w-full">
+        </p-calendar>
+        <small
+          *ngIf="getFieldError('endDate')"
+          class="p-error">
+          {{ getFieldError('endDate') }}
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="description" class="field-label">Description *</label>
+        <textarea
+          id="description"
+          pInputTextarea
+          formControlName="description"
+          placeholder="Enter report description"
+          [class.ng-invalid]="reportForm.get('description')?.invalid && reportForm.get('description')?.touched"
+          [rows]="5"
+          class="w-full">
+        </textarea>
+        <small
+          *ngIf="getFieldError('description')"
+          class="p-error">
+          {{ getFieldError('description') }}
+        </small>
+      </div>
+
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="onCancel()"
+        [disabled]="loading">
+      </p-button>
+      <p-button
+        label="Generate Report"
+        icon="pi pi-file-pdf"
+        (onClick)="onSave()"
+        [loading]="loading"
+        [disabled]="reportForm.invalid">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+

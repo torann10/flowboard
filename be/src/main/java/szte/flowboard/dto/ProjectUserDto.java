@@ -20,6 +20,7 @@ public class ProjectUserDto {
     private UUID projectId;
     private UUID userId;
     private UserRole role;
+    private Double fee;
     private String createdBy;
     private LocalDate createdAt;
     private String lastModifiedBy;

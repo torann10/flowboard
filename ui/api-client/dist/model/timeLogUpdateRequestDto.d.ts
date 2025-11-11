@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 export interface TimeLogUpdateRequestDto {
-    taskId: string;
+    taskId?: string;
     loggedTime?: string;
     logDate: string;
     billable?: boolean;

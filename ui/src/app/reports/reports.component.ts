@@ -3,14 +3,17 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { ReportModalComponent } from './report-modal/report-modal.component';
 
 @Component({
   selector: 'app-reports',
-  imports: [ButtonModule, CardModule, TableModule, CommonModule],
+  imports: [ButtonModule, CardModule, TableModule, CommonModule, ReportModalComponent],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
 export class ReportsComponent {
+  showModal = false;
+
   columns = [
     { field: 'project', header: 'Project' },
     { field: 'timeInterval', header: 'Time Interval' },
@@ -25,4 +28,16 @@ export class ReportsComponent {
     { project: 'Project C', timeInterval: 'Last 90 days', total: 1000000 + ' HUF', createdAt: '2023-08-01', download: 'Download' }
   ];
 
+  openCreateModal() {
+    this.showModal = true;
+  }
+
+  onModalClose() {
+    this.showModal = false;
+  }
+
+  onReportSaved() {
+    this.onModalClose();
+    // Optionally reload reports list here
+  }
 }

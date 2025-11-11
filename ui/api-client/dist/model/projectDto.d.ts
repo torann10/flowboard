@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CompanyDto } from './companyDto';
 import { StoryPointTimeMappingDto } from './storyPointTimeMappingDto';
 export interface ProjectDto {
     id?: string;
@@ -18,6 +19,8 @@ export interface ProjectDto {
     createAt?: string;
     lastModifiedBy?: string;
     lastModifiedAt?: string;
+    customer?: CompanyDto;
+    contractor?: CompanyDto;
 }
 export declare namespace ProjectDto {
     const StatusEnum: {

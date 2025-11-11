@@ -10,7 +10,7 @@
 export interface TaskCreateRequestDto {
     name: string;
     description?: string;
-    projectId: string;
+    projectId?: string;
     assignedToId?: string;
     storyPointMappingId?: string;
     status: TaskCreateRequestDto.StatusEnum;

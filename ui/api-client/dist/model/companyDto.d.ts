@@ -7,10 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export interface ReportUpdateRequestDto {
-    projectId: string;
-    userId: string;
-    taskId?: string;
-    description: string;
-    reportDate: string;
+export interface CompanyDto {
+    name?: string;
+    address?: string;
 }

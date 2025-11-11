@@ -37,4 +37,18 @@ public class ProjectEntity extends AuditEntity {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskEntity> tasks;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column =  @Column(name = "customer_name", nullable = false)),
+            @AttributeOverride(name = "address", column = @Column(name = "customer_address", nullable = false))
+    })
+    private CompanyEntity customer;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column =  @Column(name = "contractor_name", nullable = false)),
+            @AttributeOverride(name = "address", column = @Column(name = "contractor_address", nullable = false))
+    })
+    private CompanyEntity contractor;
 }

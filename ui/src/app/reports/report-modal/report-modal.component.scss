@@ -17,45 +17,6 @@
   font-size: 0.9rem;
 }
 
-.company-section {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  border: 1px solid #e9ecef;
-  
-  .section-title {
-    margin: 0 0 1rem 0;
-    color: #2c3e50;
-    font-weight: 600;
-    font-size: 1rem;
-  }
-}
-
-.user-management-section {
-  padding: 1rem 0;
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    
-    h4 {
-      margin: 0;
-      color: #2c3e50;
-      font-weight: 600;
-    }
-  }
-  
-  .section-description {
-    color: #6c757d;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin: 0;
-  }
-}
-
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
@@ -89,7 +50,8 @@
   }
   
   .p-inputtext.ng-invalid,
-  .p-dropdown.ng-invalid {
+  .p-dropdown.ng-invalid,
+  .p-calendar.ng-invalid {
     border-color: #e24c4c;
   }
   
@@ -103,14 +65,10 @@
     margin-bottom: 1rem;
   }
   
-  // Fix dropdown z-index issues in modals
-  .p-dropdown-panel {
+  // Fix dropdown and calendar z-index issues in modals
+  .p-dropdown-panel,
+  .p-datepicker {
     z-index: 1100 !important;
   }
-  
-  .p-dropdown {
-    .p-dropdown-panel {
-      z-index: 1100 !important;
-    }
-  }
 }
+

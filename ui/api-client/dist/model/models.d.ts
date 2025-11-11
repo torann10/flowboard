@@ -1,3 +1,4 @@
+export * from './companyDto';
 export * from './projectCreateRequestDto';
 export * from './projectDto';
 export * from './projectUpdateRequestDto';
@@ -5,8 +6,6 @@ export * from './projectUserCreateRequestDto';
 export * from './projectUserDto';
 export * from './projectUserUpdateRequestDto';
 export * from './reportCreateRequestDto';
-export * from './reportDto';
-export * from './reportUpdateRequestDto';
 export * from './storyPointTimeMappingDto';
 export * from './taskCreateRequestDto';
 export * from './taskDto';

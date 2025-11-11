@@ -3,8 +3,15 @@
     label="Create Report"
     icon="pi pi-plus"
     severity="secondary"
+    (onClick)="openCreateModal()"
   />
 </div>
+
+<app-report-modal
+  [visible]="showModal"
+  (close)="onModalClose()"
+  (saved)="onReportSaved()">
+</app-report-modal>
 <p-card class="shadow mb-6 bg-white">
   <p-table
     [value]="reports"

@@ -10,6 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,6 +28,13 @@ public class ProjectCreateRequestDto {
     @NotNull(message = "Project type is required")
     private ProjectType type;
     
-    private java.util.List<StoryPointTimeMappingDto> storyPointTimeMappings;
+    private List<StoryPointTimeMappingDto> storyPointTimeMappings;
+
+    @NotNull
+    private CompanyDto customer;
+
+    @NotNull
+    private CompanyDto contractor;
+
 }
 

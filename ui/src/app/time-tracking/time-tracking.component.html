@@ -51,7 +51,7 @@
   <div class="max-w-7xl mx-auto">
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div class="flex justify-between">
-        <h2 class="text-xl font-semibold text-gray-800 mb-6">Current week working hours</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Current {{ intervalType == 'CUSTOM' ? '' : intervalType | lowercase }} working hours</h2>
         <div class="gap-1 flex">
           <div>
             <p-select [options]="intervalOptions" [(ngModel)]="intervalType"/>

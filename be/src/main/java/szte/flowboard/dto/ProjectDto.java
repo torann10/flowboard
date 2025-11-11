@@ -1,5 +1,6 @@
 package szte.flowboard.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,7 @@ public class ProjectDto {
     private LocalDate createAt;
     private String lastModifiedBy;
     private LocalDate lastModifiedAt;
+    private CompanyDto customer;
+    private CompanyDto contractor;
 }
 

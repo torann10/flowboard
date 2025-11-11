@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Teljesítési Igazolás</title>
+
+  <style>
+    /* Fallbacks: first try embedded font, then system fonts */
+    body {
+      font-family: "PT Mono";
+      font-size: 11pt;
+      color: #1f2933;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    @page {
+      size: A4;
+      margin: 2cm;
+    }
+
+    /* --- Header --- */
+    .header {
+      width: 100%;
+      background-color: #0b6e5a; /* dark teal accent */
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: center;
+      margin-bottom: 18px;
+      border-bottom: 3px solid #074c40; /* slightly darker */
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 18pt;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .header .subtitle {
+      margin-top: 4px;
+      font-size: 9.5pt;
+      opacity: 0.95;
+    }
+
+    /* --- Company blocks (table layout for OpenHTMLToPDF) --- */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      table-layout: fixed;
+    }
+    .info-table td {
+      border: 1px solid #d1d5db;
+      padding: 10px 12px;
+      vertical-align: top;
+      word-wrap: break-word;
+    }
+    .info-title {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 11pt;
+      color: #0b6e5a;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .muted {
+      color: #555;
+      font-size: 10pt;
+    }
+
+    /* --- Report period --- */
+    .period {
+      text-align: center;
+      margin: 6px 0 12px 0;
+    }
+    .period .label {
+      font-size: 11pt;
+      background-color: #e6f5f1; /* pale teal */
+      padding: 6px 10px;
+      border: 1px solid #d1ebe6;
+      border-radius: 3px;
+      display: inline-block;
+      color: #0b6e5a;
+      font-weight: 600;
+    }
+
+    /* --- Data table --- */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      table-layout: fixed;
+      font-size: 9pt;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid #c9cdd1;
+      padding: 7px 8px;
+      vertical-align: middle;
+    }
+    .data-table th {
+      background-color: #eaf6f4; /* very pale teal */
+      color: #0b6e5a;
+      font-weight: 700;
+      text-align: center;
+    }
+    .data-table td {
+      text-align: right;
+    }
+    .data-table td:first-child { /* name column */
+      text-align: left;
+      word-wrap: break-word;
+    }
+    .data-table tbody tr:nth-child(even) {
+      background-color: #eaf6f4; /* super subtle striping */
+    }
+    .data-table tbody tr:last-child {
+      font-weight: bold;
+      background-color: white;
+    }
+
+    /* Numeric columns - small monospace to align numbers */
+    .num {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .description {
+      font-weight: 700;
+      color: #0b6e5a;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+
+    /* --- Footer / signature --- */
+    .footer-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 22px;
+      table-layout: fixed;
+    }
+    .footer-table td {
+      padding-top: 20px;
+      vertical-align: top;
+    }
+    .left-cell {
+      width: 50%;
+      text-align: left;
+      font-size: 10pt;
+      color: #333;
+    }
+    .right-cell {
+      width: 25%;
+      text-align: right;
+    }
+    .sig-line {
+      display: inline-block;
+      border-top: 1px solid #000;
+      width: 100%;
+      margin-top: 40px;
+    }
+    .sig-name {
+      text-align: center;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    /* small print */
+    .small {
+      font-size: 9pt;
+      color: #444;
+    }
+
+    /* Print-safe: avoid shadows, complex selectors, etc. */
+  </style>
+</head>
+<body>
+  <!-- Header with color -->
+  <div class="header">
+    <h1>TELJESÍTÉSI IGAZOLÁS</h1>
+    <div class="subtitle">Jóváhagyott teljesítési lista és összesítés</div>
+  </div>
+
+  <!-- Company / Contractor info using table layout -->
+  <table class="info-table" role="presentation">
+    <tr>
+      <td>
+        <span class="info-title">Megrendelő</span>
+        <div class="muted">
+          <p><strong>Név:</strong> {{customer.name}}</p>
+          <p><strong>Cím:</strong> {{customer.address}}</p>
+        </div>
+      </td>
+      <td>
+        <span class="info-title">Vállalkozó</span>
+        <div class="muted">
+          <p><strong>Név:</strong> {{contractor.name}}</p>
+          <p><strong>Cím:</strong> {{contractor.address}}</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Report period -->
+  <div class="period">
+    <span class="label">Jelentési időszak: {{start}} – {{end}}</span>
+  </div>
+
+  <!-- Data table -->
+  <table class="data-table" role="table">
+    <thead>
+      <tr>
+        <th style="width:18%;">Név</th>
+        <th style="width:12%;">Mennyiség</th>
+        <th style="width:10%;">Egység</th>
+        <th style="width:15%;">Egységár</th>
+        <th style="width:15%;">Nettó ár</th>
+        <th style="width:15%;">ÁFA</th>
+        <th style="width:15%;">Bruttó ár</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#lines}}
+      <tr>
+        <td>{{name}}</td>
+        <td class="num">{{quantity}}</td>
+        <td>{{unit}}</td>
+        <td class="num">{{unitPrice}}</td>
+        <td class="num">{{netPrice}}</td>
+        <td class="num">{{vatPrice}}</td>
+        <td class="num">{{grossPrice}}</td>
+      </tr>
+      {{/lines}}
+    </tbody>
+  </table>
+
+  <!-- Description -->
+  {{#description}}
+    <div><div class="description">Megjegyzés:</div> {{description}}</div>
+  {{/description}}
+
+  <!-- Footer / signature -->
+  <table class="footer-table" role="presentation">
+    <tr>
+      <td class="left-cell">
+        <div><strong>Készült:</strong> {{createdAt}}</div>
+      </td>
+      <td class="right-cell">
+        <div class="sig-line"></div>
+        <div class="sig-name">{{customer.name}}</div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

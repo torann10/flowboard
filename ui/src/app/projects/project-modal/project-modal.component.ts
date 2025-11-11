@@ -12,7 +12,8 @@ import {
   ProjectControllerApiService,
   ProjectDto,
   ProjectUpdateRequestDto,
-  StoryPointTimeMappingDto
+  StoryPointTimeMappingDto,
+  CompanyDto
 } from '@anna/flow-board-api';
 import { UserAssignmentComponent } from './user-assignment/user-assignment.component';
 import { StoryPointMappingsComponent } from './story-point-mappings/story-point-mappings.component';
@@ -60,6 +61,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
   loading = false;
   errorMessage = '';
   showUserAssignment = false;
+  private previousVisible = false;
 
   statusOptions = [
     { label: 'Active', value: ProjectDto.StatusEnum.Active },
@@ -80,7 +82,11 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       name: ['', [Validators.required, Validators.minLength(2)]],
       status: [ProjectDto.StatusEnum.Active, Validators.required],
       type: [ProjectDto.TypeEnum.TimeBased, Validators.required],
-      storyPointTimeMappings: [this.defaultStoryPointMappings, [Validators.min(0.1), Validators.max(100)]]
+      storyPointTimeMappings: [this.defaultStoryPointMappings],
+      customerName: ['', Validators.required],
+      customerAddress: ['', Validators.required],
+      contractorName: ['', Validators.required],
+      contractorAddress: ['', Validators.required]
     });
   }
 
@@ -90,30 +96,59 @@ export class ProjectModalComponent implements OnInit, OnChanges {
         name: this.project.name,
         status: this.project.status || ProjectDto.StatusEnum.Active,
         type: this.project.type || ProjectDto.TypeEnum.TimeBased,
-        storyPointTimeMappings: this.project.storyPointTimeMappings || []
+        storyPointTimeMappings: this.project.storyPointTimeMappings || [],
+        customerName: this.project.customer?.name || '',
+        customerAddress: this.project.customer?.address || '',
+        contractorName: this.project.contractor?.name || '',
+        contractorAddress: this.project.contractor?.address || ''
       });
     }
   }
 
   ngOnChanges() {
-    if (this.project && this.isEditMode) {
+    // Only reset when dialog becomes visible and we're in create mode
+    if (this.visible && !this.previousVisible && !this.isEditMode) {
+      this.initializeFormForCreate();
+    }
+    
+    if (this.project && this.isEditMode && this.visible) {
       this.projectForm.patchValue({
         name: this.project.name,
         status: this.project.status || ProjectDto.StatusEnum.Active,
         type: this.project.type || ProjectDto.TypeEnum.TimeBased,
-        storyPointTimeMappings: this.project.storyPointTimeMappings || []
+        storyPointTimeMappings: this.project.storyPointTimeMappings || [],
+        customerName: this.project.customer?.name || '',
+        customerAddress: this.project.customer?.address || '',
+        contractorName: this.project.contractor?.name || '',
+        contractorAddress: this.project.contractor?.address || ''
       });
-    } else if (!this.isEditMode) {
-      this.projectForm.reset({
-        name: '',
-        status: ProjectDto.StatusEnum.Active,
-        type: ProjectDto.TypeEnum.TimeBased,
-        storyPointTimeMappings: this.defaultStoryPointMappings
-      });
+      this.projectForm.updateValueAndValidity();
     }
+    
+    this.previousVisible = this.visible;
+  }
+
+  private initializeFormForCreate() {
+    // Reset the entire form
+    this.projectForm.reset({
+      name: '',
+      status: ProjectDto.StatusEnum.Active,
+      type: ProjectDto.TypeEnum.TimeBased,
+      storyPointTimeMappings: this.defaultStoryPointMappings,
+      customerName: '',
+      customerAddress: '',
+      contractorName: '',
+      contractorAddress: ''
+    });
+    
+    // Ensure form validation state is updated
+    this.projectForm.updateValueAndValidity();
   }
 
   onSave() {
+    // Update form validity before checking
+    this.projectForm.updateValueAndValidity();
+    
     if (this.projectForm.valid) {
       this.loading = true;
       this.errorMessage = '';
@@ -124,6 +159,14 @@ export class ProjectModalComponent implements OnInit, OnChanges {
         status: formData.status,
         type: formData.type,
         storyPointTimeMappings: formData.storyPointTimeMappings,
+        customer: {
+          name: formData.customerName,
+          address: formData.customerAddress
+        } as CompanyDto,
+        contractor: {
+          name: formData.contractorName,
+          address: formData.contractorAddress
+        } as CompanyDto
       } as ProjectUpdateRequestDto;
 
       if (this.isEditMode && this.project?.id) {
@@ -155,7 +198,20 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       }
     } else {
       this.markFormGroupTouched();
+      // Log form errors for debugging
+      console.log('Form is invalid. Errors:', this.getFormErrors());
     }
+  }
+
+  private getFormErrors(): any {
+    const errors: any = {};
+    Object.keys(this.projectForm.controls).forEach(key => {
+      const control = this.projectForm.get(key);
+      if (control && control.errors) {
+        errors[key] = control.errors;
+      }
+    });
+    return errors;
   }
 
   onCancel() {
@@ -177,7 +233,9 @@ export class ProjectModalComponent implements OnInit, OnChanges {
   private markFormGroupTouched() {
     Object.keys(this.projectForm.controls).forEach(key => {
       const control = this.projectForm.get(key);
-      control?.markAsTouched();
+      if (control) {
+        control.markAsTouched();
+      }
     });
   }
 
@@ -185,7 +243,8 @@ export class ProjectModalComponent implements OnInit, OnChanges {
     const field = this.projectForm.get(fieldName);
     if (field?.errors && field.touched) {
       if (field.errors['required']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
+        const displayName = fieldName.charAt(0).toUpperCase() + fieldName.slice(1).replace(/([A-Z])/g, ' $1').trim();
+        return `${displayName} is required`;
       }
       if (field.errors['minlength']) {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least ${field.errors['minlength'].requiredLength} characters`;

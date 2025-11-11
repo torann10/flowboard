@@ -7,6 +7,8 @@ import szte.flowboard.entity.TimeLogEntity;
 import szte.flowboard.entity.UserEntity;
 import szte.flowboard.repository.TimeLogRepository;
 import szte.flowboard.repository.UserRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

@@ -38,7 +38,9 @@ public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
             dto.setAssignedToName(entity.getAssignedTo().getFirstName() + " " + entity.getAssignedTo().getLastName());
         }
 
-        dto.setBookedTime(entity.getTimeLogs().stream().map(TimeLogEntity::getLoggedTime).reduce(Duration.ZERO, Duration::plus));
+        if (entity.getTimeLogs() != null) {
+            dto.setBookedTime(entity.getTimeLogs().stream().map(TimeLogEntity::getLoggedTime).reduce(Duration.ZERO, Duration::plus));
+        }
 
         dto.setStoryPointMappingId(entity.getStoryPointMapping().getId());
         dto.setStatus(entity.getStatus());

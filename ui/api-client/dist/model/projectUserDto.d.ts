@@ -12,6 +12,7 @@ export interface ProjectUserDto {
     projectId?: string;
     userId?: string;
     role?: ProjectUserDto.RoleEnum;
+    fee?: number;
     createdBy?: string;
     createdAt?: string;
     lastModifiedBy?: string;
