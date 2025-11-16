@@ -16,6 +16,8 @@ encoder.ts
 git_push.sh
 index.ts
 model/companyDto.ts
+model/createCOCReportRequestDto.ts
+model/createEmployeeMatrixReportRequestDto.ts
 model/models.ts
 model/projectCreateRequestDto.ts
 model/projectDto.ts
@@ -23,7 +25,6 @@ model/projectUpdateRequestDto.ts
 model/projectUserCreateRequestDto.ts
 model/projectUserDto.ts
 model/projectUserUpdateRequestDto.ts
-model/reportCreateRequestDto.ts
 model/storyPointTimeMappingDto.ts
 model/taskCreateRequestDto.ts
 model/taskDto.ts

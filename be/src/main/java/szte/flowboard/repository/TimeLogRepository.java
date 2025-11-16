@@ -7,6 +7,7 @@ import szte.flowboard.entity.TimeLogEntity;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -16,4 +17,5 @@ public interface TimeLogRepository extends JpaRepository<TimeLogEntity, UUID> {
     boolean existsByIdAndUserId(UUID id, UUID userId);
     long countByUserId(UUID userId);
     List<TimeLogEntity> findAllByTaskProjectIdAndLogDateBetween(UUID projectId, LocalDate startDate, LocalDate endDate);
+    List<TimeLogEntity> findByTaskProjectIdInAndLogDateBetween(Set<UUID> projectId, LocalDate startDate, LocalDate endDate);
 }

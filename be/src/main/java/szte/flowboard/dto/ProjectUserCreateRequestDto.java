@@ -16,10 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProjectUserCreateRequestDto {
     
-    @NotBlank(message = "Project ID is required")
     private UUID projectId;
     
-    @NotBlank(message = "User ID is required")
     private UUID userId;
     
     @NotNull(message = "User role is required")

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,7 +12,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { MessageModule } from 'primeng/message';
 import {
   ReportControllerApiService,
-  ReportCreateRequestDto,
+  CreateCOCReportRequestDto,
+  CreateEmployeeMatrixReportRequestDto,
   ProjectControllerApiService,
   ProjectDto
 } from '@anna/flow-board-api';
@@ -43,6 +46,10 @@ export class ReportModalComponent implements OnInit, OnChanges {
   errorMessage = '';
   projects: ProjectDto[] = [];
   projectOptions: { label: string; value: string }[] = [];
+  reportTypeOptions = [
+    { label: 'COC Report', value: 'coc' },
+    { label: 'Employee Matrix Report', value: 'employee-matrix' }
+  ];
   private previousVisible = false;
 
   constructor(
@@ -51,10 +58,16 @@ export class ReportModalComponent implements OnInit, OnChanges {
     private projectService: ProjectControllerApiService
   ) {
     this.reportForm = this.fb.group({
-      projectId: ['', Validators.required],
+      reportType: ['coc', Validators.required],
+      projectId: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      description: ['', [Validators.required, Validators.maxLength(1000)]]
+      description: ['']
+    });
+
+    // Set up conditional validation based on report type
+    this.reportForm.get('reportType')?.valueChanges.subscribe(reportType => {
+      this.updateFormValidation(reportType);
     });
   }
 
@@ -71,14 +84,34 @@ export class ReportModalComponent implements OnInit, OnChanges {
 
   private initializeForm() {
     this.reportForm.reset({
+      reportType: 'coc',
       projectId: '',
       startDate: null,
       endDate: null,
       description: ''
     });
+    this.updateFormValidation('coc');
     this.reportForm.markAsPristine();
     this.reportForm.markAsUntouched();
     this.reportForm.updateValueAndValidity();
+  }
+
+  private updateFormValidation(reportType: string) {
+    const projectIdControl = this.reportForm.get('projectId');
+    const descriptionControl = this.reportForm.get('description');
+
+    if (reportType === 'coc') {
+      // COC report requires projectId and description
+      projectIdControl?.setValidators([Validators.required]);
+      descriptionControl?.setValidators([Validators.required, Validators.maxLength(1000)]);
+    } else {
+      // Employee Matrix report doesn't require projectId or description
+      projectIdControl?.clearValidators();
+      descriptionControl?.clearValidators();
+    }
+
+    projectIdControl?.updateValueAndValidity({ emitEvent: false });
+    descriptionControl?.updateValueAndValidity({ emitEvent: false });
   }
 
   loadProjects() {
@@ -104,62 +137,112 @@ export class ReportModalComponent implements OnInit, OnChanges {
       this.errorMessage = '';
 
       const formData = this.reportForm.value;
-      const reportData: ReportCreateRequestDto = {
-        projectId: formData.projectId,
-        startDate: formData.startDate ? new Date(formData.startDate).toISOString().split('T')[0] : undefined,
-        endDate: formData.endDate ? new Date(formData.endDate).toISOString().split('T')[0] : undefined,
-        description: formData.description
-      };
+      const reportType = formData.reportType;
+      const startDate = formData.startDate ? new Date(formData.startDate).toISOString().split('T')[0] : undefined;
+      const endDate = formData.endDate ? new Date(formData.endDate).toISOString().split('T')[0] : undefined;
 
-      this.reportService.createReport(reportData, 'response', true, {
-        httpHeaderAccept: 'application/pdf'
-      }).subscribe({
-        next: (response) => {
+      console.log('Generating report:', { reportType, startDate, endDate, formData });
+
+      let reportObservable: Observable<HttpResponse<any>>;
+
+      try {
+        if (reportType === 'coc') {
+          const reportData: CreateCOCReportRequestDto = {
+            projectId: formData.projectId,
+            startDate: startDate,
+            endDate: endDate,
+            description: formData.description
+          };
+          console.log('Calling createCocReport with data:', reportData);
+          reportObservable = this.reportService.createCocReport(reportData, 'response', true, {
+            httpHeaderAccept: 'application/pdf'
+          });
+        } else {
+          const reportData: CreateEmployeeMatrixReportRequestDto = {
+            startDate: startDate,
+            endDate: endDate
+          };
+          console.log('Calling createEmployeeMatrixReport with data:', reportData);
+          reportObservable = this.reportService.createEmployeeMatrixReport(reportData, 'response', true, {
+            httpHeaderAccept: 'application/pdf'
+          });
+        }
+
+        console.log('Subscribing to observable...', reportObservable);
+        if (!reportObservable) {
+          console.error('Observable is null or undefined!');
           this.loading = false;
-          
-          // Handle PDF download
-          if (response.body) {
-            // Convert response body to Blob (handles ArrayBuffer, string, or Blob)
-            let blob: Blob;
-            if (response.body instanceof Blob) {
-              blob = response.body;
-            } else if (response.body instanceof ArrayBuffer) {
-              blob = new Blob([response.body], { type: 'application/pdf' });
-            } else {
-              // If it's a string, convert to ArrayBuffer first
-              const arrayBuffer = new TextEncoder().encode(response.body).buffer;
-              blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-            }
-            
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            
-            // Get filename from Content-Disposition header if available
-            const contentDisposition = response.headers.get('Content-Disposition');
-            let filename = 'teljesitesi_igazolas.pdf';
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-              if (filenameMatch && filenameMatch[1]) {
-                filename = filenameMatch[1].replace(/['"]/g, '');
+          this.errorMessage = 'Failed to create report request. Please try again.';
+          return;
+        }
+        
+        reportObservable.subscribe({
+          next: (response: HttpResponse<any>) => {
+            console.log('Response received:', response);
+            try {
+              // Handle PDF download
+              if (response.body) {
+                // Convert response body to Blob (handles ArrayBuffer, string, or Blob)
+                let blob: Blob;
+                if (response.body instanceof Blob) {
+                  blob = response.body;
+                } else if (response.body instanceof ArrayBuffer) {
+                  blob = new Blob([response.body], { type: 'application/pdf' });
+                } else {
+                  // If it's a string, convert to ArrayBuffer first
+                  const arrayBuffer = new TextEncoder().encode(response.body).buffer;
+                  blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+                }
+                
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                
+                // Get filename from Content-Disposition header if available
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = reportType === 'coc' ? 'teljesitesi_igazolas.pdf' : 'munkavallaloi-matrix.pdf';
+                if (contentDisposition) {
+                  const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                  if (filenameMatch && filenameMatch[1]) {
+                    filename = filenameMatch[1].replace(/['"]/g, '');
+                  }
+                }
+                
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+                
+                this.saved.emit();
+              } else {
+                this.errorMessage = 'No PDF data received from server.';
+                console.error('Response body is null or undefined');
               }
+            } catch (error) {
+              this.errorMessage = 'Error processing PDF download. Please try again.';
+              console.error('Error processing PDF:', error);
+            } finally {
+              this.loading = false;
             }
-            
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-          }
-          
-          this.saved.emit();
-        },
-        error: (error: any) => {
+          },
+          error: (error: any) => {
           this.loading = false;
           this.errorMessage = 'Error generating report. Please try again.';
           console.error('Error creating report:', error);
+        },
+        complete: () => {
+          // Ensure loading is reset even if next doesn't fire
+          if (this.loading) {
+            this.loading = false;
+          }
         }
       });
+      } catch (error) {
+        console.error('Error creating observable:', error);
+        this.loading = false;
+        this.errorMessage = 'Failed to create report request. Please try again.';
+      }
     } else {
       this.markFormGroupTouched();
     }
@@ -196,6 +279,10 @@ export class ReportModalComponent implements OnInit, OnChanges {
       }
     }
     return '';
+  }
+
+  get isCocReport(): boolean {
+    return this.reportForm.get('reportType')?.value === 'coc';
   }
 }
 

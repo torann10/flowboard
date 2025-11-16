@@ -20,6 +20,24 @@
       </p-message>
 
       <div class="field">
+        <label for="reportType" class="field-label">Report Type *</label>
+        <p-dropdown
+          id="reportType"
+          formControlName="reportType"
+          [options]="reportTypeOptions"
+          placeholder="Select report type"
+          [class.ng-invalid]="reportForm.get('reportType')?.invalid && reportForm.get('reportType')?.touched"
+          [appendTo]="'body'"
+          class="w-full">
+        </p-dropdown>
+        <small
+          *ngIf="getFieldError('reportType')"
+          class="p-error">
+          {{ getFieldError('reportType') }}
+        </small>
+      </div>
+
+      <div class="field" *ngIf="isCocReport">
         <label for="projectId" class="field-label">Project *</label>
         <p-dropdown
           id="projectId"
@@ -76,7 +94,7 @@
         </small>
       </div>
 
-      <div class="field">
+      <div class="field" *ngIf="isCocReport">
         <label for="description" class="field-label">Description *</label>
         <textarea
           id="description"

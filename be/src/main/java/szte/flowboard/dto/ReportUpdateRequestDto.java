@@ -17,10 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ReportUpdateRequestDto {
     
-    @NotBlank(message = "Project ID is required")
     private UUID projectId;
     
-    @NotBlank(message = "User ID is required")
     private UUID userId;
     
     private UUID taskId;

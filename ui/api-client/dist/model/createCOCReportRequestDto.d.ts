@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export interface ReportCreateRequestDto {
+export interface CreateCOCReportRequestDto {
     projectId?: string;
     startDate?: string;
     endDate?: string;
