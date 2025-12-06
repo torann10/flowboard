@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import szte.flowboard.dto.*;
+import szte.flowboard.dto.request.CreateCOCReportRequestDto;
+import szte.flowboard.dto.request.CreateEmployeeMatrixReportRequestDto;
+import szte.flowboard.dto.request.CreateProjectActivityReportRequestDto;
+import szte.flowboard.dto.response.DownloadReportDto;
 import szte.flowboard.mapper.ReportMapper;
 import szte.flowboard.service.ReportService;
 

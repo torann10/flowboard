@@ -26,12 +26,12 @@ public class UserSyncService {
             var keycloakId = (String) ((Jwt)authentication.getPrincipal()).getClaims().get("sub");
 
             Optional<UserEntity> existingUser = userRepository.findByKeycloakId(keycloakId);
+
             if (existingUser.isPresent()) {
                 return existingUser.get();
             }
 
-            Optional<org.keycloak.representations.idm.UserRepresentation> keycloakUser = 
-                    keycloakService.getUserById(keycloakId);
+            Optional<UserRepresentation> keycloakUser = keycloakService.getUserById(keycloakId);
             UserEntity userEntity = getUserEntity(keycloakUser, keycloakId);
 
             if(userEntity == null) {

@@ -3,7 +3,7 @@ package szte.flowboard.mapper;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.TimeLogDto;
-import szte.flowboard.dto.TimeLogUpdateRequestDto;
+import szte.flowboard.dto.request.TimeLogUpdateRequestDto;
 import szte.flowboard.entity.TaskEntity;
 import szte.flowboard.entity.TimeLogEntity;
 import szte.flowboard.entity.UserEntity;

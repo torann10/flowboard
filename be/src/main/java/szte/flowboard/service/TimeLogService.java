@@ -103,20 +103,5 @@ public class TimeLogService {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
 
         return user.filter(userEntity -> timeLogRepository.existsByIdAndUserId(id, userEntity.getId())).isPresent();
-
-    }
-
-    public long countByUser(Authentication authentication) {
-        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
-        
-        if (user.isEmpty()) {
-            return 0;
-        }
-        
-        return timeLogRepository.countByUserId(user.get().getId());
-    }
-
-    private String getKeycloakIdFromAuthentication(Authentication authentication) {
-        return (String) ((Jwt) authentication.getPrincipal()).getClaims().get("sub");
     }
 }

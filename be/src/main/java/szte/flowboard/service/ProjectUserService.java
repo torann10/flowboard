@@ -71,8 +71,4 @@ public class ProjectUserService {
     public boolean existsById(UUID id) {
         return projectUserRepository.existsById(id);
     }
-
-    public long count() {
-        return projectUserRepository.count();
-    }
 }

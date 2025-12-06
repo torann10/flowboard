@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import szte.flowboard.dto.ProjectDto;
-import szte.flowboard.dto.ProjectCreateRequestDto;
-import szte.flowboard.dto.ProjectUpdateRequestDto;
+import szte.flowboard.dto.request.ProjectCreateRequestDto;
+import szte.flowboard.dto.request.ProjectUpdateRequestDto;
 import szte.flowboard.entity.ProjectEntity;
 import szte.flowboard.mapper.ProjectMapper;
 import szte.flowboard.service.ProjectService;
@@ -96,15 +96,5 @@ public class ProjectController {
         }
         projectService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Operation(operationId = "getProjectCount", summary = "Get project count", description = "Retrieves the total number of projects for the current user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Count retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
-    })
-    @GetMapping("/count")
-    public ResponseEntity<Long> count(Authentication authentication) {
-        long count = projectService.countByUser(authentication);
-        return ResponseEntity.ok(count);
     }
 }

@@ -1,4 +1,4 @@
-package szte.flowboard.dto;
+package szte.flowboard.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,3 +15,4 @@ public class DownloadReportDto {
 
     private URL downloadUrl;
 }
+

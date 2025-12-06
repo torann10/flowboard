@@ -3,8 +3,8 @@ package szte.flowboard.mapper;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.TaskDto;
-import szte.flowboard.dto.TaskCreateRequestDto;
-import szte.flowboard.dto.TaskUpdateRequestDto;
+import szte.flowboard.dto.request.TaskCreateRequestDto;
+import szte.flowboard.dto.request.TaskUpdateRequestDto;
 import szte.flowboard.entity.*;
 import szte.flowboard.enums.TaskStatus;
 

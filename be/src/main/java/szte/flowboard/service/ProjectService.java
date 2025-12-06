@@ -8,10 +8,8 @@ import szte.flowboard.entity.BaseEntity;
 import szte.flowboard.entity.ProjectEntity;
 import szte.flowboard.entity.ProjectUserEntity;
 import szte.flowboard.entity.UserEntity;
-import szte.flowboard.repository.ProjectRepository;
-import szte.flowboard.repository.ProjectUserRepository;
-import szte.flowboard.repository.StoryPointTimeMappingRepository;
-import szte.flowboard.repository.UserRepository;
+import szte.flowboard.repository.*;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,34 +18,33 @@ import java.util.UUID;
 @Service
 public class ProjectService {
 
+    private final ReportRepository reportRepository;
     private final ProjectRepository projectRepository;
     private final ProjectUserRepository projectUserRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final StoryPointTimeMappingRepository storyPointTimeMappingRepository;
 
-    public ProjectService(ProjectRepository projectRepository,
+    public ProjectService(ReportRepository reportRepository,
+                          ProjectRepository projectRepository,
                           ProjectUserRepository projectUserRepository,
-                          UserRepository userRepository,
+                          UserService userService,
                           StoryPointTimeMappingRepository storyPointTimeMappingRepository) {
+        this.reportRepository = reportRepository;
         this.projectRepository = projectRepository;
         this.projectUserRepository = projectUserRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.storyPointTimeMappingRepository = storyPointTimeMappingRepository;
     }
 
     public ProjectEntity create(ProjectEntity project, Authentication authentication) {
-        // Get current user
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
-        
+        var user = userService.getUserByAuthentication(authentication);
+
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         
-        // Save project
         ProjectEntity savedProject = projectRepository.save(project);
         
-        // Create project-user relationship with ADMIN role
         ProjectUserEntity projectUser = new ProjectUserEntity();
         projectUser.setUser(user.get());
         projectUser.setProject(savedProject);
@@ -58,8 +55,7 @@ public class ProjectService {
     }
 
     public List<ProjectEntity> findAllByUser(Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        var user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
             return List.of();
@@ -73,8 +69,7 @@ public class ProjectService {
     }
 
     public Optional<ProjectEntity> findByIdAndUser(UUID id, Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
+        var user = userService.getUserByAuthentication(authentication);
         
         if (user.isEmpty()) {
             return Optional.empty();
@@ -90,25 +85,12 @@ public class ProjectService {
     }
 
     public boolean existsByIdAndUser(UUID id, Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
-        
-        if (user.isEmpty()) {
-            return false;
-        }
-        
-        return projectUserRepository.existsByUserIdAndProjectId(user.get().getId(), id);
-    }
+        var user = userService.getUserByAuthentication(authentication);
 
-    public long countByUser(Authentication authentication) {
-        String keycloakId = getKeycloakIdFromAuthentication(authentication);
-        Optional<UserEntity> user = userRepository.findByKeycloakId(keycloakId);
-        
-        if (user.isEmpty()) {
-            return 0;
-        }
-        
-        return projectUserRepository.countByUserId(user.get().getId());
+        return user
+                .filter(userEntity -> projectUserRepository.existsByUserIdAndProjectId(userEntity.getId(), id))
+                .isPresent();
+
     }
 
     @Transactional
@@ -125,13 +107,10 @@ public class ProjectService {
 
     @Transactional
     public void delete(UUID id) {
+        reportRepository.deleteByProjectId(id);
         // Delete project-user relationships first
         projectUserRepository.deleteByProjectId(id);
         // Then delete the project
         projectRepository.deleteById(id);
-    }
-
-    private String getKeycloakIdFromAuthentication(Authentication authentication) {
-        return (String) ((Jwt) authentication.getPrincipal()).getClaims().get("sub");
     }
 }

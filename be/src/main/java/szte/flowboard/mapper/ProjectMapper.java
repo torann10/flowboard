@@ -2,8 +2,8 @@ package szte.flowboard.mapper;
 
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.ProjectDto;
-import szte.flowboard.dto.ProjectCreateRequestDto;
-import szte.flowboard.dto.ProjectUpdateRequestDto;
+import szte.flowboard.dto.request.ProjectCreateRequestDto;
+import szte.flowboard.dto.request.ProjectUpdateRequestDto;
 import szte.flowboard.entity.ProjectEntity;
 
 import java.util.List;

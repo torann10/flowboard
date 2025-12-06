@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import szte.flowboard.dto.TimeLogDto;
-import szte.flowboard.dto.TimeLogUpdateRequestDto;
+import szte.flowboard.dto.request.TimeLogUpdateRequestDto;
 import szte.flowboard.entity.TimeLogEntity;
 import szte.flowboard.mapper.TimeLogMapper;
 import szte.flowboard.service.TimeLogService;
@@ -106,15 +106,5 @@ public class TimeLogController {
         }
         timeLogService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Operation(operationId = "getTimeLogCount", summary = "Get time log count", description = "Retrieves the total number of time logs for the current user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Count retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
-    })
-    @GetMapping("/count")
-    public ResponseEntity<Long> count(Authentication authentication) {
-        long count = timeLogService.countByUser(authentication);
-        return ResponseEntity.ok(count);
     }
 }

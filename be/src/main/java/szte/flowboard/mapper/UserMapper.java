@@ -2,8 +2,8 @@ package szte.flowboard.mapper;
 
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.UserDto;
-import szte.flowboard.dto.UserCreateRequestDto;
-import szte.flowboard.dto.UserUpdateRequestDto;
+import szte.flowboard.dto.request.UserCreateRequestDto;
+import szte.flowboard.dto.request.UserUpdateRequestDto;
 import szte.flowboard.entity.UserEntity;
 import java.util.List;
 import java.util.UUID;

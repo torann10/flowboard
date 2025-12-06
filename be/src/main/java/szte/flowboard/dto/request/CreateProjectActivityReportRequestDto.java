@@ -1,4 +1,4 @@
-package szte.flowboard.dto;
+package szte.flowboard.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,3 +21,4 @@ public class CreateProjectActivityReportRequestDto {
     private LocalDate endDate;
 
 }
+

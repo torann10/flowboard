@@ -1,4 +1,4 @@
-package szte.flowboard.dto;
+package szte.flowboard.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,3 +26,4 @@ public class CreateCOCReportRequestDto {
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
 }
+

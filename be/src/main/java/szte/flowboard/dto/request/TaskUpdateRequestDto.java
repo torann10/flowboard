@@ -1,4 +1,4 @@
-package szte.flowboard.dto;
+package szte.flowboard.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskCreateRequestDto {
+public class TaskUpdateRequestDto {
     
     @NotBlank(message = "Task name is required")
     @Size(min = 2, max = 200, message = "Task name must be between 2 and 200 characters")
@@ -25,8 +25,6 @@ public class TaskCreateRequestDto {
     
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
-    
-    private UUID projectId;
     
     private UUID assignedToId;
     

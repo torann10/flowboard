@@ -1,4 +1,4 @@
-package szte.flowboard.dto;
+package szte.flowboard.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import szte.flowboard.enums.ProjectStatus;
 import szte.flowboard.enums.ProjectType;
+import szte.flowboard.dto.CompanyDto;
+import szte.flowboard.dto.StoryPointTimeMappingDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectCreateRequestDto {
+public class ProjectUpdateRequestDto {
     
     @NotBlank(message = "Project name is required")
     @Size(min = 2, max = 100, message = "Project name must be between 2 and 100 characters")
@@ -30,13 +30,12 @@ public class ProjectCreateRequestDto {
 
     private Double storyPointFee;
     
-    private List<StoryPointTimeMappingDto> storyPointTimeMappings;
+    private java.util.List<StoryPointTimeMappingDto> storyPointTimeMappings;
 
     @NotNull
     private CompanyDto customer;
 
     @NotNull
     private CompanyDto contractor;
-
 }
 

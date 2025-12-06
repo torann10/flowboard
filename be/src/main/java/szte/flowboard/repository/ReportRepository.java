@@ -18,4 +18,5 @@ public interface ReportRepository extends JpaRepository<ReportEntity, UUID> {
     @Modifying
     @Query("update ReportEntity r set r.name = ?1 where r.id = ?2 AND r.user.id = ?3")
     Integer renameReportByIdAndUserId(String name, UUID id, UUID userId);
+    void deleteByProjectId(UUID projectId);
 }
