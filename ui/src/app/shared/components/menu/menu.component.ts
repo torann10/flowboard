@@ -3,15 +3,13 @@ import { MenuItem } from 'primeng/api';
 import { Menu, MenuModule } from 'primeng/menu';
 import { Ripple } from 'primeng/ripple';
 import { UserService } from '../../../services/user.service';
-import { Divider } from 'primeng/divider';
 import { Button } from 'primeng/button';
-import { KeycloakService } from 'keycloak-angular';
 import Keycloak from 'keycloak-js';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
-  imports: [MenuModule, Menu, Ripple, Divider, Button, RouterLink],
+  imports: [MenuModule, Menu, Ripple, Button, RouterLink],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
@@ -29,7 +27,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'Time Tracking',
         icon: 'pi pi-clock',
-        routerLink: '/time-tracking'
+        routerLink: ''
       },
       {
         label: 'Projects',

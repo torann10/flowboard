@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +13,7 @@ import {
   ReportControllerApiService,
   CreateCOCReportRequestDto,
   CreateEmployeeMatrixReportRequestDto,
+  CreateProjectActivityReportRequestDto,
   ProjectControllerApiService,
   ProjectDto
 } from '@anna/flow-board-api';
@@ -39,7 +39,7 @@ import {
 export class ReportModalComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Output() close = new EventEmitter<void>();
-  @Output() saved = new EventEmitter<void>();
+  @Output() saved = new EventEmitter<string>();
 
   reportForm: FormGroup;
   loading = false;
@@ -48,7 +48,8 @@ export class ReportModalComponent implements OnInit, OnChanges {
   projectOptions: { label: string; value: string }[] = [];
   reportTypeOptions = [
     { label: 'COC Report', value: 'coc' },
-    { label: 'Employee Matrix Report', value: 'employee-matrix' }
+    { label: 'Employee Matrix Report', value: 'employee-matrix' },
+    { label: 'Project Activity Report', value: 'project-activity' }
   ];
   private previousVisible = false;
 
@@ -104,6 +105,10 @@ export class ReportModalComponent implements OnInit, OnChanges {
       // COC report requires projectId and description
       projectIdControl?.setValidators([Validators.required]);
       descriptionControl?.setValidators([Validators.required, Validators.maxLength(1000)]);
+    } else if (reportType === 'project-activity') {
+      // Project Activity report requires projectId but not description
+      projectIdControl?.setValidators([Validators.required]);
+      descriptionControl?.clearValidators();
     } else {
       // Employee Matrix report doesn't require projectId or description
       projectIdControl?.clearValidators();
@@ -123,10 +128,21 @@ export class ReportModalComponent implements OnInit, OnChanges {
           value: p.id || ''
         }));
       },
-      error: (error) => {
-        console.error('Error loading projects:', error);
+      error: () => {
+        // Error loading projects - silently fail
       }
     });
+  }
+
+  private formatDateForApi(date: Date | null | undefined): string | undefined {
+    if (!date) {
+      return undefined;
+    }
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   onSave() {
@@ -138,14 +154,15 @@ export class ReportModalComponent implements OnInit, OnChanges {
 
       const formData = this.reportForm.value;
       const reportType = formData.reportType;
-      const startDate = formData.startDate ? new Date(formData.startDate).toISOString().split('T')[0] : undefined;
-      const endDate = formData.endDate ? new Date(formData.endDate).toISOString().split('T')[0] : undefined;
+      const startDate = this.formatDateForApi(formData.startDate);
+      const endDate = this.formatDateForApi(formData.endDate);
 
-      console.log('Generating report:', { reportType, startDate, endDate, formData });
-
-      let reportObservable: Observable<HttpResponse<any>>;
+      let reportObservable: Observable<string>;
 
       try {
+        if (!this.reportService) {
+          throw new Error('ReportService is not initialized');
+        }
         if (reportType === 'coc') {
           const reportData: CreateCOCReportRequestDto = {
             projectId: formData.projectId,
@@ -153,93 +170,39 @@ export class ReportModalComponent implements OnInit, OnChanges {
             endDate: endDate,
             description: formData.description
           };
-          console.log('Calling createCocReport with data:', reportData);
-          reportObservable = this.reportService.createCocReport(reportData, 'response', true, {
-            httpHeaderAccept: 'application/pdf'
-          });
+          reportObservable = this.reportService.createCocReport(reportData);
+        } else if (reportType === 'project-activity') {
+          const reportData: CreateProjectActivityReportRequestDto = {
+            projectId: formData.projectId,
+            startDate: startDate,
+            endDate: endDate
+          };
+          reportObservable = this.reportService.createProjectActivityReport(reportData);
         } else {
           const reportData: CreateEmployeeMatrixReportRequestDto = {
             startDate: startDate,
             endDate: endDate
           };
-          console.log('Calling createEmployeeMatrixReport with data:', reportData);
-          reportObservable = this.reportService.createEmployeeMatrixReport(reportData, 'response', true, {
-            httpHeaderAccept: 'application/pdf'
-          });
+          reportObservable = this.reportService.createEmployeeMatrixReport(reportData);
         }
 
-        console.log('Subscribing to observable...', reportObservable);
         if (!reportObservable) {
-          console.error('Observable is null or undefined!');
           this.loading = false;
           this.errorMessage = 'Failed to create report request. Please try again.';
           return;
         }
         
         reportObservable.subscribe({
-          next: (response: HttpResponse<any>) => {
-            console.log('Response received:', response);
-            try {
-              // Handle PDF download
-              if (response.body) {
-                // Convert response body to Blob (handles ArrayBuffer, string, or Blob)
-                let blob: Blob;
-                if (response.body instanceof Blob) {
-                  blob = response.body;
-                } else if (response.body instanceof ArrayBuffer) {
-                  blob = new Blob([response.body], { type: 'application/pdf' });
-                } else {
-                  // If it's a string, convert to ArrayBuffer first
-                  const arrayBuffer = new TextEncoder().encode(response.body).buffer;
-                  blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-                }
-                
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                
-                // Get filename from Content-Disposition header if available
-                const contentDisposition = response.headers.get('Content-Disposition');
-                let filename = reportType === 'coc' ? 'teljesitesi_igazolas.pdf' : 'munkavallaloi-matrix.pdf';
-                if (contentDisposition) {
-                  const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-                  if (filenameMatch && filenameMatch[1]) {
-                    filename = filenameMatch[1].replace(/['"]/g, '');
-                  }
-                }
-                
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-                
-                this.saved.emit();
-              } else {
-                this.errorMessage = 'No PDF data received from server.';
-                console.error('Response body is null or undefined');
-              }
-            } catch (error) {
-              this.errorMessage = 'Error processing PDF download. Please try again.';
-              console.error('Error processing PDF:', error);
-            } finally {
-              this.loading = false;
-            }
-          },
-          error: (error: any) => {
-          this.loading = false;
-          this.errorMessage = 'Error generating report. Please try again.';
-          console.error('Error creating report:', error);
-        },
-        complete: () => {
-          // Ensure loading is reset even if next doesn't fire
-          if (this.loading) {
+          next: (reportId: string) => {
             this.loading = false;
+            this.saved.emit(reportId);
+          },
+          error: () => {
+            this.loading = false;
+            this.errorMessage = 'Error generating report. Please try again.';
           }
-        }
-      });
+        });
       } catch (error) {
-        console.error('Error creating observable:', error);
         this.loading = false;
         this.errorMessage = 'Failed to create report request. Please try again.';
       }
@@ -283,6 +246,15 @@ export class ReportModalComponent implements OnInit, OnChanges {
 
   get isCocReport(): boolean {
     return this.reportForm.get('reportType')?.value === 'coc';
+  }
+
+  get isProjectActivityReport(): boolean {
+    return this.reportForm.get('reportType')?.value === 'project-activity';
+  }
+
+  get showProjectField(): boolean {
+    const reportType = this.reportForm.get('reportType')?.value;
+    return reportType === 'coc' || reportType === 'project-activity';
   }
 }
 

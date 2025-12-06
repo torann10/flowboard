@@ -14,9 +14,10 @@ export interface ProjectDto {
     name?: string;
     status?: ProjectDto.StatusEnum;
     type?: ProjectDto.TypeEnum;
+    storyPointFee?: number;
     storyPointTimeMappings?: Array<StoryPointTimeMappingDto>;
     createdBy?: string;
-    createAt?: string;
+    createdAt?: string;
     lastModifiedBy?: string;
     lastModifiedAt?: string;
     customer?: CompanyDto;

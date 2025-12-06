@@ -1,0 +1,80 @@
+<div class="flex flex-col gap-6">
+  <p-message
+    *ngIf="errorMessage"
+    severity="error"
+    [text]="errorMessage"
+    [closable]="true"
+    (onClose)="errorMessage = ''">
+  </p-message>
+
+  <form [formGroup]="timeLogForm" (ngSubmit)="onSave()">
+    <div class="space-y-4">
+      <div>
+        <label for="timeLogTime" class="block text-sm font-medium text-gray-700 mb-2">
+          <i class="pi pi-clock mr-1"></i>Time Spent *
+        </label>
+        <input
+          id="timeLogTime"
+          type="text"
+          pInputText
+          formControlName="loggedTime"
+          placeholder="e.g., 2h 30m or 1h"
+          [class.ng-invalid]="timeLogForm.get('loggedTime')?.invalid && timeLogForm.get('loggedTime')?.touched"
+          class="w-full">
+        <small *ngIf="getFieldError('loggedTime')" class="text-red-500 text-xs mt-1 block">
+          {{ getFieldError('loggedTime') }}
+        </small>
+      </div>
+
+      <div>
+        <label for="timeLogDate" class="block text-sm font-medium text-gray-700 mb-2">
+          <i class="pi pi-calendar mr-1"></i>Date *
+        </label>
+        <p-calendar
+          id="timeLogDate"
+          formControlName="logDate"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          [class.ng-invalid]="timeLogForm.get('logDate')?.invalid && timeLogForm.get('logDate')?.touched"
+          [appendTo]="'body'"
+          class="w-full">
+        </p-calendar>
+        <small *ngIf="getFieldError('logDate')" class="text-red-500 text-xs mt-1 block">
+          {{ getFieldError('logDate') }}
+        </small>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-checkbox
+          formControlName="isBillable"
+          [binary]="true"
+          inputId="timeLogBillable">
+        </p-checkbox>
+        <label for="timeLogBillable" class="text-sm text-gray-700">
+          Billable
+        </label>
+      </div>
+    </div>
+
+    <div class="flex gap-2 mt-6 pt-4 border-t border-gray-200">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="onCancel()"
+        [disabled]="loading"
+        styleClass="flex-1">
+      </p-button>
+      <p-button
+        [label]="isEditMode ? 'Update' : 'Add'"
+        [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+        (onClick)="onSave()"
+        [loading]="loading"
+        [disabled]="timeLogForm.invalid"
+        styleClass="flex-1">
+      </p-button>
+    </div>
+  </form>
+</div>
+
+

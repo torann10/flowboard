@@ -51,16 +51,17 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label for="projectId" class="block text-sm font-medium text-gray-700 mb-2">Project *</label>
-          <p-dropdown
+          <p-select
             id="projectId"
             formControlName="projectId"
             [options]="projectOptions"
+            optionValue="value"
+            optionLabel="label"
             placeholder="Select project"
             [class.ng-invalid]="taskForm.get('projectId')?.invalid && taskForm.get('projectId')?.touched"
             [appendTo]="'body'"
-            [autofocus]="false"
             class="w-full">
-          </p-dropdown>
+          </p-select>
           <small
             *ngIf="getFieldError('projectId')"
             class="text-red-500 text-xs mt-1">
@@ -70,16 +71,17 @@
 
         <div>
           <label for="assignTo" class="block text-sm font-medium text-gray-700 mb-2">Assign To</label>
-          <p-dropdown
+          <p-select
             id="assignTo"
             formControlName="assignTo"
             [options]="userOptions"
+            optionValue="value"
+            optionLabel="label"
             placeholder="Select user (optional)"
             [appendTo]="'body'"
-            [autofocus]="false"
             [showClear]="true"
             class="w-full">
-          </p-dropdown>
+          </p-select>
           <small class="text-gray-500 text-xs mt-1">
             Use the clear button (×) to remove assignment
           </small>
@@ -87,16 +89,17 @@
 
         <div>
           <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
-          <p-dropdown
+          <p-select
             id="status"
             formControlName="status"
             [options]="statusOptions"
+            optionValue="value"
+            optionLabel="label"
             placeholder="Select status"
             [class.ng-invalid]="taskForm.get('status')?.invalid && taskForm.get('status')?.touched"
             [appendTo]="'body'"
-            [autofocus]="false"
             class="w-full">
-          </p-dropdown>
+          </p-select>
           <small
             *ngIf="getFieldError('status')"
             class="text-red-500 text-xs mt-1">

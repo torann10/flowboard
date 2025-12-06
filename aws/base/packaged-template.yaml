@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack for flowboard base setup
+Resources:
+  GithubStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/flowboard-cf-stacks/aeabb799535775f37ea49e79fca011cf.template
+  ECRStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/flowboard-cf-stacks/115605572217822429ae967785ecccb6.template
+  S3Stack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.eu-central-1.amazonaws.com/flowboard-cf-stacks/446765808e066b5bb2f5647cf0b974ab.template

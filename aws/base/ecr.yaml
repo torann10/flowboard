@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Elastic Container Registry for Flowboard
+
+Resources:
+  FlowboardBEECR:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: flowboard-be
+  FlowboardUIECR:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: flowboard-ui
+
+Outputs:
+  FlowboardBEECRRepositoryUri:
+    Description: URI of the Flowboard BE ECR repository
+    Value: !GetAtt FlowboardBEECR.RepositoryUri
+    Export:
+      Name: !Sub "FlowboardBEECRRepositoryUri"
+  FlowboardUIECRRepositoryUri:
+    Description: URI of the Flowboard UI ECR repository
+    Value: !GetAtt FlowboardUIECR.RepositoryUri
+    Export:
+      Name: !Sub "FlowboardUIECRRepositoryUri"

@@ -8,6 +8,7 @@ import lombok.Setter;
 import szte.flowboard.enums.TaskStatus;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,9 @@ public class TaskEntity extends AuditEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskStatus status;
+
+    @Column
+    private LocalDateTime finishedAt;
 
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")

@@ -14,7 +14,7 @@ export interface TimeLogDto {
     loggedTime?: string;
     logDate?: string;
     createdBy?: string;
-    createAt?: string;
+    createdAt?: string;
     lastModifiedBy?: string;
     lastModifiedAt?: string;
     billable?: boolean;

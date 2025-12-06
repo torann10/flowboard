@@ -33,7 +33,7 @@ public class TimeLogMapper implements EntityMapper<TimeLogEntity, TimeLogDto> {
         dto.setLoggedTime(entity.getLoggedTime());
         dto.setLogDate(entity.getLogDate());
         dto.setCreatedBy(entity.getCreatedBy());
-        dto.setCreateAt(entity.getCreatedAt());
+        dto.setCreatedAt(entity.getCreatedAt());
         dto.setLastModifiedBy(entity.getLastModifiedBy());
         dto.setLastModifiedAt(entity.getLastModifiedAt());
         dto.setBillable(entity.getIsBillable());
@@ -54,7 +54,7 @@ public class TimeLogMapper implements EntityMapper<TimeLogEntity, TimeLogDto> {
         entity.setLoggedTime(dto.getLoggedTime());
         entity.setLogDate(dto.getLogDate());
         entity.setCreatedBy(dto.getCreatedBy());
-        entity.setCreatedAt(dto.getCreateAt());
+        entity.setCreatedAt(dto.getCreatedAt());
         entity.setLastModifiedBy(dto.getLastModifiedBy());
         entity.setLastModifiedAt(dto.getLastModifiedAt());
         entity.setIsBillable(dto.isBillable());

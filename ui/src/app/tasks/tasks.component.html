@@ -50,12 +50,11 @@
           <th>Task</th>
           <th>Status</th>
           <th>Time</th>
-          <th>Actions</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-task>
-        <tr>
+        <tr (click)="openTaskDrawer(task)" class="cursor-pointer hover:bg-gray-50 transition-colors">
           <td>
             <div class="font-semibold text-gray-800">{{ task.name }}</div>
           </td>
@@ -71,44 +70,12 @@
               <span class="font-medium">{{ task.bookedTime | durationFormat }}</span>
             </div>
           </td>
-          <td>
-            <div class="flex gap-1">
-              <p-button
-                icon="pi pi-clock"
-                [text]="true"
-                [rounded]="true"
-                size="small"
-                (onClick)="openTimeLogModal(task)"
-                pTooltip="Log Time"
-                tooltipPosition="top">
-              </p-button>
-              <p-button
-                icon="pi pi-pencil"
-                [text]="true"
-                [rounded]="true"
-                size="small"
-                (onClick)="openEditTask(task)"
-                pTooltip="Edit Task"
-                tooltipPosition="top">
-              </p-button>
-              <p-button
-                icon="pi pi-trash"
-                [text]="true"
-                [rounded]="true"
-                severity="danger"
-                size="small"
-                (onClick)="deleteTask(task)"
-                pTooltip="Delete Task"
-                tooltipPosition="top">
-              </p-button>
-            </div>
-          </td>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="4" class="text-center">
+          <td colspan="3" class="text-center">
             <div class="text-center">
               <p class="text-gray-600">No tasks found</p>
             </div>
@@ -119,19 +86,12 @@
   </p-card>
 </div>
 
-<!-- Task Modal -->
-<app-task-modal
-  [visible]="showTaskModal"
+<!-- Task Drawer -->
+<app-task-drawer
+  [(visible)]="showTaskDrawer"
+  [(mode)]="drawerMode"
   [task]="selectedTask"
-  [isEditMode]="isEditMode"
-  (close)="onTaskModalClose()"
-  (saved)="onTaskSaved()">
-</app-task-modal>
-
-<!-- Time Log Modal -->
-<app-time-log-modal
-  [visible]="showTimeLogModal"
-  [task]="selectedTaskForTimeLog"
-  (close)="onTimeLogModalClose()"
-  (saved)="onTimeLogSaved()">
-</app-time-log-modal>
+  [projects]="projects"
+  [users]="users"
+  (close)="onDrawerClose($event)">
+</app-task-drawer>

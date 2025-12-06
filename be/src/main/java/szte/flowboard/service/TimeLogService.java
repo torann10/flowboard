@@ -5,10 +5,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import szte.flowboard.entity.TimeLogEntity;
 import szte.flowboard.entity.UserEntity;
+import szte.flowboard.repository.ProjectRepository;
+import szte.flowboard.repository.ProjectUserRepository;
+import szte.flowboard.repository.TaskRepository;
 import szte.flowboard.repository.TimeLogRepository;
-import szte.flowboard.repository.UserRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,10 +19,14 @@ public class TimeLogService {
 
     private final TimeLogRepository timeLogRepository;
     private final UserService userService;
+    private final ProjectUserRepository projectUserRepository;
+    private final TaskRepository taskRepository;
 
-    public TimeLogService(TimeLogRepository timeLogRepository, UserService userService) {
+    public TimeLogService(TimeLogRepository timeLogRepository, UserService userService, ProjectUserRepository projectUserRepository, TaskRepository taskRepository) {
         this.timeLogRepository = timeLogRepository;
         this.userService = userService;
+        this.projectUserRepository = projectUserRepository;
+        this.taskRepository = taskRepository;
     }
 
     public TimeLogEntity create(TimeLogEntity timeLog, Authentication authentication) {
@@ -54,6 +59,28 @@ public class TimeLogService {
         }
         
         return timeLogRepository.findByIdAndUserId(id, user.get().getId());
+    }
+
+    public List<TimeLogEntity> findAllByTaskId(UUID taskId, Authentication authentication) {
+        Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
+
+        if (user.isEmpty()) {
+            return List.of();
+        }
+
+        var task = taskRepository.findById(taskId);
+
+        if (task.isEmpty()) {
+            return List.of();
+        }
+
+        var userExists = projectUserRepository.existsByUserIdAndProjectId(user.get().getId(), task.get().getProject().getId());
+
+        if (!userExists) {
+            return List.of();
+        }
+
+        return task.get().getTimeLogs();
     }
 
     public TimeLogEntity update(TimeLogEntity timeLog, Authentication authentication) {

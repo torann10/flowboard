@@ -1,0 +1,198 @@
+<p-drawer
+  [visible]="visible"
+  [position]="'right'"
+  [style]="{ width: '800px' }"
+  [modal]="false"
+  [dismissible]="mode === 'view'"
+  (visibleChange)="onVisibleChange($event)">
+  <ng-template pTemplate="header">
+    <div class="flex items-center justify-between w-full">
+      <h2 class="text-2xl font-semibold text-gray-800">{{ getTitle() }}</h2>
+    </div>
+  </ng-template>
+
+  <!-- Create Task Form -->
+  <app-task-form
+    *ngIf="mode === 'create-task'"
+    [projects]="projects"
+    [users]="users"
+    [isEditMode]="false"
+    [loading]="taskFormLoading"
+    (save)="onTaskFormSave($event)"
+    (cancel)="onTaskFormCancel()">
+  </app-task-form>
+
+  <!-- Edit Task Form -->
+  <app-task-form
+    *ngIf="mode === 'edit-task' && task"
+    [task]="task"
+    [projects]="projects"
+    [users]="users"
+    [isEditMode]="true"
+    [loading]="taskFormLoading"
+    (save)="onTaskFormSave($event)"
+    (cancel)="onTaskFormCancel()">
+  </app-task-form>
+
+  <!-- Add/Edit Time Log Form -->
+  <app-time-log-form
+    *ngIf="(mode === 'add-timelog' || mode === 'edit-timelog') && task"
+    [timeLog]="editingTimeLog"
+    [isEditMode]="mode === 'edit-timelog'"
+    [loading]="timeLogFormLoading"
+    (save)="onTimeLogFormSave($event)"
+    (cancel)="onTimeLogFormCancel()">
+  </app-time-log-form>
+
+  <!-- View Task Details -->
+  <div class="flex flex-col gap-6" *ngIf="mode === 'view' && task">
+    <!-- Task Information -->
+    <div class="space-y-4">
+      <div>
+        <label class="text-sm font-medium text-gray-600">Description</label>
+        <p class="mt-1 text-gray-800 whitespace-pre-wrap">{{ task.description || 'No description provided' }}</p>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-medium text-gray-600">Status</label>
+          <div class="mt-1">
+            <p-tag
+              [value]="getStatusLabel(task.status)"
+              [severity]="getStatusSeverity(task.status)">
+            </p-tag>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-gray-600">Project</label>
+          <p class="mt-1 text-gray-800">{{ getProjectName(task.projectId) }}</p>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-gray-600">Assigned To</label>
+          <p class="mt-1 text-gray-800">{{ getAssignedUserName(task.assignedToId) }}</p>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-gray-600">Total Time</label>
+          <div class="mt-1 flex items-center gap-2">
+            <i class="pi pi-clock text-gray-500"></i>
+            <span class="text-gray-800 font-medium">{{ task.bookedTime | durationFormat }}</span>
+          </div>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <label class="text-sm font-medium text-gray-600">Created</label>
+          <p class="mt-1 text-gray-800">{{ task.createdAt | date:'short' }}</p>
+          <p class="text-xs text-gray-500">by {{ task.createdBy }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-600">Last Modified</label>
+          <p class="mt-1 text-gray-800">{{ task.lastModifiedAt | date:'short' }}</p>
+          <p class="text-xs text-gray-500">by {{ task.lastModifiedBy }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time Logs Summary -->
+    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Time Logs</h3>
+        <div *ngIf="loadingTimeLogs" class="flex items-center gap-2">
+          <i class="pi pi-spin pi-spinner text-gray-500"></i>
+          <span class="text-sm text-gray-600">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="!loadingTimeLogs" class="grid grid-cols-2 gap-4">
+        <div class="bg-white rounded-lg p-3 border border-gray-200">
+          <div class="text-sm text-gray-600 mb-1">Total Time</div>
+          <div class="text-xl font-bold text-gray-800">{{ getTotalLoggedTime() }}</div>
+          <div class="text-xs text-gray-500 mt-1">{{ timeLogs.length }} entries</div>
+        </div>
+        <div class="bg-white rounded-lg p-3 border border-gray-200">
+          <div class="text-sm text-gray-600 mb-1">Billable Time</div>
+          <div class="text-xl font-bold text-gray-800">{{ getTotalBillableTime() }}</div>
+          <div class="text-xs text-gray-500 mt-1">{{ timeLogs | billableCount }} billable</div>
+        </div>
+      </div>
+
+      <!-- Recent Time Logs -->
+      <div *ngIf="!loadingTimeLogs && timeLogs.length > 0" class="mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm font-medium text-gray-600">Recent Entries</div>
+          <p-button
+            label="Add Time Log"
+            icon="pi pi-plus"
+            size="small"
+            [text]="true"
+            (onClick)="onAddTimeLog(); $event.stopPropagation()">
+          </p-button>
+        </div>
+        <div class="space-y-2 max-h-48 overflow-y-auto">
+          <div *ngFor="let log of timeLogs.slice(0, 5)" class="bg-white rounded p-2 border border-gray-200 text-sm hover:bg-gray-50 transition-colors">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-medium text-gray-800">{{ log.logDate | date:'MMM dd, yyyy' }}</span>
+                <span class="text-gray-600 ml-2">{{ log.loggedTime | durationFormat }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <p-tag
+                  [value]="log.billable ? 'Billable' : 'Non-billable'"
+                  [severity]="log.billable ? 'success' : 'info'"
+                  [icon]="log.billable ? 'pi pi-dollar' : 'pi pi-times'">
+                </p-tag>
+                <p-button
+                  icon="pi pi-pencil"
+                  [text]="true"
+                  [rounded]="true"
+                  size="small"
+                  (onClick)="onEditTimeLog(log); $event.stopPropagation()"
+                  pTooltip="Edit Time Log"
+                  (click)="$event.stopPropagation()">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!loadingTimeLogs && timeLogs.length === 0" class="text-center py-4">
+        <p class="text-sm text-gray-500">No time logs yet</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col gap-2 pt-4 border-t border-gray-200">
+      <p-button
+        label="Add Time Log"
+        icon="pi pi-plus"
+        [outlined]="true"
+        (onClick)="onAddTimeLog()"
+        styleClass="w-full">
+      </p-button>
+      <p-button
+        label="Edit Task"
+        icon="pi pi-pencil"
+        (onClick)="onEditTask(); $event.stopPropagation()"
+        styleClass="w-full">
+      </p-button>
+      <p-button
+        label="Delete Task"
+        icon="pi pi-trash"
+        severity="danger"
+        [outlined]="true"
+        (onClick)="onDeleteTask()"
+        styleClass="w-full">
+      </p-button>
+    </div>
+  </div>
+</p-drawer>
+

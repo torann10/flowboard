@@ -27,6 +27,8 @@ public class ProjectCreateRequestDto {
     
     @NotNull(message = "Project type is required")
     private ProjectType type;
+
+    private Double storyPointFee;
     
     private List<StoryPointTimeMappingDto> storyPointTimeMappings;
 

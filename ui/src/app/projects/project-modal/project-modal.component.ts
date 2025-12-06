@@ -82,6 +82,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       name: ['', [Validators.required, Validators.minLength(2)]],
       status: [ProjectDto.StatusEnum.Active, Validators.required],
       type: [ProjectDto.TypeEnum.TimeBased, Validators.required],
+      storyPointFee: [null, [Validators.min(0)]],
       storyPointTimeMappings: [this.defaultStoryPointMappings],
       customerName: ['', Validators.required],
       customerAddress: ['', Validators.required],
@@ -96,6 +97,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
         name: this.project.name,
         status: this.project.status || ProjectDto.StatusEnum.Active,
         type: this.project.type || ProjectDto.TypeEnum.TimeBased,
+        storyPointFee: this.project.storyPointFee || null,
         storyPointTimeMappings: this.project.storyPointTimeMappings || [],
         customerName: this.project.customer?.name || '',
         customerAddress: this.project.customer?.address || '',
@@ -116,6 +118,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
         name: this.project.name,
         status: this.project.status || ProjectDto.StatusEnum.Active,
         type: this.project.type || ProjectDto.TypeEnum.TimeBased,
+        storyPointFee: this.project.storyPointFee || null,
         storyPointTimeMappings: this.project.storyPointTimeMappings || [],
         customerName: this.project.customer?.name || '',
         customerAddress: this.project.customer?.address || '',
@@ -134,6 +137,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       name: '',
       status: ProjectDto.StatusEnum.Active,
       type: ProjectDto.TypeEnum.TimeBased,
+      storyPointFee: null,
       storyPointTimeMappings: this.defaultStoryPointMappings,
       customerName: '',
       customerAddress: '',
@@ -158,6 +162,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
         name: formData.name,
         status: formData.status,
         type: formData.type,
+        storyPointFee: formData.type === ProjectDto.TypeEnum.StoryPointBased ? formData.storyPointFee : undefined,
         storyPointTimeMappings: formData.storyPointTimeMappings,
         customer: {
           name: formData.customerName,
@@ -257,5 +262,9 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       }
     }
     return '';
+  }
+
+  get isStoryPointBased(): boolean {
+    return this.projectForm.get('type')?.value === ProjectDto.TypeEnum.StoryPointBased;
   }
 }

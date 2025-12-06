@@ -5,8 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
@@ -17,24 +22,24 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ReportEntity extends AuditEntity {
 
-    @Column(name = "project_id", nullable = false)
-    private UUID projectId;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate start;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @Column(name = "end_date", nullable = false)
+    private LocalDate end;
 
-    @Column(name = "interval_from", nullable = false)
-    private LocalDate intervalFrom;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "interval_until", nullable = false)
-    private LocalDate intervalUntil;
+    @ManyToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    private ProjectEntity project;
 
-    @Column(name = "total_time", nullable = false)
-    private Duration totalTime;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
 
-    @Column(name = "total_billable_time", nullable = false)
-    private Duration totalBillableTime;
-
-    @Column(columnDefinition = "TEXT")
-    private String data;
+    public String contentDisposition() {
+        return "attachment; filename*=UTF-8''" + URLEncoder.encode(name + "_" + start.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "-" + end.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".pdf", StandardCharsets.UTF_8);
+    }
 }

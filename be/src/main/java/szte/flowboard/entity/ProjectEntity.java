@@ -1,6 +1,7 @@
 package szte.flowboard.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,10 @@ public class ProjectEntity extends AuditEntity {
     @Column(nullable = false)
     private ProjectType type;
 
+    @Column(name = "story_point_fee")
+    @Min(0)
+    private Double storyPointFee;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StoryPointTimeMappingEntity> storyPointTimeMappings;
 
@@ -37,6 +42,9 @@ public class ProjectEntity extends AuditEntity {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskEntity> tasks;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReportEntity> reports;
 
     @Embedded
     @AttributeOverrides({

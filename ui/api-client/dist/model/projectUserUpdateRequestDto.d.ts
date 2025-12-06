@@ -14,7 +14,6 @@ export interface ProjectUserUpdateRequestDto {
 export declare namespace ProjectUserUpdateRequestDto {
     const RoleEnum: {
         readonly Maintainer: "MAINTAINER";
-        readonly Editor: "EDITOR";
         readonly Member: "MEMBER";
         readonly Reporter: "REPORTER";
     };

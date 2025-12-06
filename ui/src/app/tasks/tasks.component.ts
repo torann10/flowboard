@@ -6,24 +6,22 @@ import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
-import { TaskModalComponent } from './task-modal/task-modal.component';
-import { TimeLogModalComponent } from './time-log-modal/time-log-modal.component';
+import { DividerModule } from 'primeng/divider';
+import { SidebarMode, TaskDrawerComponent } from './task-drawer/task-drawer.component';
 import {
-  TaskControllerApiService,
   ProjectControllerApiService,
+  ProjectDto,
+  TaskControllerApiService,
+  TaskDto,
   UserControllerApiService,
-  UserResponse,
-  TaskDto, ProjectDto
+  UserResponse
 } from '@anna/flow-board-api';
 import { DurationFormatPipe } from '../shared/pipes/duration-format.pipe';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Select } from 'primeng/select';
-import { filter } from 'rxjs';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-tasks',
@@ -36,16 +34,14 @@ import { filter } from 'rxjs';
     CardModule,
     TagModule,
     DialogModule,
-    InputTextModule,
-    DropdownModule,
-    CalendarModule,
     TooltipModule,
-    TaskModalComponent,
-    TimeLogModalComponent,
+    DividerModule,
+    TaskDrawerComponent,
     DurationFormatPipe,
     IconField,
     InputIcon,
-    Select
+    Select,
+    InputText
   ],
   templateUrl: './tasks.component.html'
 })
@@ -56,9 +52,9 @@ export class TasksComponent implements OnInit {
   loading = false;
   showTaskModal = false;
   showTimeLogModal = false;
+  showTaskDrawer = false;
   selectedTask: TaskDto | null = null;
-  selectedTaskForTimeLog: TaskDto | null = null;
-  isEditMode = false;
+  drawerMode: SidebarMode = 'view';
 
   statusOptions = [
     { label: 'Open', value: TaskDto.StatusEnum.Open, severity: 'info' },
@@ -66,12 +62,6 @@ export class TasksComponent implements OnInit {
     { label: 'Done', value: TaskDto.StatusEnum.Done, severity: 'success' },
     { label: 'Canceled', value: TaskDto.StatusEnum.Canceled, severity: 'danger' }
   ];
-
-  projectOptions: { label: string; value: string }[] = [{ label: 'All Projects', value: '' }];
-
-  log(asd: any) {
-    console.log(asd.value);
-  }
 
   constructor(
     private taskService: TaskControllerApiService,
@@ -103,13 +93,6 @@ export class TasksComponent implements OnInit {
     this.projectService.getAllProjects().subscribe({
       next: projects => {
         this.projects = projects;
-        this.projectOptions = [
-          { label: 'All Projects', value: '' },
-          ...projects.map(project => ({
-            label: project.name || 'Unnamed Project',
-            value: project.id || ''
-          }))
-        ];
       },
       error: error => {
         console.error('Error loading projects:', error);
@@ -130,50 +113,22 @@ export class TasksComponent implements OnInit {
 
   openCreateTask() {
     this.selectedTask = null;
-    this.isEditMode = false;
-    this.showTaskModal = true;
+    this.drawerMode = 'create-task';
+    this.showTaskDrawer = true;
   }
 
-  openEditTask(task: TaskDto) {
+  openTaskDrawer(task: TaskDto) {
     this.selectedTask = task;
-    this.isEditMode = true;
-    this.showTaskModal = true;
+    this.drawerMode = 'view';
+    this.showTaskDrawer = true;
   }
 
-  openTimeLogModal(task: TaskDto) {
-    this.selectedTaskForTimeLog = task;
-    this.showTimeLogModal = true;
-  }
-
-  onTaskModalClose() {
-    this.showTaskModal = false;
+  onDrawerClose(reloadNeeded: boolean) {
+    this.showTaskDrawer = false;
+    this.drawerMode = 'view';
     this.selectedTask = null;
-  }
-
-  onTimeLogModalClose() {
-    this.showTimeLogModal = false;
-    this.selectedTaskForTimeLog = null;
-  }
-
-  onTaskSaved() {
-    this.loadTasks();
-    this.onTaskModalClose();
-  }
-
-  onTimeLogSaved() {
-    this.loadTasks(); // Refresh to update booked time
-  }
-
-  deleteTask(task: TaskDto) {
-    if (task.id && confirm('Are you sure you want to delete this task?')) {
-      this.taskService.deleteTask(task.id).subscribe({
-        next: () => {
-          this.loadTasks();
-        },
-        error: error => {
-          console.error('Error deleting task:', error);
-        }
-      });
+    if (reloadNeeded) {
+      this.loadTasks();
     }
   }
 

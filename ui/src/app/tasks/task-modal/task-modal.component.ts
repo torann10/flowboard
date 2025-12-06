@@ -6,7 +6,6 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
-import { DropdownModule } from 'primeng/dropdown';
 import { MessageModule } from 'primeng/message';
 import { CalendarModule } from 'primeng/calendar';
 import {
@@ -30,7 +29,6 @@ import { Select } from 'primeng/select';
     InputTextModule,
     InputNumberModule,
     TextareaModule,
-    DropdownModule,
     MessageModule,
     CalendarModule,
     Select,

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,15 +15,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReportDto {
     
-    private String id;
-    private String projectId;
-    private String userId;
-    private String taskId;
-    private String description;
-    private LocalDate reportDate;
-    private String createdBy;
-    private LocalDate createdAt;
-    private String lastModifiedBy;
-    private LocalDate lastModifiedAt;
+    private UUID id;
+    private String name;
+    private LocalDate start;
+    private LocalDate end;
+    private String projectName;
+    private LocalDateTime createdAt;
 }
 

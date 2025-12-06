@@ -76,6 +76,27 @@
             </small>
           </div>
 
+          <!-- Story Point Fee (only for Story Point-based projects) -->
+          <div class="field" *ngIf="isStoryPointBased">
+            <label for="storyPointFee" class="field-label">Story Point Fee</label>
+            <p-inputNumber
+              id="storyPointFee"
+              formControlName="storyPointFee"
+              [min]="0"
+              [maxFractionDigits]="2"
+              [minFractionDigits]="2"
+              placeholder="Enter story point fee"
+              [class.ng-invalid]="projectForm.get('storyPointFee')?.invalid && projectForm.get('storyPointFee')?.touched"
+              [useGrouping]="true"
+              class="w-full">
+            </p-inputNumber>
+            <small
+              *ngIf="getFieldError('storyPointFee')"
+              class="p-error">
+              {{ getFieldError('storyPointFee') }}
+            </small>
+          </div>
+
           <!-- Customer Section -->
           <div class="company-section">
             <h4 class="section-title">Customer *</h4>

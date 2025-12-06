@@ -74,6 +74,28 @@ export declare class TimeLogControllerApiService extends BaseService {
         transferCache?: boolean;
     }): Observable<HttpEvent<Array<TimeLogDto>>>;
     /**
+     * Get all time logs for a task
+     * Retrieves all time log entries for the current user
+     * @param taskId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    getAllTimeLogsByTask(taskId: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<Array<TimeLogDto>>;
+    getAllTimeLogsByTask(taskId: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpResponse<Array<TimeLogDto>>>;
+    getAllTimeLogsByTask(taskId: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: 'application/json';
+        context?: HttpContext;
+        transferCache?: boolean;
+    }): Observable<HttpEvent<Array<TimeLogDto>>>;
+    /**
      * Get time log by ID
      * Retrieves a time log by its ID for the current user
      * @param id
@@ -84,17 +106,17 @@ export declare class TimeLogControllerApiService extends BaseService {
         httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<TimeLogDto>;
+    }): Observable<Array<TimeLogDto>>;
     getTimeLogById(id: string, observe?: 'response', reportProgress?: boolean, options?: {
         httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpResponse<TimeLogDto>>;
+    }): Observable<HttpResponse<Array<TimeLogDto>>>;
     getTimeLogById(id: string, observe?: 'events', reportProgress?: boolean, options?: {
         httpHeaderAccept?: 'application/json' | '*/*';
         context?: HttpContext;
         transferCache?: boolean;
-    }): Observable<HttpEvent<TimeLogDto>>;
+    }): Observable<HttpEvent<Array<TimeLogDto>>>;
     /**
      * Get time log count
      * Retrieves the total number of time logs for the current user

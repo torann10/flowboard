@@ -53,7 +53,6 @@ export class UserAssignmentComponent implements OnInit, OnChanges {
 
   roleOptions = [
     { label: 'Maintainer', value: 'MAINTAINER' },
-    { label: 'Editor', value: 'EDITOR' },
     { label: 'Member', value: 'MEMBER' },
     { label: 'Reporter', value: 'REPORTER' }
   ];

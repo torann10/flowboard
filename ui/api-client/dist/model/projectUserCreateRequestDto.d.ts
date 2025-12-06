@@ -8,15 +8,14 @@
  * Do not edit the class manually.
  */
 export interface ProjectUserCreateRequestDto {
-    projectId: string;
-    userId: string;
+    projectId?: string;
+    userId?: string;
     role: ProjectUserCreateRequestDto.RoleEnum;
     fee: number;
 }
 export declare namespace ProjectUserCreateRequestDto {
     const RoleEnum: {
         readonly Maintainer: "MAINTAINER";
-        readonly Editor: "EDITOR";
         readonly Member: "MEMBER";
         readonly Reporter: "REPORTER";
     };

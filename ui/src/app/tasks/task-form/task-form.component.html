@@ -1,0 +1,138 @@
+<div class="flex flex-col gap-6">
+  <p-message
+    *ngIf="errorMessage"
+    severity="error"
+    [text]="errorMessage"
+    [closable]="true"
+    (onClose)="errorMessage = ''">
+  </p-message>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSave()">
+    <div class="space-y-4">
+      <div>
+        <label [for]="isEditMode ? 'editTaskName' : 'taskName'" class="block text-sm font-medium text-gray-700 mb-2">Task Name *</label>
+        <input
+          [id]="isEditMode ? 'editTaskName' : 'taskName'"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Enter task name"
+          [class.ng-invalid]="taskForm.get('name')?.invalid && taskForm.get('name')?.touched"
+          class="w-full">
+        <small *ngIf="getFieldError('name')" class="text-red-500 text-xs mt-1 block">
+          {{ getFieldError('name') }}
+        </small>
+      </div>
+
+      <div>
+        <label [for]="isEditMode ? 'editTaskDescription' : 'taskDescription'" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+        <textarea
+          [id]="isEditMode ? 'editTaskDescription' : 'taskDescription'"
+          pTextarea
+          formControlName="description"
+          placeholder="Enter task description"
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label [for]="isEditMode ? 'editTaskProject' : 'taskProject'" class="block text-sm font-medium text-gray-700 mb-2">Project *</label>
+          <p-select
+            [id]="isEditMode ? 'editTaskProject' : 'taskProject'"
+            formControlName="projectId"
+            [options]="projectOptions"
+            optionValue="value"
+            optionLabel="label"
+            placeholder="Select project"
+            [class.ng-invalid]="taskForm.get('projectId')?.invalid && taskForm.get('projectId')?.touched"
+            [appendTo]="'body'"
+            class="w-full">
+          </p-select>
+          <small *ngIf="getFieldError('projectId')" class="text-red-500 text-xs mt-1 block">
+            {{ getFieldError('projectId') }}
+          </small>
+        </div>
+
+        <div>
+          <label [for]="isEditMode ? 'editTaskStatus' : 'taskStatus'" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
+          <p-select
+            [id]="isEditMode ? 'editTaskStatus' : 'taskStatus'"
+            formControlName="status"
+            [options]="statusOptions"
+            optionValue="value"
+            optionLabel="label"
+            placeholder="Select status"
+            [class.ng-invalid]="taskForm.get('status')?.invalid && taskForm.get('status')?.touched"
+            [appendTo]="'body'"
+            class="w-full">
+          </p-select>
+          <small *ngIf="getFieldError('status')" class="text-red-500 text-xs mt-1 block">
+            {{ getFieldError('status') }}
+          </small>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label [for]="isEditMode ? 'editTaskAssignTo' : 'taskAssignTo'" class="block text-sm font-medium text-gray-700 mb-2">Assign To</label>
+          <p-select
+            [id]="isEditMode ? 'editTaskAssignTo' : 'taskAssignTo'"
+            formControlName="assignTo"
+            [options]="userOptions"
+            optionValue="value"
+            optionLabel="label"
+            placeholder="Select user (optional)"
+            [appendTo]="'body'"
+            [showClear]="true"
+            class="w-full">
+          </p-select>
+        </div>
+
+        <div *ngIf="selectedProject">
+          <label [for]="isEditMode ? 'editTaskStoryPoints' : 'taskStoryPoints'" class="block text-sm font-medium text-gray-700 mb-2">Estimation (story points) *</label>
+          <p-select
+            [id]="isEditMode ? 'editTaskStoryPoints' : 'taskStoryPoints'"
+            formControlName="storyPointMappingId"
+            placeholder="Select estimation"
+            class="w-full"
+            [appendTo]="'body'"
+            [options]="selectedProject.storyPointTimeMappings"
+            optionValue="id"
+            [class.ng-invalid]="taskForm.get('storyPointMappingId')?.invalid && taskForm.get('storyPointMappingId')?.touched">
+            <ng-template #selectedItem let-selectedOption>
+              <div>{{ selectedOption.storyPoints }} story point(s)</div>
+            </ng-template>
+            <ng-template let-item #item>
+              <div>{{ item.storyPoints }} story point(s)</div>
+            </ng-template>
+          </p-select>
+          <small *ngIf="getFieldError('storyPointMappingId')" class="text-red-500 text-xs mt-1 block">
+            {{ getFieldError('storyPointMappingId') }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-2 mt-6 pt-4 border-t border-gray-200">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="onCancel()"
+        [disabled]="loading"
+        styleClass="flex-1">
+      </p-button>
+      <p-button
+        [label]="isEditMode ? 'Update' : 'Create'"
+        icon="pi pi-check"
+        (onClick)="onSave()"
+        [loading]="loading"
+        [disabled]="taskForm.invalid"
+        styleClass="flex-1">
+      </p-button>
+    </div>
+  </form>
+</div>
+

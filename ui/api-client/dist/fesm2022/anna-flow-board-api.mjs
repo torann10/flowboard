@@ -303,10 +303,10 @@ class AuthControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: AuthControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: AuthControllerApiService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: AuthControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: AuthControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: AuthControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: AuthControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -586,10 +586,10 @@ class ProjectControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ProjectControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ProjectControllerApiService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ProjectControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ProjectControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ProjectControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ProjectControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -869,10 +869,10 @@ class ProjectUserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ProjectUserControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ProjectUserControllerApiService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ProjectUserControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ProjectUserControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ProjectUserControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ProjectUserControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -910,7 +910,8 @@ class ReportControllerApiService extends BaseService {
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/pdf'
+            'application/json',
+            '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -958,7 +959,8 @@ class ReportControllerApiService extends BaseService {
         // authentication (oauth2) required
         localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
         const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/pdf'
+            'application/json',
+            '*/*'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -998,10 +1000,212 @@ class ReportControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ReportControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ReportControllerApiService, providedIn: 'root' });
+    createProjectActivityReport(createProjectActivityReportRequestDto, observe = 'body', reportProgress = false, options) {
+        if (createProjectActivityReportRequestDto === null || createProjectActivityReportRequestDto === undefined) {
+            throw new Error('Required parameter createProjectActivityReportRequestDto was null or undefined when calling createProjectActivityReport.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        // to determine the Content-Type header
+        const consumes = [
+            'application/json'
+        ];
+        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/reports/project-activity`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('post', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            body: createProjectActivityReportRequestDto,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    deleteReport(reportId, observe = 'body', reportProgress = false, options) {
+        if (reportId === null || reportId === undefined) {
+            throw new Error('Required parameter reportId was null or undefined when calling deleteReport.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/reports/${this.configuration.encodeParam({ name: "reportId", value: reportId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    getReportDownloadUrl(reportId, observe = 'body', reportProgress = false, options) {
+        if (reportId === null || reportId === undefined) {
+            throw new Error('Required parameter reportId was null or undefined when calling getReportDownloadUrl.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/reports/${this.configuration.encodeParam({ name: "reportId", value: reportId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}/download`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    listReportsForUser(observe = 'body', reportProgress = false, options) {
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/reports`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    renameReport(reportId, name, observe = 'body', reportProgress = false, options) {
+        if (reportId === null || reportId === undefined) {
+            throw new Error('Required parameter reportId was null or undefined when calling renameReport.');
+        }
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling renameReport.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/reports/${this.configuration.encodeParam({ name: "reportId", value: reportId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}/rename/${this.configuration.encodeParam({ name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('patch', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ReportControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ReportControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: ReportControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: ReportControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -1284,10 +1488,10 @@ class TaskControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: TaskControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: TaskControllerApiService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: TaskControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: TaskControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: TaskControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: TaskControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -1439,6 +1643,45 @@ class TimeLogControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
+    getAllTimeLogsByTask(taskId, observe = 'body', reportProgress = false, options) {
+        if (taskId === null || taskId === undefined) {
+            throw new Error('Required parameter taskId was null or undefined when calling getAllTimeLogsByTask.');
+        }
+        let localVarHeaders = this.defaultHeaders;
+        // authentication (oauth2) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('oauth2', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const localVarHttpContext = options?.context ?? new HttpContext();
+        const localVarTransferCache = options?.transferCache ?? true;
+        let responseType_ = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            }
+            else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            }
+            else {
+                responseType_ = 'blob';
+            }
+        }
+        let localVarPath = `/time-logs/task/${this.configuration.encodeParam({ name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid" })}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`, {
+            context: localVarHttpContext,
+            responseType: responseType_,
+            ...(withCredentials ? { withCredentials } : {}),
+            headers: localVarHeaders,
+            observe: observe,
+            transferCache: localVarTransferCache,
+            reportProgress: reportProgress
+        });
+    }
     getTimeLogById(id, observe = 'body', reportProgress = false, options) {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getTimeLogById.');
@@ -1567,10 +1810,10 @@ class TimeLogControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: TimeLogControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: TimeLogControllerApiService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: TimeLogControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: TimeLogControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: TimeLogControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: TimeLogControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -1887,10 +2130,10 @@ class UserControllerApiService extends BaseService {
             reportProgress: reportProgress
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: UserControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: UserControllerApiService, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: UserControllerApiService, deps: [{ token: i1.HttpClient }, { token: BASE_PATH, optional: true }, { token: FlowBoardConfiguration, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: UserControllerApiService, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: UserControllerApiService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: UserControllerApiService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -1905,6 +2148,26 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImpo
                 }] }] });
 
 const APIS = [AuthControllerApiService, ProjectControllerApiService, ProjectUserControllerApiService, ReportControllerApiService, TaskControllerApiService, TimeLogControllerApiService, UserControllerApiService];
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
 
 /**
  * OpenAPI definition
@@ -1988,7 +2251,6 @@ var ProjectUserCreateRequestDto;
 (function (ProjectUserCreateRequestDto) {
     ProjectUserCreateRequestDto.RoleEnum = {
         Maintainer: 'MAINTAINER',
-        Editor: 'EDITOR',
         Member: 'MEMBER',
         Reporter: 'REPORTER'
     };
@@ -2007,7 +2269,6 @@ var ProjectUserDto;
 (function (ProjectUserDto) {
     ProjectUserDto.RoleEnum = {
         Maintainer: 'MAINTAINER',
-        Editor: 'EDITOR',
         Member: 'MEMBER',
         Reporter: 'REPORTER'
     };
@@ -2026,11 +2287,20 @@ var ProjectUserUpdateRequestDto;
 (function (ProjectUserUpdateRequestDto) {
     ProjectUserUpdateRequestDto.RoleEnum = {
         Maintainer: 'MAINTAINER',
-        Editor: 'EDITOR',
         Member: 'MEMBER',
         Reporter: 'REPORTER'
     };
 })(ProjectUserUpdateRequestDto || (ProjectUserUpdateRequestDto = {}));
+
+/**
+ * OpenAPI definition
+ *
+ *
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
 
 /**
  * OpenAPI definition
@@ -2165,11 +2435,11 @@ class FlowBoardApiModule {
                 'See also https://github.com/angular/angular/issues/20575');
         }
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: FlowBoardApiModule, deps: [{ token: FlowBoardApiModule, optional: true, skipSelf: true }, { token: i1.HttpClient, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.15", ngImport: i0, type: FlowBoardApiModule });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: FlowBoardApiModule });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: FlowBoardApiModule, deps: [{ token: FlowBoardApiModule, optional: true, skipSelf: true }, { token: i1.HttpClient, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.17", ngImport: i0, type: FlowBoardApiModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: FlowBoardApiModule });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.15", ngImport: i0, type: FlowBoardApiModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.17", ngImport: i0, type: FlowBoardApiModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [],

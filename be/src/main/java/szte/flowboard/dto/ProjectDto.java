@@ -1,13 +1,12 @@
 package szte.flowboard.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import szte.flowboard.enums.ProjectStatus;
 import szte.flowboard.enums.ProjectType;
-import java.time.Duration;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,11 +22,12 @@ public class ProjectDto {
     private String name;
     private ProjectStatus status;
     private ProjectType type;
+    private Double storyPointFee;
     private List<StoryPointTimeMappingDto> storyPointTimeMappings;
     private String createdBy;
-    private LocalDate createAt;
+    private LocalDateTime createdAt;
     private String lastModifiedBy;
-    private LocalDate lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
     private CompanyDto customer;
     private CompanyDto contractor;
 }

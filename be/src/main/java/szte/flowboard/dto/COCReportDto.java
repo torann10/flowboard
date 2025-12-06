@@ -7,6 +7,7 @@ import lombok.Setter;
 import szte.flowboard.entity.CompanyEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,7 +20,7 @@ public class COCReportDto {
 
     private LocalDate end;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     private CompanyEntity customer;
 

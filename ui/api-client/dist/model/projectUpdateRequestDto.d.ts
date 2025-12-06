@@ -13,6 +13,7 @@ export interface ProjectUpdateRequestDto {
     name: string;
     status: ProjectUpdateRequestDto.StatusEnum;
     type: ProjectUpdateRequestDto.TypeEnum;
+    storyPointFee?: number;
     storyPointTimeMappings?: Array<StoryPointTimeMappingDto>;
     customer: CompanyDto;
     contractor: CompanyDto;

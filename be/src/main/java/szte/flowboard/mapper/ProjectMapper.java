@@ -7,7 +7,6 @@ import szte.flowboard.dto.ProjectUpdateRequestDto;
 import szte.flowboard.entity.ProjectEntity;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,8 +32,9 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         dto.setName(entity.getName());
         dto.setStatus(entity.getStatus());
         dto.setType(entity.getType());
+        dto.setStoryPointFee(entity.getStoryPointFee());
         dto.setCreatedBy(entity.getCreatedBy());
-        dto.setCreateAt(entity.getCreatedAt());
+        dto.setCreatedAt(entity.getCreatedAt());
         dto.setLastModifiedBy(entity.getLastModifiedBy());
         dto.setLastModifiedAt(entity.getLastModifiedAt());
         dto.setCustomer(companyMapper.toDto(entity.getCustomer()));
@@ -60,6 +60,7 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         entity.setName(dto.getName());
         entity.setStatus(dto.getStatus());
         entity.setType(dto.getType());
+        entity.setStoryPointFee(dto.getStoryPointFee());
         entity.setLastModifiedBy(dto.getLastModifiedBy());
         entity.setLastModifiedAt(dto.getLastModifiedAt());
         entity.setCustomer(companyMapper.toEntity(dto.getCustomer()));
@@ -87,6 +88,7 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         entity.setName(dto.getName());
         entity.setStatus(dto.getStatus());
         entity.setType(dto.getType());
+        entity.setStoryPointFee(dto.getStoryPointFee());
         entity.setCustomer(companyMapper.toEntity(dto.getCustomer()));
         entity.setContractor(companyMapper.toEntity(dto.getContractor()));
 
@@ -112,6 +114,7 @@ public class ProjectMapper implements EntityMapper<ProjectEntity, ProjectDto> {
         entity.setName(dto.getName());
         entity.setStatus(dto.getStatus());
         entity.setType(dto.getType());
+        entity.setStoryPointFee(dto.getStoryPointFee());
         entity.setCustomer(companyMapper.toEntity(dto.getCustomer()));
         entity.setContractor(companyMapper.toEntity(dto.getContractor()));
 

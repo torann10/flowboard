@@ -76,10 +76,9 @@ export class TimeLogModalComponent implements OnInit, OnChanges {
     if (!this.task?.id) return;
 
     this.loading = true;
-    this.timeLogService.getAllTimeLogs().subscribe({
+    this.timeLogService.getAllTimeLogsByTask(this.task!.id).subscribe({
       next: (timeLogs) => {
-        // Filter time logs for this specific task
-        this.timeLogs = timeLogs.filter(log => log.taskId === this.task?.id);
+        this.timeLogs = timeLogs;
         this.loading = false;
       },
       error: (error) => {

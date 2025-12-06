@@ -1,37 +1,150 @@
-<div class="flex justify-end flex-row md:flex mb-4 gap-4">
-  <p-button
-    label="Create Report"
-    icon="pi pi-plus"
-    severity="secondary"
-    (onClick)="openCreateModal()"
-  />
-</div>
+<div class="p-8 mx-auto">
+  <div class="flex justify-between items-start mb-8">
+    <div>
+      <h1 class="text-3xl font-semibold text-gray-800 mb-2">Reports</h1>
+      <p class="text-gray-600">View and manage your generated reports.</p>
+    </div>
+    <div class="flex gap-2">
+      <p-button
+        label="Create Report"
+        icon="pi pi-plus"
+        raised="true"
+        (onClick)="openCreateModal()"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </div>
 
-<app-report-modal
-  [visible]="showModal"
-  (close)="onModalClose()"
-  (saved)="onReportSaved()">
-</app-report-modal>
-<p-card class="shadow mb-6 bg-white">
-  <p-table
-    [value]="reports"
-    [columns]="columns"
-    responsiveLayout="scroll"
-  >
-    <ng-template pTemplate="header" let-columns>
+  <app-report-modal
+    [visible]="showModal"
+    (close)="onModalClose()"
+    (saved)="onReportSaved($event)">
+  </app-report-modal>
+
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
+
+  <p-dialog
+    [(visible)]="showRenameDialog"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '400px' }"
+    header="Rename Report"
+    (onHide)="closeRenameDialog()">
+    <form [formGroup]="renameForm" (ngSubmit)="saveRename()">
+      <div class="field mb-4">
+        <label for="reportName" class="block mb-2">Report Name *</label>
+        <input
+          id="reportName"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Enter report name"
+          class="w-full"
+          [class.ng-invalid]="renameForm.get('name')?.invalid && renameForm.get('name')?.touched"
+        />
+        <small
+          *ngIf="renameForm.get('name')?.errors?.['required'] && renameForm.get('name')?.touched"
+          class="p-error block mt-1">
+          Report name is required
+        </small>
+        <small
+          *ngIf="renameForm.get('name')?.errors?.['maxlength'] && renameForm.get('name')?.touched"
+          class="p-error block mt-1">
+          Report name must not exceed 255 characters
+        </small>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          [text]="true"
+          (onClick)="closeRenameDialog()"
+        />
+        <p-button
+          label="Save"
+          icon="pi pi-check"
+          (onClick)="saveRename()"
+          [disabled]="renameForm.invalid"
+        />
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Reports Table -->
+  <p-card>
+    <p-table
+      #table
+      [value]="reports"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+      styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
       <tr>
-        <th *ngFor="let col of columns" class="text-center">
-          {{ col.header }}
-        </th>
+        <th class="text-center">Report Name</th>
+        <th class="text-center">Project</th>
+        <th class="text-center">Date Range</th>
+        <th class="text-center">Created At</th>
+        <th class="text-center">Actions</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-row let-columns="columns">
+    <ng-template pTemplate="body" let-report>
       <tr>
-        <td *ngFor="let col of columns" class="text-center">
-          {{ row[col.field] }}
+        <td class="text-center">{{ report?.name || '-' }}</td>
+        <td class="text-center">{{ report?.projectName || '-' }}</td>
+        <td class="text-center">{{ report?.start | date: 'yyyy-MM-dd' }} - {{ report?.end | date: 'yyyy-MM-dd' }}</td>
+        <td class="text-center">{{ report?.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td class="text-center">
+          <div class="flex gap-2 justify-content-center">
+            <p-button
+              label="Download"
+              icon="pi pi-download"
+              [text]="true"
+              severity="secondary"
+              size="small"
+              (onClick)="downloadReportById(report.id)"
+              [disabled]="!report?.id"
+            />
+            <p-button
+              label="Rename"
+              icon="pi pi-pencil"
+              [text]="true"
+              severity="secondary"
+              size="small"
+              (onClick)="openRenameDialog(report)"
+              [disabled]="!report?.id"
+            />
+            <p-button
+              label="Delete"
+              icon="pi pi-trash"
+              [text]="true"
+              severity="danger"
+              size="small"
+              (onClick)="deleteReport(report)"
+              [disabled]="!report?.id"
+            />
+          </div>
         </td>
       </tr>
     </ng-template>
-  </p-table>
-</p-card>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="text-center">
+            <div class="text-center">
+              <p class="text-gray-600">No reports found</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

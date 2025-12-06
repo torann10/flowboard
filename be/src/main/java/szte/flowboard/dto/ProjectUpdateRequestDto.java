@@ -25,6 +25,8 @@ public class ProjectUpdateRequestDto {
     
     @NotNull(message = "Project type is required")
     private ProjectType type;
+
+    private Double storyPointFee;
     
     private java.util.List<StoryPointTimeMappingDto> storyPointTimeMappings;
 

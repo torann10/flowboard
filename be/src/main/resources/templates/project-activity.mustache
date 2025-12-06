@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Projekt Aktivitás</title>
+
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 20mm;
+        }
+
+        /* Fallbacks: first try embedded font, then system fonts */
+        body {
+          font-family: "PT Mono";
+          font-size: 11pt;
+          color: #1f2933;
+          line-height: 1.45;
+          margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2b4d8a;
+            margin-bottom: 10px;
+        }
+
+        .summary {
+            margin-bottom: 25px;
+            border: 2px solid #2b4d8a;
+            padding: 12px;
+            background-color: #f4f7ff;
+        }
+
+        .summary-item {
+            margin: 4px 0;
+            font-size: 12pt;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #2b4d8a;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #a4c0ff;
+        }
+
+        th {
+            background-color: #2b4d8a;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #eef3ff;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Projekt Aktivitás</h1>
+
+<div class="summary">
+    <div class="summary-item"><strong>Projekt neve:</strong> {{projectName}}</div>
+    <div class="summary-item"><strong>Időszak:</strong> {{start}} - {{end}}</div>
+    <div class="summary-item"><strong>Készült:</strong> {{createdAt}}</div>
+    <div class="summary-item"><strong>Feladatok száma:</strong> {{taskCount}}</div>
+</div>
+
+<table>
+    <tr>
+        <th>Név</th>
+        <th>Ráfordított idő</th>
+        <th>Becsült idő</th>
+        <th>Eltérés</th>
+    </tr>
+
+    {{#tasks}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{spent}}</td>
+        <td>{{estimated}}</td>
+        <td>{{deviation}}</td>
+    </tr>
+    {{/tasks}}
+</table>
+
+</body>
+</html>

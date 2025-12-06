@@ -16,14 +16,19 @@
     </a>
   </ng-template>
   <ng-template #end>
-    <div class="flex flex-col">
-      <span class="ps-2 inline-flex flex-col">
-        <span class="font-bold">{{ userService.user()?.firstName }} {{ userService.user()?.lastName }}</span>
-        <span class="text-sm">{{ userService.user()?.emailAddress }}</span>
-      </span>
-      <p-divider styleClass="!m-0"/>
-      <p-button styleClass="w-full" variant="text" (onClick)="keycloak.logout()">
-        Logout
+    <div class="flex flex-col gap-2 p-2 mt-auto border-t border-gray-200">
+      <div class="flex flex-col gap-0.5 px-2">
+        <span class="font-semibold text-sm text-gray-800">{{ userService.user()?.firstName }} {{ userService.user()?.lastName }}</span>
+        <span class="text-xs text-gray-600">{{ userService.user()?.emailAddress }}</span>
+      </div>
+      <p-button 
+        styleClass="w-full" 
+        variant="outlined" 
+        severity="secondary"
+        icon="pi pi-sign-out"
+        label="Logout"
+        size="small"
+        (onClick)="keycloak.logout()">
       </p-button>
     </div>
   </ng-template>

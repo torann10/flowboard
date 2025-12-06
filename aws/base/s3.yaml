@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Stack for Flowboard S3 setup
+
+Resources:
+  FlowboardS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "flowboard-report-bucket"

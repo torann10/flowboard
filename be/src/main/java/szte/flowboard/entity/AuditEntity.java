@@ -11,7 +11,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
@@ -26,11 +29,11 @@ public class AuditEntity extends BaseEntity {
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedBy
     private String lastModifiedBy;
 
     @LastModifiedDate
-    private LocalDate lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
 }

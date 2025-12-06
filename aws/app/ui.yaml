@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Application stack for Flowboard UI
+
+Resources:
+  FlowboardUIAppAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: FlowboardUIAppAccessRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - build.apprunner.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: FlowboardUIAppAccessRolePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ecr:*"
+                Resource: "*"
+
+  FlowboardUIAppInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: FlowboardUIAppInstanceRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - tasks.apprunner.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+  FlowboardUIAutoScaling:
+    Type: AWS::AppRunner::AutoScalingConfiguration
+    Properties:
+      AutoScalingConfigurationName: FlowboardUIAutoScaling
+      MaxSize: 1
+      MinSize: 0
+
+  FlowboardUIApp:
+    Type: AWS::AppRunner::Service
+    Properties:
+      ServiceName: Flowboard-ui-app
+      SourceConfiguration:
+        ImageRepository:
+          ImageIdentifier:
+            !Join
+            - ""
+            - - !ImportValue FlowboardUIECRRepositoryUri
+              - ":latest"
+          ImageRepositoryType: ECR
+          ImageConfiguration:
+            RuntimeEnvironmentSecrets:
+
+            RuntimeEnvironmentVariables:
+
+            Port: "3000"
+        AutoDeploymentsEnabled: true
+        AuthenticationConfiguration:
+          AccessRoleArn: !GetAtt FlowboardUIAppAccessRole.Arn
+      InstanceConfiguration:
+        Cpu: "0.25 vCPU"
+        Memory: "0.5 GB"
+        InstanceRoleArn: !GetAtt FlowboardUIAppInstanceRole.Arn
+      AutoScalingConfigurationArn: !GetAtt FlowboardUIAutoScaling.AutoScalingConfigurationArn
+      HealthCheckConfiguration:
+        Protocol: HTTP
+        Path: "/api/health"
+
+Outputs:
+  FlowboardAppServiceArn:
+    Description: The ID of the created flowboard UI App
+    Value: !GetAtt FlowboardUIApp.ServiceArn

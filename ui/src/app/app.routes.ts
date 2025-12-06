@@ -7,11 +7,11 @@ import { canActivateAuthRole } from './guards/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: ' time-tracking', pathMatch: 'full' },
   {
-    path: 'time-tracking',
+    path: '',
     component: TimeTrackingComponent,
-    canActivate: [canActivateAuthRole]
+    canActivate: [canActivateAuthRole],
+    pathMatch: 'full',
   },
   {
     path: 'tasks',

@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +53,20 @@ public class TimeLogController {
         return ResponseEntity.ok(timeLogDtos);
     }
 
+    @Operation(operationId = "getAllTimeLogsByTask", summary = "Get all time logs for a task", description = "Retrieves all time log entries for the current user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Time logs retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TimeLogDto.class))))
+    })
+    @GetMapping("task/{taskId}")
+    public ResponseEntity<List<TimeLogDto>> findAllByTask(@PathVariable UUID taskId, Authentication authentication) {
+        List<TimeLogEntity> timeLogs = timeLogService.findAllByTaskId(taskId, authentication);
+        List<TimeLogDto> timeLogDtos = timeLogMapper.toDtoList(timeLogs);
+        return ResponseEntity.ok(timeLogDtos);
+    }
+
     @Operation(operationId = "getTimeLogById", summary = "Get time log by ID", description = "Retrieves a time log by its ID for the current user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Time log found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TimeLogDto.class))),
+            @ApiResponse(responseCode = "200", description = "Time log found successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TimeLogDto.class)))),
             @ApiResponse(responseCode = "404", description = "Time log not found")
     })
     @GetMapping("/{id}")

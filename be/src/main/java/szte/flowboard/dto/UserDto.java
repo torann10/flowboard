@@ -21,8 +21,8 @@ public class UserDto {
     private String emailAddress;
     private String keycloakId;
     private String createdBy;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private String lastModifiedBy;
-    private LocalDate lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
 }
 

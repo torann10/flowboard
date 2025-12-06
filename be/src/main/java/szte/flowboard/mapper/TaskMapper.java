@@ -6,8 +6,10 @@ import szte.flowboard.dto.TaskDto;
 import szte.flowboard.dto.TaskCreateRequestDto;
 import szte.flowboard.dto.TaskUpdateRequestDto;
 import szte.flowboard.entity.*;
+import szte.flowboard.enums.TaskStatus;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -108,6 +110,14 @@ public class TaskMapper implements EntityMapper<TaskEntity, TaskDto> {
 
         if (dto.getAssignedToId() != null) {
             entity.setAssignedTo(entityManager.getReference(UserEntity.class, dto.getAssignedToId()));
+        }
+
+        if (dto.getStatus() == TaskStatus.DONE && entity.getFinishedAt() == null) {
+            entity.setFinishedAt(LocalDateTime.now());
+        }
+
+        if (dto.getStatus() != TaskStatus.DONE && entity.getFinishedAt() != null) {
+            entity.setFinishedAt(null);
         }
 
         entity.setStoryPointMapping(entityManager.getReference(StoryPointTimeMappingEntity.class, dto.getStoryPointMappingId()));

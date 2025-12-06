@@ -54,7 +54,7 @@ public class ProjectUserService {
 
         var projectUser = optionalProjectUser.get();
 
-        if (projectUser.getRole() != UserRole.MAINTAINER && projectUser.getRole() != UserRole.EDITOR) {
+        if (projectUser.getRole() != UserRole.MAINTAINER) {
             return null;
         }
 

@@ -1,6 +1,7 @@
 package szte.flowboard.configuration;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,7 @@ public class PersistenceConfig {
 
     @Bean
     public DateTimeProvider auditingDateTimeProvider() {
-        return () -> Optional.of(LocalDate.now());
+        return () -> Optional.of(LocalDateTime.now());
     }
 
 }

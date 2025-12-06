@@ -22,8 +22,8 @@ public class ProjectUserDto {
     private UserRole role;
     private Double fee;
     private String createdBy;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private String lastModifiedBy;
-    private LocalDate lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
 }
 
