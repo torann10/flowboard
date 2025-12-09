@@ -35,4 +35,5 @@ Resources:
                   - "organizations:*"
                   - "cloudformation:*"
                   - "ecr:*"
+                  - "ec2:*"
                 Resource: "*"
