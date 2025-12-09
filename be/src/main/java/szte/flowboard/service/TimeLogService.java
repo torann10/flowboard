@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service for managing time log entries.
+ * Handles time log creation, retrieval, updates, and deletion with user and project access control.
+ * Time logs track the time spent by users on specific tasks.
+ */
 @Service
 public class TimeLogService {
 
@@ -29,6 +34,13 @@ public class TimeLogService {
         this.taskRepository = taskRepository;
     }
 
+    /**
+     * Creates a new time log entry and associates it with the current user.
+     *
+     * @param timeLog the time log entity to create
+     * @param authentication the authentication object containing the current user's information
+     * @return the created time log entity, or null if user not found
+     */
     public TimeLogEntity create(TimeLogEntity timeLog, Authentication authentication) {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
@@ -41,6 +53,12 @@ public class TimeLogService {
         return timeLogRepository.save(timeLog);
     }
 
+    /**
+     * Retrieves all time log entries for the current user.
+     *
+     * @param authentication the authentication object containing the current user's information
+     * @return a list of time log entities for the user, or an empty list if user not found
+     */
     public List<TimeLogEntity> findAllByUser(Authentication authentication) {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
@@ -51,6 +69,13 @@ public class TimeLogService {
         return timeLogRepository.findByUserId(user.get().getId());
     }
 
+    /**
+     * Finds a time log by ID if it belongs to the current user.
+     *
+     * @param id the unique identifier of the time log
+     * @param authentication the authentication object containing the current user's information
+     * @return an Optional containing the time log if found and belongs to the user, empty otherwise
+     */
     public Optional<TimeLogEntity> findByIdAndUser(UUID id, Authentication authentication) {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
@@ -61,6 +86,13 @@ public class TimeLogService {
         return timeLogRepository.findByIdAndUserId(id, user.get().getId());
     }
 
+    /**
+     * Retrieves all time log entries for a specific task if the current user has access to the project.
+     *
+     * @param taskId the unique identifier of the task
+     * @param authentication the authentication object containing the current user's information
+     * @return a list of time log entities for the task, or an empty list if user not found or no access
+     */
     public List<TimeLogEntity> findAllByTaskId(UUID taskId, Authentication authentication) {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
 
@@ -83,6 +115,14 @@ public class TimeLogService {
         return task.get().getTimeLogs();
     }
 
+    /**
+     * Updates an existing time log entry and associates it with the current user.
+     *
+     * @param timeLog the time log entity with updated information
+     * @param authentication the authentication object containing the current user's information
+     * @return the updated time log entity
+     * @throws RuntimeException if the user is not found
+     */
     public TimeLogEntity update(TimeLogEntity timeLog, Authentication authentication) {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
         
@@ -95,10 +135,22 @@ public class TimeLogService {
         return timeLogRepository.save(timeLog);
     }
 
+    /**
+     * Deletes a time log entry by its ID.
+     *
+     * @param id the unique identifier of the time log to delete
+     */
     public void delete(UUID id) {
         timeLogRepository.deleteById(id);
     }
 
+    /**
+     * Checks if a time log exists and belongs to the current user.
+     *
+     * @param id the unique identifier of the time log
+     * @param authentication the authentication object containing the current user's information
+     * @return true if the time log exists and belongs to the user, false otherwise
+     */
     public boolean existsByIdAndUser(UUID id, Authentication authentication) {
         Optional<UserEntity> user = userService.getUserByAuthentication(authentication);
 

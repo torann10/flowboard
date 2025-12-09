@@ -13,9 +13,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Service for generating HTML content from report data using Mustache templates.
+ * Converts report DTOs into HTML strings that can be used for PDF generation.
+ */
 @Service
 public class HTMLGenerator {
 
+    /**
+     * Generates HTML from an employee matrix data structure.
+     * Transposes the matrix and renders it using the employee-matrix.mustache template.
+     *
+     * @param matrix a 2D array list representing the employee matrix (projects x users)
+     * @return the generated HTML string
+     * @throws IOException if the template file cannot be read
+     */
     public String generateFromMatrix(ArrayList<ArrayList<String>> matrix) throws IOException {
         ClassPathResource resource = new ClassPathResource("templates/employee-matrix.mustache");
         MustacheFactory mf = new DefaultMustacheFactory();
@@ -50,6 +62,14 @@ public class HTMLGenerator {
         return writer.toString();
     }
 
+    /**
+     * Generates HTML from a project activity report DTO.
+     * Renders task activity data using the project-activity.mustache template.
+     *
+     * @param report the project activity report DTO containing task information
+     * @return the generated HTML string
+     * @throws IOException if the template file cannot be read
+     */
     public String generateFromProjectActivity(szte.flowboard.dto.ProjectActivityReportDto report) throws IOException {
         ClassPathResource resource = new ClassPathResource("templates/project-activity.mustache");
         MustacheFactory mf = new DefaultMustacheFactory();
@@ -68,6 +88,14 @@ public class HTMLGenerator {
         return writer.toString();
     }
 
+    /**
+     * Generates HTML from a Certificate of Completion (COC) report DTO.
+     * Renders COC data including customer, contractor, and line items using the coc-report.mustache template.
+     *
+     * @param report the COC report DTO containing billing information
+     * @return the generated HTML string
+     * @throws IOException if the template file cannot be read
+     */
     public String generateFromCOC(szte.flowboard.dto.COCReportDto report) throws IOException {
         ClassPathResource resource = new ClassPathResource("templates/coc-report.mustache");
         MustacheFactory mf = new DefaultMustacheFactory();

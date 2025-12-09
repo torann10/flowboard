@@ -18,6 +18,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for interacting with Keycloak admin API.
+ * Handles user retrieval from Keycloak using the admin client.
+ * Initializes the Keycloak admin client on startup.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -40,6 +45,12 @@ public class KeycloakService {
 
     private RealmResource realmResource;
 
+    /**
+     * Initializes the Keycloak admin client after bean construction.
+     * Connects to Keycloak using admin credentials and sets up the realm resource.
+     *
+     * @throws RuntimeException if initialization fails
+     */
     @PostConstruct
     public void initKeycloak() {
         try {
@@ -60,6 +71,12 @@ public class KeycloakService {
         }
     }
 
+    /**
+     * Retrieves a user from Keycloak by their user ID.
+     *
+     * @param userId the Keycloak user ID
+     * @return an Optional containing the user representation if found, empty otherwise
+     */
     public Optional<UserRepresentation> getUserById(String userId) {
         try {
             UserResource userResource = realmResource.users().get(userId);

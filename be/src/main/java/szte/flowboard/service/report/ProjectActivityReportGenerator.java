@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Service for generating project activity reports.
+ * Creates a report showing task completion activity for a specific project,
+ * including time spent, estimated time, and deviation.
+ */
 @Service
 public class ProjectActivityReportGenerator {
 
@@ -27,6 +32,15 @@ public class ProjectActivityReportGenerator {
         this.pdfGenerator = pdfGenerator;
     }
 
+    /**
+     * Generates a project activity report PDF.
+     * Analyzes finished tasks within the date range and calculates time metrics.
+     *
+     * @param report the project activity report request containing project and date range
+     * @param project the project entity for which to generate the report
+     * @return the PDF as a byte array
+     * @throws IOException if report generation fails
+     */
     public byte[] generate(CreateProjectActivityReportRequestDto report, ProjectEntity project) throws IOException {
         var finishedTasks = taskRepository
                 .findByProjectIdAndFinishedAtBetween(

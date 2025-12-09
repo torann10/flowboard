@@ -6,7 +6,6 @@ import szte.flowboard.dto.request.UserCreateRequestDto;
 import szte.flowboard.dto.request.UserUpdateRequestDto;
 import szte.flowboard.entity.UserEntity;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component

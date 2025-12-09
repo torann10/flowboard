@@ -20,6 +20,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service for managing reports.
+ * Handles report generation (COC, Employee Matrix, Project Activity), storage in S3,
+ * retrieval, renaming, and deletion. Reports are generated as PDFs and stored in AWS S3.
+ */
 @Service
 public class ReportService {
 
@@ -54,6 +59,14 @@ public class ReportService {
         this.cocReportGenerator = cocReportGenerator;
     }
 
+    /**
+     * Creates an employee matrix report showing time logged by employees across projects.
+     *
+     * @param report the employee matrix report request containing date range
+     * @param authentication the authentication object containing the current user's information
+     * @return the UUID of the created report, or null if user not found or generation fails
+     * @throws IOException if an I/O error occurs during report generation
+     */
     public UUID createEmployeeMatrix(CreateEmployeeMatrixReportRequestDto report, Authentication authentication)
             throws IOException {
         var user = userService.getUserByAuthentication(authentication);
@@ -71,6 +84,14 @@ public class ReportService {
         return persistReport(null, user.get().getId(), report.getStartDate(), report.getEndDate(), "munkavallaloi_matrix", data);
     }
 
+    /**
+     * Creates a project activity report showing task activity for a specific project.
+     *
+     * @param report the project activity report request containing project and date range
+     * @param authentication the authentication object containing the current user's information
+     * @return the UUID of the created report, or null if user not found, no access, or generation fails
+     * @throws IOException if an I/O error occurs during report generation
+     */
     public UUID createProjectActivityReport(CreateProjectActivityReportRequestDto report, Authentication authentication)
             throws IOException {
         var optionalUser = userService.getUserByAuthentication(authentication);
@@ -97,6 +118,15 @@ public class ReportService {
                 data);
     }
 
+    /**
+     * Creates a Certificate of Completion (COC) report for a project.
+     * Supports both time-based and story-point-based projects.
+     *
+     * @param report the COC report request containing project and date range
+     * @param authentication the authentication object containing the current user's information
+     * @return the UUID of the created report, or null if user not found, no access, or generation fails
+     * @throws IOException if an I/O error occurs during report generation
+     */
     public UUID createCOC(CreateCOCReportRequestDto report, Authentication authentication) throws IOException {
         var optionalUser = userService.getUserByAuthentication(authentication);
 
@@ -116,6 +146,12 @@ public class ReportService {
         return persistReport(project.getId(), user.getId(), report.getStartDate(), report.getEndDate(), "teljesitesi_igazolas", data);
     }
 
+    /**
+     * Retrieves all reports created by the current user.
+     *
+     * @param authentication the authentication object containing the current user's information
+     * @return a list of report entities for the user, or an empty list if user not found
+     */
     public List<ReportEntity> findAllByUser(Authentication authentication) {
         var user = userService.getUserByAuthentication(authentication);
 
@@ -126,6 +162,14 @@ public class ReportService {
         return reportRepository.findByUserId(user.get().getId());
     }
 
+    /**
+     * Generates a presigned download URL for a report from S3.
+     * The URL is valid for 5 minutes.
+     *
+     * @param reportId the unique identifier of the report
+     * @param authentication the authentication object containing the current user's information
+     * @return a presigned URL for downloading the report, or null if user not found or report not accessible
+     */
     public URL getDownloadUrl(UUID reportId, Authentication authentication) {
         var user = userService.getUserByAuthentication(authentication);
 
@@ -142,6 +186,13 @@ public class ReportService {
         return s3Service.getDownloadUrl(reportId, report.get().contentDisposition(), "application/pdf");
     }
 
+    /**
+     * Deletes a report and its associated file from S3 if the current user owns it.
+     *
+     * @param reportId the unique identifier of the report to delete
+     * @param authentication the authentication object containing the current user's information
+     * @return true if the report was deleted successfully, false otherwise
+     */
     @Transactional
     public boolean deleteReport(UUID reportId, Authentication authentication) {
         var user = userService.getUserByAuthentication(authentication);
@@ -157,6 +208,14 @@ public class ReportService {
         return s3Service.deleteReport(reportId);
     }
 
+    /**
+     * Renames a report if the current user owns it.
+     *
+     * @param reportId the unique identifier of the report to rename
+     * @param name the new name for the report
+     * @param authentication the authentication object containing the current user's information
+     * @return true if the report was renamed successfully, false otherwise
+     */
     @Transactional
     public boolean renameReport(UUID reportId, String name, Authentication authentication) {
         var user = userService.getUserByAuthentication(authentication);
@@ -165,6 +224,13 @@ public class ReportService {
                 .renameReportByIdAndUserId(name, reportId, userEntity.getId()) == 1).isPresent();
     }
 
+    /**
+     * Checks if a user has access to a project (REPORTER or MAINTAINER role).
+     *
+     * @param projectId the unique identifier of the project
+     * @param userId the unique identifier of the user
+     * @return the project entity if the user has access, null otherwise
+     */
     private ProjectEntity userHasProjectAccess(UUID projectId, UUID userId) {
         var optionalProject = projectRepository.findById(projectId);
 
@@ -180,6 +246,17 @@ public class ReportService {
         return optionalProject.get();
     }
 
+    /**
+     * Persists a report entity and uploads the PDF data to S3.
+     *
+     * @param projectId the unique identifier of the project (can be null for employee matrix reports)
+     * @param userId the unique identifier of the user creating the report
+     * @param start the start date of the report period
+     * @param end the end date of the report period
+     * @param name the name of the report
+     * @param data the PDF data to upload to S3
+     * @return the UUID of the created report, or null if S3 upload fails
+     */
     protected UUID persistReport(UUID projectId, UUID userId, LocalDate start, LocalDate end, String name, byte[] data) {
         var entity = new ReportEntity();
 

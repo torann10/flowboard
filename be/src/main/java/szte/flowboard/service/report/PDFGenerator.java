@@ -10,9 +10,22 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Service for generating PDF documents from HTML content.
+ * Uses OpenHTMLToPDF library to convert HTML strings to PDF byte arrays.
+ * Includes PT Mono font for proper character rendering.
+ */
 @Service
 public class PDFGenerator {
 
+    /**
+     * Generates a PDF document from HTML content.
+     * Loads the PT Mono font from classpath resources and embeds it in the PDF.
+     *
+     * @param html the HTML content to convert to PDF
+     * @return the PDF as a byte array
+     * @throws RuntimeException if PDF generation fails
+     */
     public byte[] generatePdf(String html) {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();

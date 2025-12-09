@@ -4,13 +4,11 @@ import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import szte.flowboard.dto.ProjectUserDto;
 import szte.flowboard.dto.request.ProjectUserCreateRequestDto;
-import szte.flowboard.dto.request.ProjectUserUpdateRequestDto;
 import szte.flowboard.entity.ProjectEntity;
 import szte.flowboard.entity.ProjectUserEntity;
 import szte.flowboard.entity.UserEntity;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component

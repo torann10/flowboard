@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service for managing project-user relationships.
+ * Handles the association between users and projects, including roles and fees.
+ * Only MAINTAINER role users can create or update project-user relationships.
+ */
 @Service
 public class ProjectUserService {
 
@@ -23,6 +28,14 @@ public class ProjectUserService {
         this.projectUserRepository = projectUserRepository;
     }
 
+    /**
+     * Creates a new project-user relationship.
+     * Only users with MAINTAINER role on the project can create relationships.
+     *
+     * @param projectUser the project-user entity to create
+     * @param authentication the authentication object containing the current user's information
+     * @return the created project-user entity, or null if user not found or doesn't have MAINTAINER role
+     */
     public ProjectUserEntity create(ProjectUserEntity projectUser, Authentication authentication) {
         var user = userService.getUserByAuthentication(authentication);
 
@@ -37,14 +50,34 @@ public class ProjectUserService {
         return projectUserRepository.save(projectUser);
     }
 
+    /**
+     * Retrieves all project-user relationships in the system.
+     *
+     * @return a list of all project-user entities
+     */
     public List<ProjectUserEntity> findAll() {
         return projectUserRepository.findAll();
     }
 
+    /**
+     * Finds a project-user relationship by its ID.
+     *
+     * @param id the unique identifier of the project-user relationship
+     * @return an Optional containing the project-user entity if found, empty otherwise
+     */
     public Optional<ProjectUserEntity> findById(UUID id) {
         return projectUserRepository.findById(id);
     }
 
+    /**
+     * Updates a project-user relationship's role and fee.
+     * Only MAINTAINER role relationships can be updated.
+     *
+     * @param id the unique identifier of the project-user relationship to update
+     * @param role the new role for the relationship
+     * @param fee the new fee for the relationship
+     * @return the updated project-user entity, or null if not found or not a MAINTAINER relationship
+     */
     public ProjectUserEntity update(UUID id, UserRole role, Double fee) {
         var optionalProjectUser = projectUserRepository.findById(id);
 
@@ -64,10 +97,21 @@ public class ProjectUserService {
         return projectUserRepository.save(projectUser);
     }
 
+    /**
+     * Deletes a project-user relationship by its ID.
+     *
+     * @param id the unique identifier of the project-user relationship to delete
+     */
     public void delete(UUID id) {
         projectUserRepository.deleteById(id);
     }
 
+    /**
+     * Checks if a project-user relationship exists by its ID.
+     *
+     * @param id the unique identifier of the project-user relationship
+     * @return true if the relationship exists, false otherwise
+     */
     public boolean existsById(UUID id) {
         return projectUserRepository.existsById(id);
     }

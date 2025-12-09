@@ -12,29 +12,40 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Request DTO for updating an existing project.
+ * Contains all fields that can be updated for a project.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectUpdateRequestDto {
     
+    /** The name of the project (required, 2-100 characters) */
     @NotBlank(message = "Project name is required")
     @Size(min = 2, max = 100, message = "Project name must be between 2 and 100 characters")
     private String name;
     
+    /** The status of the project (required) */
     @NotNull(message = "Project status is required")
     private ProjectStatus status;
     
+    /** The type of the project (required) */
     @NotNull(message = "Project type is required")
     private ProjectType type;
 
+    /** The fee per story point (only applicable for STORY_POINT_BASED projects) */
     private Double storyPointFee;
     
+    /** The list of story point to time mappings for the project */
     private java.util.List<StoryPointTimeMappingDto> storyPointTimeMappings;
 
+    /** The customer company information (required) */
     @NotNull
     private CompanyDto customer;
 
+    /** The contractor company information (required) */
     @NotNull
     private CompanyDto contractor;
 }

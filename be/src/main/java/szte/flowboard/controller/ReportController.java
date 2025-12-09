@@ -23,6 +23,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * REST controller for managing reports.
+ * Provides endpoints for creating various types of reports (COC, Employee Matrix, Project Activity),
+ * listing reports, downloading reports, renaming, and deleting reports.
+ * All operations are scoped to the authenticated user's accessible reports.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/reports")
@@ -31,6 +37,12 @@ public class ReportController {
     private final ReportService reportService;
     private final ReportMapper reportMapper;
 
+    /**
+     * Lists all reports accessible by the current user.
+     *
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity containing a list of report DTOs with HTTP status 200
+     */
     @Operation(operationId = "listReportsForUser", summary = "Lists the reports for the user", description = "Lists the available reports for the user")
     @ApiResponse(responseCode = "200", description = "Reports were successfully retrieved", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ReportDto.class))))
     @GetMapping
@@ -40,6 +52,15 @@ public class ReportController {
         return ResponseEntity.ok(reportMapper.toDto(reports));
     }
 
+    /**
+     * Creates a Certificate of Completion (COC) report PDF for a project.
+     * The report can be generated for time-based or story-point-based projects.
+     *
+     * @param reportRequest the COC report creation request containing project and date range details
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity containing the report ID with HTTP status 200, or 400 if input is invalid
+     * @throws IOException if an I/O error occurs during report generation
+     */
     @Operation(operationId = "createCocReport", summary = "Create COC report", description = "Creates a new report PDF for the current user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Report PDF generated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UUID.class))),
@@ -56,6 +77,14 @@ public class ReportController {
         return ResponseEntity.ok().body(id);
     }
 
+    /**
+     * Creates an employee matrix report PDF showing time logged by employees across projects.
+     *
+     * @param reportRequest the employee matrix report creation request containing date range details
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity containing the report ID with HTTP status 200, or 400 if input is invalid
+     * @throws IOException if an I/O error occurs during report generation
+     */
     @Operation(operationId = "createEmployeeMatrixReport", summary = "Create employee matrix report", description = "Creates a new report PDF for the current user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Report PDF generated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UUID.class))),
@@ -72,6 +101,14 @@ public class ReportController {
         return ResponseEntity.ok().body(id);
     }
 
+    /**
+     * Creates a project activity report PDF showing task activity for a specific project.
+     *
+     * @param reportRequest the project activity report creation request containing project and date range details
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity containing the report ID with HTTP status 200, or 400 if input is invalid
+     * @throws IOException if an I/O error occurs during report generation
+     */
     @Operation(operationId = "createProjectActivityReport", summary = "Create project activity report", description = "Creates a new report PDF for the current user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Report PDF generated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UUID.class))),
@@ -88,6 +125,13 @@ public class ReportController {
         return ResponseEntity.ok().body(id);
     }
 
+    /**
+     * Retrieves a short-lived presigned download URL for a report from S3.
+     *
+     * @param reportId the unique identifier of the report
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity containing the download URL DTO with HTTP status 200, or 400 if invalid
+     */
     @Operation(operationId = "getReportDownloadUrl", summary = "Retrieve a report download url", description = "Retrieves a short lived download url for the report")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The download url was successfully retrieved", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DownloadReportDto.class))),
@@ -100,6 +144,14 @@ public class ReportController {
         return url == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok().body(new DownloadReportDto(url));
     }
 
+    /**
+     * Renames a report if the current user has access to it.
+     *
+     * @param reportId the unique identifier of the report to rename
+     * @param name the new name for the report
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity with HTTP status 204 if renamed successfully, or 400 if invalid
+     */
     @Operation(operationId = "renameReport", summary = "Renames a report", description = "Renames a report with the given unique identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "The report was successfully renamed"),
@@ -112,6 +164,13 @@ public class ReportController {
         return success ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 
+    /**
+     * Deletes a report and its associated file from S3 if the current user has access to it.
+     *
+     * @param reportId the unique identifier of the report to delete
+     * @param authentication the authentication object containing the current user's information
+     * @return ResponseEntity with HTTP status 204 if deleted successfully, or 400 if invalid
+     */
     @Operation(operationId = "deleteReport", summary = "Delete a report", description = "Deletes a report with the given unique identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "The report was successfully deleted"),

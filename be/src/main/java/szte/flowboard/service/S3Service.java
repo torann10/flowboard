@@ -17,11 +17,23 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.UUID;
 
+/**
+ * Service for interacting with AWS S3 for report storage.
+ * Handles uploading, deleting, and generating presigned download URLs for report PDFs.
+ * Uses the flowboard-report-bucket for storing reports.
+ */
 @Service
 public class S3Service {
 
     private static final String BUCKET_NAME = "flowboard-report-bucket";
 
+    /**
+     * Uploads a report PDF to S3.
+     *
+     * @param reportId the unique identifier of the report (used as S3 key)
+     * @param data the PDF data to upload
+     * @return true if upload succeeds, false otherwise
+     */
     public boolean uploadReport(UUID reportId, byte[] data) {
         try (var s3Client = getS3ClientBuilder().build()) {
             PutObjectRequest objectRequest = PutObjectRequest.builder()
@@ -36,6 +48,12 @@ public class S3Service {
         }
     }
 
+    /**
+     * Deletes a report PDF from S3.
+     *
+     * @param reportId the unique identifier of the report (used as S3 key)
+     * @return true if deletion succeeds, false otherwise
+     */
     public boolean deleteReport(UUID reportId) {
         try (var s3Client = getS3ClientBuilder().build()) {
             var deleteObject = DeleteObjectRequest.builder()
@@ -50,6 +68,15 @@ public class S3Service {
         }
     }
 
+    /**
+     * Generates a presigned download URL for a report from S3.
+     * The URL is valid for 5 minutes.
+     *
+     * @param reportId the unique identifier of the report (used as S3 key)
+     * @param contentDisposition the Content-Disposition header value for the download
+     * @param contentType the Content-Type header value (typically "application/pdf")
+     * @return a presigned URL for downloading the report, or null if generation fails
+     */
     public URL getDownloadUrl(UUID reportId, String contentDisposition, String contentType) {
         try (var s3Presigner = getS3Presigner()) {
             var objectRequest = GetObjectRequest.builder()
@@ -71,12 +98,22 @@ public class S3Service {
         }
     }
 
+    /**
+     * Creates an S3 client builder configured with default credentials and EU Central 1 region.
+     *
+     * @return an S3ClientBuilder instance
+     */
     private S3ClientBuilder getS3ClientBuilder() {
         return S3Client.builder()
                 .credentialsProvider(DefaultCredentialsProvider.builder().build())
                 .region(Region.EU_CENTRAL_1);
     }
 
+    /**
+     * Creates an S3 presigner configured with default credentials and EU Central 1 region.
+     *
+     * @return an S3Presigner instance
+     */
     private S3Presigner getS3Presigner() {
         return S3Presigner.builder()
                 .credentialsProvider(DefaultCredentialsProvider.builder().build())

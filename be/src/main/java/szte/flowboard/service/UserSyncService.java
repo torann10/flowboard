@@ -12,6 +12,10 @@ import szte.flowboard.repository.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * Service for synchronizing users from Keycloak to the local database.
+ * Creates local user entities based on Keycloak user information when users first authenticate.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -20,6 +24,14 @@ public class UserSyncService {
     private final UserRepository userRepository;
     private final KeycloakService keycloakService;
 
+    /**
+     * Synchronizes a user from Keycloak to the local database.
+     * If the user already exists locally, returns the existing user.
+     * Otherwise, fetches user data from Keycloak and creates a new local user entity.
+     *
+     * @param authentication the authentication object containing the JWT token
+     * @return the synchronized user entity, or null if synchronization fails
+     */
     @Transactional
     public UserEntity syncUserFromKeycloak(Authentication authentication) {
         try {
@@ -48,6 +60,13 @@ public class UserSyncService {
         }
     }
 
+    /**
+     * Converts a Keycloak user representation to a local user entity.
+     *
+     * @param keycloakUser the Keycloak user representation
+     * @param keycloakId the Keycloak user ID
+     * @return a user entity created from Keycloak data, or null if user not found in Keycloak
+     */
     private static UserEntity getUserEntity(Optional<UserRepresentation> keycloakUser, String keycloakId) {
         if (keycloakUser.isEmpty()) {
             log.warn("User not found in Keycloak: {}", keycloakId);

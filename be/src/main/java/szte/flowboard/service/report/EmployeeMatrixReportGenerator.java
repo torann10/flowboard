@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service for generating employee matrix reports.
+ * Creates a matrix showing time logged by employees across projects managed by the user.
+ * Only includes projects where the user has MAINTAINER role.
+ */
 @Service
 public class EmployeeMatrixReportGenerator {
 
@@ -31,6 +36,15 @@ public class EmployeeMatrixReportGenerator {
         this.pdfGenerator = pdfGenerator;
     }
 
+    /**
+     * Generates an employee matrix report PDF.
+     * Aggregates time logs by user and project, then generates a matrix showing hours worked.
+     *
+     * @param report the employee matrix report request containing date range
+     * @param userId the unique identifier of the user generating the report
+     * @return the PDF as a byte array, or null if user has no projects with MAINTAINER role
+     * @throws IOException if report generation fails
+     */
     public byte[] generate(CreateEmployeeMatrixReportRequestDto report, UUID userId) throws IOException {
         var optionalProjects = projectRepository
                 .findAllByProjectUsersUserIdAndProjectUsersRole(userId, UserRole.MAINTAINER);

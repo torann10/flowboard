@@ -15,6 +15,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Service for generating Certificate of Completion (COC) reports.
+ * Creates billing reports for projects, supporting both time-based and story-point-based projects.
+ * Calculates net, VAT, and gross prices based on project type and user fees.
+ */
 @Service
 public class COCReportGenerator {
 
@@ -37,6 +42,15 @@ public class COCReportGenerator {
         this.pdfGenerator = pdfGenerator;
     }
 
+    /**
+     * Generates a COC report PDF based on the project type.
+     * Delegates to time-based or story-point-based generation methods.
+     *
+     * @param report the COC report request containing project and date range
+     * @param project the project entity for which to generate the report
+     * @return the PDF as a byte array
+     * @throws IOException if report generation fails
+     */
     public byte[] generate(CreateCOCReportRequestDto report, ProjectEntity project) throws IOException {
         if (project.getType() == ProjectType.TIME_BASED) {
             return generateTimeBased(report, project);
@@ -45,6 +59,15 @@ public class COCReportGenerator {
         }
     }
 
+    /**
+     * Generates a COC report for a time-based project.
+     * Calculates billing based on hours logged by users and their fees.
+     *
+     * @param report the COC report request containing project and date range
+     * @param project the time-based project entity
+     * @return the PDF as a byte array
+     * @throws IOException if report generation fails
+     */
     private byte[] generateTimeBased(CreateCOCReportRequestDto report, ProjectEntity project) throws IOException {
         var timeLogs = timeLogRepository
                 .findAllByTaskProjectIdAndLogDateBetween(
@@ -98,6 +121,15 @@ public class COCReportGenerator {
         return pdfGenerator.generatePdf(html);
     }
 
+    /**
+     * Generates a COC report for a story-point-based project.
+     * Calculates billing based on completed tasks' story points and the project's story point fee.
+     *
+     * @param report the COC report request containing project and date range
+     * @param project the story-point-based project entity
+     * @return the PDF as a byte array
+     * @throws IOException if report generation fails
+     */
     private byte[] generateStoryBased(CreateCOCReportRequestDto report, ProjectEntity project) throws IOException {
         var tasks = taskRepository
                 .findByProjectIdAndFinishedAtBetween(
