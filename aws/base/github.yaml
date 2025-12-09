@@ -24,7 +24,7 @@ Resources:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
               StringLike:
-                token.actions.githubusercontent.com:sub: repo:torann10/flowboard
+                token.actions.githubusercontent.com:sub: repo:torann10/flowboard:ref:refs/heads/main
       Policies:
         - PolicyName: GithubActionsPolicy
           PolicyDocument:
