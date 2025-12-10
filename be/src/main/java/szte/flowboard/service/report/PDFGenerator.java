@@ -1,5 +1,6 @@
 package szte.flowboard.service.report;
 
+import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,9 @@ public class PDFGenerator {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(html, null);
 
-            builder.useFont(new ClassPathResource("fonts/PTMono-Regular.ttf").getFile(), "PT Mono");
+            FSSupplier<InputStream> fontSupplier = () -> getClass().getResourceAsStream("fonts/PTMono-Regular.ttf");
+
+            builder.useFont(fontSupplier, "PT Mono");
             builder.toStream(os);
             builder.run();
 
