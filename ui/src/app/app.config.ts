@@ -15,12 +15,14 @@ import {
   withAutoRefreshToken
 } from 'keycloak-angular';
 import { environment } from '../environments/environment';
-import { FlowBoardApiModule, FlowBoardConfiguration, provideApi } from '@anna/flow-board-api';
+import { FlowBoardConfiguration, provideApi } from '@anna/flow-board-api';
 import { DurationFormatPipe } from './shared/pipes/duration-format.pipe';
 import { DatePipe } from '@angular/common';
 
+const escapedHostname = environment.basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: /^(http:\/\/localhost:8080)(\/.*)?$/i
+  urlPattern: new RegExp('^(' + escapedHostname + ')(\\/.*)?$'),
 });
 
 export const appConfig: ApplicationConfig = {

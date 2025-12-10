@@ -137,8 +137,6 @@ export class TimeTrackingComponent implements OnInit {
     const labels: string[] = [];
 
     while (currentDate <= endDate) {
-      console.log(currentDate);
-
       const dayEnd = new Date(currentDate);
       dayEnd.setDate(currentDate.getDate() + 1);
 

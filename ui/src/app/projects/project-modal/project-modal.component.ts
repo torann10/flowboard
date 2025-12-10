@@ -112,7 +112,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
     if (this.visible && !this.previousVisible && !this.isEditMode) {
       this.initializeFormForCreate();
     }
-    
+
     if (this.project && this.isEditMode && this.visible) {
       this.projectForm.patchValue({
         name: this.project.name,
@@ -127,7 +127,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       });
       this.projectForm.updateValueAndValidity();
     }
-    
+
     this.previousVisible = this.visible;
   }
 
@@ -144,7 +144,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
       contractorName: '',
       contractorAddress: ''
     });
-    
+
     // Ensure form validation state is updated
     this.projectForm.updateValueAndValidity();
   }
@@ -152,7 +152,7 @@ export class ProjectModalComponent implements OnInit, OnChanges {
   onSave() {
     // Update form validity before checking
     this.projectForm.updateValueAndValidity();
-    
+
     if (this.projectForm.valid) {
       this.loading = true;
       this.errorMessage = '';
@@ -204,7 +204,6 @@ export class ProjectModalComponent implements OnInit, OnChanges {
     } else {
       this.markFormGroupTouched();
       // Log form errors for debugging
-      console.log('Form is invalid. Errors:', this.getFormErrors());
     }
   }
 

@@ -46,7 +46,6 @@ export class ProjectsComponent implements OnInit {
     this.loading = true;
     this.projectService.getAllProjects().subscribe({
       next: (projects) => {
-        console.log(projects);
         this.projects = projects;
         this.loading = false;
       },

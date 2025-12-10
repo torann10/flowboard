@@ -86,3 +86,7 @@ jobs:
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY_UI:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY_UI:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_UI:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_UI:latest
+
+      - name: Restart ECS Service
+        run: |
+          aws ecs update-service --cluster default --service flowboard-service --force-new-deployment --region $AWS_REGION
