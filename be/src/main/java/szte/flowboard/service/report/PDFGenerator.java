@@ -8,6 +8,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -34,7 +35,13 @@ public class PDFGenerator {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(html, null);
 
-            FSSupplier<InputStream> fontSupplier = () -> getClass().getResourceAsStream("fonts/PTMono-Regular.ttf");
+            FSSupplier<InputStream> fontSupplier = () -> {
+                try {
+                    return new ClassPathResource("fonts/PTMono-Regular.ttf").getInputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            };
 
             builder.useFont(fontSupplier, "PT Mono");
             builder.toStream(os);
