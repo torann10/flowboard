@@ -11,4 +11,4 @@ USER app
 
 ADD --chown=999:999 ./target/flowboard-*.jar backend.jar
 
-CMD java -Xmx${MEM:-512m} -XX:OnOutOfMemoryError="kill -9 %p" -DCONF_DIR=/opt/app/conf/ -Dlogging.config=/opt/app/conf/logback.xml -jar /opt/app/backend.jar --spring.config.additional-location=/opt/app/conf/
+CMD java -Xmx${MEM:-512m} -XX:OnOutOfMemoryError="kill -9 %p" -jar /opt/app/backend.jar
