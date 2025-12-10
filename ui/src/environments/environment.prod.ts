@@ -1,10 +1,9 @@
 export const environment = {
   production: true,
-  basePath: 'https://__INGRESS_HOST_PLACEHOLDER__/api',
-  websocketUrl: 'https://__INGRESS_HOST_PLACEHOLDER__/api/ws',
+  basePath: '__INGRESS_HOST_PLACEHOLDER__',
   keycloak: {
-    url: '__KEYCLOAK_HOST_PLACEHOLDER__/auth',
-    realm: 'DigitalComparisonTool',
-    clientId: 'DigitalComparisonToolFrontend',
+    url: '__KEYCLOAK_HOST_PLACEHOLDER__',
+    realm: 'flowboard',
+    clientId: 'flowboard',
   },
 };
