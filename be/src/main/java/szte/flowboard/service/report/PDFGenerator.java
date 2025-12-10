@@ -32,7 +32,8 @@ public class PDFGenerator {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(html, null);
-            builder.useFont(ResourceUtils.getFile("classpath:fonts/PTMono-Regular.ttf"), "PT Mono");
+
+            builder.useFont(new ClassPathResource("fonts/PTMono-Regular.ttf").getFile(), "PT Mono");
             builder.toStream(os);
             builder.run();
 
