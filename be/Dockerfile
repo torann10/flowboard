@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2-slim
+FROM eclipse-temurin:21-jre
 
 RUN groupadd --system --gid 999 app && \
     useradd --system --create-home --home-dir /opt/app --shell /usr/sbin/nologin --gid app --uid 999 app
