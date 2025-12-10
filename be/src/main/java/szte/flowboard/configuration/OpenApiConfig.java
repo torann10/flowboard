@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${keycloak.auth-server-url}")
+    @Value("${keycloak.public-auth-server-url}")
     String authServerUrl;
     @Value("${keycloak.realm}")
     String realm;
