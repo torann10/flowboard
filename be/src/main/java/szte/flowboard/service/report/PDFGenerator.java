@@ -3,6 +3,7 @@ package szte.flowboard.service.report;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,23 +32,7 @@ public class PDFGenerator {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(html, null);
-            
-            // Load font from classpath using ClassPathResource (works in both runtime and tests)
-            ClassPathResource fontResource = new ClassPathResource("fonts/PTMono-Regular.ttf");
-            File tempFontFile = null;
-            try (InputStream fontStream = fontResource.getInputStream()) {
-                // Create temporary file for font (useFont requires a File)
-                tempFontFile = File.createTempFile("PTMono-Regular", ".ttf");
-                tempFontFile.deleteOnExit();
-                Files.copy(fontStream, tempFontFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                builder.useFont(tempFontFile, "PT Mono");
-            } finally {
-                // Clean up temporary file
-                if (tempFontFile != null && tempFontFile.exists()) {
-                    tempFontFile.delete();
-                }
-            }
-            
+            builder.useFont(ResourceUtils.getFile("classpath:fonts/PTMono-Regular.ttf"), "PT Mono");
             builder.toStream(os);
             builder.run();
 
