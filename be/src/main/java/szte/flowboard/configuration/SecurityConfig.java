@@ -1,6 +1,7 @@
 package szte.flowboard.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -24,6 +25,9 @@ public class SecurityConfig {
 
     @Autowired
     private JwtConverter jwtConverter;
+
+    @Value("${security.allowedOrigins}")
+    List<String> allowedOrigins;
 
     private static final String ACTUATOR = "/actuator/**";
     private static final String SWAGGER_API_DOC = "/v3/api-docs";
@@ -60,7 +64,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:4444"));
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Origin", "Access-Control-Allow-Origin",
                 "Access-Control-Allow-Methods", "Access-Control-Allow-Headers", "Access-Control-Allow-Credentials", "Cookie"));
