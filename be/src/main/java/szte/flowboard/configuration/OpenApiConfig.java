@@ -3,9 +3,12 @@ package szte.flowboard.configuration;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.*;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.ArrayList;
 
 @Configuration
 public class OpenApiConfig {
@@ -14,12 +17,19 @@ public class OpenApiConfig {
     String authServerUrl;
     @Value("${keycloak.realm}")
     String realm;
+    @Value("${server.public-url}")
+    String publicUrl;
 
     private static final String OAUTH_SCHEME_NAME = "oauth2";
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI().components(new Components()
+        return new OpenAPI()
+                .servers(new ArrayList<>() {
+                    {
+                        add(new Server().url(publicUrl).description("API Server URL"));
+                    }
+                }).components(new Components()
                         .addSecuritySchemes(OAUTH_SCHEME_NAME, createOAuthScheme()))
                 .addSecurityItem(new SecurityRequirement().addList(OAUTH_SCHEME_NAME));
     }
