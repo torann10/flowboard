@@ -43,6 +43,7 @@ public class KeycloakService {
     @Value("${keycloak.admin.password}")
     private String adminPassword;
 
+    private Keycloak keycloak;
     private RealmResource realmResource;
 
     /**
@@ -54,16 +55,15 @@ public class KeycloakService {
     @PostConstruct
     public void initKeycloak() {
         try {
-            try (var keycloak = KeycloakBuilder.builder()
+            keycloak = KeycloakBuilder.builder()
                     .serverUrl(serverUrl)
                     .realm("master")
                     .username(adminUsername)
                     .password(adminPassword)
                     .clientId(clientId)
-                    .build()) {
+                    .build();
 
                 realmResource = keycloak.realm(realm);
-            }
             log.info("Keycloak admin client initialized successfully");
         } catch (Exception e) {
             log.error("Failed to initialize Keycloak admin client", e);
