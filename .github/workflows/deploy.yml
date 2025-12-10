@@ -73,7 +73,7 @@ jobs:
         env:
           INGRESS_HOST: ${{ secrets.INGRESS_HOST }}
           KEYCLOAK_HOST: ${{ secrets.KEYCLOAK_HOST }}
-        run: npm run build -- --prod
+        run: npm run build
 
       - name: Build, tag, and push frontend image to Amazon ECR
         working-directory: ./ui
