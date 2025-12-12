@@ -182,4 +182,3 @@ class EmployeeMatrixReportGeneratorTest {
         assertEquals(pdfData, result);
     }
 }
-

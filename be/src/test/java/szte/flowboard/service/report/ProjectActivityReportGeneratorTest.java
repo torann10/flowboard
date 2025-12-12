@@ -199,4 +199,3 @@ class ProjectActivityReportGeneratorTest {
         assertEquals(pdfData, result);
     }
 }
-
